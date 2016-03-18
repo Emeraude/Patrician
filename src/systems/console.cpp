@@ -9,15 +9,25 @@ System::Console::~Console() {
 }
 
 void System::Console::readCin() {
-  std::string s;
+  std::string in;
 
   while(true) {
-    std::cin >> s;
-    if (s == "exit") {
+    if (!std::getline(std::cin, in)) {
       _w->stop();
       return;
     }
-    std::cout << s << std::endl;
+    std::stringstream ss(in);
+    std::string cmd;
+    ss >> cmd;
+    if (cmd == "exit") {
+      _w->stop();
+      return;
+    }
+    else if (_cmds[cmd] != NULL)
+      (this->*_cmds[cmd])(ss);
+    else
+      std::cerr << "Unknown command " << cmd << std::endl;
+    std::cout << in << std::endl;
   }
 }
 
