@@ -12,11 +12,11 @@ namespace System {
     Ecs::World *_w;
     std::map<std::string, void (System::Console::*)(std::stringstream&)> _cmds;
 
+    void readCin();
   public:
     Console();
     ~Console();
 
-    void readCin();
     void update(Ecs::World &world);
   };
 }
