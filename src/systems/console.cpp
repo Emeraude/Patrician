@@ -1,7 +1,9 @@
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include "Components.hpp"
 #include "console.hpp"
+#include "ShipBuilder.hpp"
 
 System::Console::Console() : _thread(new std::thread(&System::Console::readCin, this)), _w(NULL) {}
 
@@ -17,20 +19,18 @@ void System::Console::ship(std::stringstream& ss) {
   std::string cmd;
   ss >> cmd;
   if (cmd == "add") {
-    Ecs::Entity *e = new Ecs::Entity();
-    int x, y;
+    int16_t x, y;
     // TODO : raise error if an argument is missing
     ss >> x >> y;
-    e->addComponent<Component::Position>(x, y);
-    e->addComponent<Component::Type>(Type::SHIP);
-    _w->addEntity(e);
+    _w->addEntity(ShipBuilder::Crayer(x, y));
   }
   else if (cmd == "list") {
     for (auto *it: _w->getEntities()) {
       if (it->hasComponent<Component::Type>()
 	  && it->getComponent<Component::Type>()->type == Type::SHIP)
-	std::cout << "A ship in " << it->getComponent<Component::Position>()->x <<
-	  "," << it->getComponent<Component::Position>()->y << std::endl;
+	std::cout << "\"" << it->getComponent<Component::Name>()->value
+		  << "\" in " << it->getComponent<Component::Position>()->x
+		  << "," << it->getComponent<Component::Position>()->y << std::endl;
     }
   }
 }

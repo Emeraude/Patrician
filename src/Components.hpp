@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include "World.hpp"
 
 enum Type {
@@ -17,5 +18,10 @@ namespace Component {
   struct Type : Ecs::Component::Base {
     ::Type type;
     Type(::Type _type) : type(_type) {}
+  };
+
+  struct Name : Ecs::Component::Base {
+    std::string value;
+    Name(std::string const& s) : value(s) {}
   };
 }
