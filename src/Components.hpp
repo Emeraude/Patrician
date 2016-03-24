@@ -24,4 +24,10 @@ namespace Component {
     std::string value;
     Name(std::string const& s) : value(s) {}
   };
+
+  struct Speed : Ecs::Component::Base {
+    uint16_t current;
+    uint16_t max;
+    Speed(uint16_t _max) : current(0), max(_max) {}
+  };
 }

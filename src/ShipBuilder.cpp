@@ -21,5 +21,6 @@ Ecs::Entity *ShipBuilder::Crayer(int16_t x, int16_t y) {
   e->addComponent<Component::Position>(x, y);
   e->addComponent<Component::Type>(Type::SHIP);
   e->addComponent<Component::Name>(randomName());
+  e->addComponent<Component::Speed>(5);
   return e;
 }
