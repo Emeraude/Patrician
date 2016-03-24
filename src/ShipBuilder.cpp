@@ -1,8 +1,18 @@
+#include <string>
 #include "ShipBuilder.hpp"
 #include "Components.hpp"
 
+#define SIZE(x) (sizeof(x) / sizeof(*x))
+
 std::string const ShipBuilder::randomName() {
-  return "toto";
+  static const std::string first[] = {
+    "Pretty", "Huge"
+  };
+  static const std::string second[] = {
+    "Ship", "Boat", "Vessel"
+  };
+  return first[std::rand() % SIZE(first)]
+    + " " + second[std::rand() % SIZE(second)];
 }
 
 Ecs::Entity *ShipBuilder::Crayer(int16_t x, int16_t y) {
