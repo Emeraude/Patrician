@@ -30,4 +30,10 @@ namespace Component {
     uint16_t max;
     Speed(uint16_t _max) : current(0), max(_max) {}
   };
+
+  struct Hull : Ecs::Component::Base {
+    uint16_t current;
+    uint16_t max;
+    Hull(uint16_t _max) : current(_max), max(_max) {}
+  };
 }
