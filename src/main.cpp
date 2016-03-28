@@ -1,3 +1,5 @@
+#include <exception>
+#include <iostream>
 #include <random>
 #include "World.hpp"
 #include "systems/console.cpp"
@@ -10,6 +12,10 @@ int main(void) {
 
   w.addSystem<System::Console>();
   w.addSystem<System::Move>();
-  w.run();
+  try {
+    w.run();
+  } catch (std::exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
   return 0;
 }
