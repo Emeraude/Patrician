@@ -2,7 +2,7 @@
 #include <iostream>
 #include <random>
 #include "World.hpp"
-#include "systems/console.cpp"
+#include "systems/Console.cpp"
 #include "systems/Move.cpp"
 
 int main(void) {

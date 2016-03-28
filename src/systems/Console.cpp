@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include "Components.hpp"
-#include "console.hpp"
+#include "Console.hpp"
 #include "ShipBuilder.hpp"
 
 System::Console::Console() : _thread(new std::thread(&System::Console::readCin, this)), _w(NULL) {}
