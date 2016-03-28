@@ -33,6 +33,14 @@ void System::Console::ship(std::stringstream& ss) {
 		  << "," << it->getComponent<Component::Position>()->y << std::endl;
     }
   }
+  // Test only; find a proper way to do it
+  else if (cmd == "move") {
+    for (auto *it: _w->getEntities()) {
+      it->addComponent<Component::Move>(500, 600);
+      it->getComponent<Component::Speed>()->current = 2;
+      break;
+    }
+  }
 }
 
 void System::Console::readCin() {

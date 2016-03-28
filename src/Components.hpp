@@ -36,4 +36,11 @@ namespace Component {
     uint16_t max;
     Hull(uint16_t _max) : current(_max), max(_max) {}
   };
+
+  // This is not a movement vector, but a destination
+  struct Move : Ecs::Component::Base {
+    uint16_t x;
+    uint16_t y;
+    Move(uint16_t _x, uint16_t _y) : x(_x), y(_y) {}
+  };
 }
