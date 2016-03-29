@@ -47,11 +47,9 @@ void System::Console::readCin() {
   std::string in;
 
   _cmds["ship"] = &System::Console::ship;
-  while(true) {
-    if (!std::getline(std::cin, in)) {
-      _w->stop();
-      return;
-    }
+  while (true) {
+    if (!std::getline(std::cin, in))
+      break;
     in.erase(0, in.find_first_not_of(" \n\r\t"));
     in.erase(in.find_last_not_of(" \n\r\t")+1);
     if (in.length() == 0)
@@ -60,15 +58,14 @@ void System::Console::readCin() {
     std::stringstream ss(in);
     std::string cmd;
     ss >> cmd;
-    if (cmd == "exit") {
-      _w->stop();
-      return;
-    }
+    if (cmd == "exit")
+      break;
     else if (_cmds[cmd] != NULL)
       (this->*_cmds[cmd])(ss);
     else
       std::cerr << "Unknown command " << cmd << std::endl;
   }
+  _w->stop();
 }
 
 void System::Console::update(Ecs::World& w) {
