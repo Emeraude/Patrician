@@ -1,11 +1,13 @@
-#include <cstdint>
 #include <iostream>
 #include <string>
 #include "Components.hpp"
 #include "Console.hpp"
 #include "ShipBuilder.hpp"
 
-System::Console::Console() : _thread(new std::thread(&System::Console::readCin, this)), _w(NULL) {}
+System::Console::Console() : _thread(new std::thread(&System::Console::readCin, this)), _w(NULL) {
+  _types["snaikka"] = &ShipBuilder::Snaikka;
+  _types["crayer"] = &ShipBuilder::Crayer;
+}
 
 System::Console::~Console() {
   delete _thread;
@@ -13,16 +15,20 @@ System::Console::~Console() {
 
 void System::Console::ship(std::stringstream& ss) {
   if (ss.eof()) {
-    std::cout << "Usage: ship add <x> <y> | list" << std::endl;
+    std::cout << "Usage: ship add <type> <x> <y> | list" << std::endl;
     return;
   }
   std::string cmd;
   ss >> cmd;
   if (cmd == "add") {
     uint16_t x, y;
+    std::string type;
     // TODO : raise error if an argument is missing
-    ss >> x >> y;
-    _w->addEntity(ShipBuilder::Crayer(x, y));
+    ss >> type >> x >> y;
+    if (_types[type] == NULL)
+      std::cerr << "Unknown ship type \"" << type << "\"" << std::endl;
+    else
+      _w->addEntity(_types[type](x, y));
   }
   else if (cmd == "list") {
     for (auto *it: _w->getEntities()) {

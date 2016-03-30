@@ -15,7 +15,7 @@ std::string const ShipBuilder::randomName() {
     + " " + second[std::rand() % SIZE(second)];
 }
 
-Ecs::Entity *ShipBuilder::Snaikka(int16_t x, int16_t y) {
+Ecs::Entity *ShipBuilder::Snaikka(uint16_t x, uint16_t y) {
   Ecs::Entity *e = new Ecs::Entity();
 
   e->addComponent<Component::Position>(x, y);
@@ -26,7 +26,7 @@ Ecs::Entity *ShipBuilder::Snaikka(int16_t x, int16_t y) {
   return e;
 }
 
-Ecs::Entity *ShipBuilder::Crayer(int16_t x, int16_t y) {
+Ecs::Entity *ShipBuilder::Crayer(uint16_t x, uint16_t y) {
   Ecs::Entity *e = new Ecs::Entity();
 
   e->addComponent<Component::Position>(x, y);
