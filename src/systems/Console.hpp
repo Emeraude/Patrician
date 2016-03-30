@@ -15,6 +15,7 @@ namespace System {
     std::map<std::string, Ecs::Entity *(*)(uint16_t, uint16_t)> _types;
 
     void ship(std::stringstream&);
+    void city(std::stringstream&);
     void readCin();
   public:
     Console();

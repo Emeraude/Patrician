@@ -49,10 +49,32 @@ void System::Console::ship(std::stringstream& ss) {
   }
 }
 
+void System::Console::city(std::stringstream& ss) {
+  if (ss.eof()) {
+    std::cout << "Usage: city list" << std::endl;
+    return;
+  }
+  std::string cmd;
+  ss >> cmd;
+  if (cmd == "list") {
+    for (auto *it: _w->getEntities()) {
+      if (it->hasComponent<Component::Type>()
+	  && it->getComponent<Component::Type>()->type == Type::CITY)
+	std::cout << "\"" << it->getComponent<Component::Name>()->value
+		  << "\" in " << it->getComponent<Component::Position>()->x
+		  << "," << it->getComponent<Component::Position>()->y << std::endl;
+    }
+  }
+  else {
+    std::cerr << "Unknown command \"city " << cmd << "\"" << std::endl;
+  }
+}
+
 void System::Console::readCin() {
   std::string in;
 
   _cmds["ship"] = &System::Console::ship;
+  _cmds["city"] = &System::Console::city;
   while (true) {
     std::cout << "> ";
     if (!std::getline(std::cin, in))
