@@ -54,6 +54,7 @@ void System::Console::readCin() {
 
   _cmds["ship"] = &System::Console::ship;
   while (true) {
+    std::cout << "> ";
     if (!std::getline(std::cin, in))
       break;
     in.erase(0, in.find_first_not_of(" \n\r\t"));
