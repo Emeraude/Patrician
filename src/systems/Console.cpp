@@ -61,7 +61,8 @@ void System::Console::city(std::stringstream& ss) {
       if (it->hasComponent<Component::Type>()
 	  && it->getComponent<Component::Type>()->type == Type::CITY)
 	std::cout << "\"" << it->getComponent<Component::Name>()->value
-		  << "\" in " << it->getComponent<Component::Position>()->x
+		  << "\" (" << it->getComponent<Component::Inhabitants>()->total()
+		  << ") in " << it->getComponent<Component::Position>()->x
 		  << "," << it->getComponent<Component::Position>()->y << std::endl;
     }
   }

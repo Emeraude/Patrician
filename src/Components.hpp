@@ -43,4 +43,15 @@ namespace Component {
     uint16_t y;
     Move(uint16_t _x, uint16_t _y) : x(_x), y(_y) {}
   };
+
+  struct Inhabitants : Ecs::Component::Base {
+    uint16_t poor;
+    uint16_t wealthy;
+    uint16_t rich;
+    uint16_t beggar;
+    Inhabitants(uint16_t _poor, uint16_t _wealthy, uint16_t _rich, uint16_t _beggar) : poor(_poor), wealthy(_wealthy), rich(_rich), beggar(_beggar) {}
+    uint16_t total() {
+      return poor + wealthy + rich + beggar;
+    }
+  };
 }

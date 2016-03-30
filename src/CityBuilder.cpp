@@ -20,5 +20,9 @@ Ecs::Entity *CityBuilder::random() {
   e->addComponent<Component::Position>(rand() % 1000, rand() % 1000);
   e->addComponent<Component::Type>(Type::CITY);
   e->addComponent<Component::Name>(getName());
+  e->addComponent<Component::Inhabitants>(rand() % 100 + 1950,
+					  rand() % 70 + 860,
+					  rand() % 50 + 470,
+					  rand() % 10 + 85);
   return e;
 }
