@@ -19,7 +19,7 @@ void System::Console::ship(std::stringstream& ss) {
   std::string cmd;
   ss >> cmd;
   if (cmd == "add") {
-    int16_t x, y;
+    uint16_t x, y;
     // TODO : raise error if an argument is missing
     ss >> x >> y;
     _w->addEntity(ShipBuilder::Crayer(x, y));
