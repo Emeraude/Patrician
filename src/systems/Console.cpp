@@ -51,7 +51,7 @@ void System::Console::ship(std::stringstream& ss) {
 
 void System::Console::city(std::stringstream& ss) {
   if (ss.eof()) {
-    std::cout << "Usage: city list" << std::endl;
+    std::cout << "Usage: city details <city> | list" << std::endl;
     return;
   }
   std::string cmd;
@@ -64,6 +64,28 @@ void System::Console::city(std::stringstream& ss) {
 		  << "\" (" << it->getComponent<Component::Inhabitants>()->total()
 		  << ") in " << it->getComponent<Component::Position>()->x
 		  << "," << it->getComponent<Component::Position>()->y << std::endl;
+    }
+  }
+  else if (cmd == "details") {
+    std::string cityName;
+    if (!(ss >> cityName))
+      std::cerr << "Usage: city details <city>" << std::endl;
+    else {
+      // Very inefficient, we have to do O(log(n)) instead of O(n)
+      for (auto *it: _w->getEntities()) {
+	if (it->hasComponent<Component::Type>()
+	    && it->getComponent<Component::Type>()->type == Type::CITY
+	    && it->hasComponent<Component::Name>()
+	    && it->getComponent<Component::Name>()->value == cityName)
+	  std::cout << "\"" << cityName
+		    << "\" in " << it->getComponent<Component::Position>()->x
+		    << "," << it->getComponent<Component::Position>()->y
+		    << ": " << it->getComponent<Component::Inhabitants>()->poor
+		    << " poors, " << it->getComponent<Component::Inhabitants>()->wealthy
+		    << " wealthy, " << it->getComponent<Component::Inhabitants>()->rich
+		    << " rich, " << it->getComponent<Component::Inhabitants>()->beggar
+		    << " beggars" << std::endl;
+      }
     }
   }
   else {
