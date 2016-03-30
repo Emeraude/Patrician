@@ -23,9 +23,9 @@ void System::Console::ship(std::stringstream& ss) {
   if (cmd == "add") {
     uint16_t x, y;
     std::string type;
-    // TODO : raise error if an argument is missing
-    ss >> type >> x >> y;
-    if (_types[type] == NULL)
+    if (!(ss >> type >> x >> y))
+      std::cerr << "Usage: ship add <type> <x> <y>" << std::endl;
+    else if (_types[type] == NULL)
       std::cerr << "Unknown ship type \"" << type << "\"" << std::endl;
     else
       _w->addEntity(_types[type](x, y));
