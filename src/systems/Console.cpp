@@ -104,8 +104,10 @@ void System::Console::readCin() {
   _cmds["city"] = &System::Console::city;
   while (true) {
     std::cout << "> ";
-    if (!std::getline(std::cin, in))
+    if (!std::getline(std::cin, in)) {
+      std::cout << "exit" << std::endl;
       break;
+    }
     in.erase(0, in.find_first_not_of(" \n\r\t"));
     in.erase(in.find_last_not_of(" \n\r\t")+1);
     if (in.length() == 0)
