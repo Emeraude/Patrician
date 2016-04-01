@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include "World.hpp"
+#include "Resources.hpp"
 
 enum Type {
   SHIP, CITY, BUILDING
@@ -52,6 +53,17 @@ namespace Component {
     Inhabitants(uint16_t _poor, uint16_t _wealthy, uint16_t _rich, uint16_t _beggar) : poor(_poor), wealthy(_wealthy), rich(_rich), beggar(_beggar) {}
     uint16_t total() {
       return poor + wealthy + rich + beggar;
+    }
+  };
+
+  struct Stock : Ecs::Component::Base {
+  private:
+    std::vector<uint16_t> _stock;
+
+  public:
+    Stock() : _stock(Resource::LENGTH) {}
+    uint16_t& at(Resource const r) {
+      return _stock.at(r);
     }
   };
 }

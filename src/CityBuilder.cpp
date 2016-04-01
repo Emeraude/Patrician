@@ -24,5 +24,8 @@ Ecs::Entity *CityBuilder::random() {
 					  rand() % 70 + 860,
 					  rand() % 50 + 470,
 					  rand() % 10 + 85);
+  e->addComponent<Component::Stock>();
+  e->getComponent<Component::Stock>()->at(Resource::TIMBER) = 5;
+  e->getComponent<Component::Stock>()->at(Resource::BRICK) = 5;
   return e;
 }
