@@ -27,14 +27,18 @@ void System::Console::ship(std::stringstream& ss) {
       std::cerr << "Usage: ship add <type> <x> <y>" << std::endl;
     else if (_types[type] == NULL)
       std::cerr << "Unknown ship type \"" << type << "\"" << std::endl;
-    else
-      _w->addEntity(_types[type](x, y));
+    else {
+      Ecs::Entity *e = _types[type](x, y);
+      unsigned int id = _w->addEntity(e);
+      e->addComponent<Component::Id>(id);
+    }
   }
   else if (cmd == "list") {
     for (auto *it: _w->getEntities()) {
       if (it->hasComponent<Component::Type>()
 	  && it->getComponent<Component::Type>()->type == Type::SHIP)
-	std::cout << "\"" << it->getComponent<Component::Name>()->value
+	std::cout << "#" << it->getComponent<Component::Id>()->value
+		  << " \"" << it->getComponent<Component::Name>()->value
 		  << "\" in " << it->getComponent<Component::Position>()->x
 		  << "," << it->getComponent<Component::Position>()->y << std::endl;
     }

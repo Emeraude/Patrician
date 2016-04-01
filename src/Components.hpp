@@ -10,6 +10,11 @@ enum Type {
 };
 
 namespace Component {
+  struct Id : Ecs::Component::Base {
+    uint32_t value;
+    Id(uint32_t v) : value(v) {}
+  };
+
   struct Position : Ecs::Component::Base {
     int16_t x;
     int16_t y;
