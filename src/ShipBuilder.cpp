@@ -22,6 +22,7 @@ Ecs::Entity *ShipBuilder::Snaikka(uint16_t x, uint16_t y) {
   e->addComponent<Component::Name>(randomName());
   e->addComponent<Component::Speed>(6);
   e->addComponent<Component::Hull>(80);
+  e->addComponent<Component::Stock>();
   return e;
 }
 
@@ -33,5 +34,6 @@ Ecs::Entity *ShipBuilder::Crayer(uint16_t x, uint16_t y) {
   e->addComponent<Component::Name>(randomName());
   e->addComponent<Component::Speed>(5);
   e->addComponent<Component::Hull>(100);
+  e->addComponent<Component::Stock>();
   return e;
 }
