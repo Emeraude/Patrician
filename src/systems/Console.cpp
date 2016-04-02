@@ -13,6 +13,13 @@ System::Console::~Console() {
   delete _thread;
 }
 
+void System::Console::help(std::stringstream&) {
+  std::cout << "Available commands:" << std::endl
+	    << "\tcity details <city> | list | stock <city>" << std::endl
+	    << "\thelp" << std::endl
+	    << "\tship add <type> <x> <y> | list" << std::endl;
+}
+
 void System::Console::ship(std::stringstream& ss) {
   if (ss.eof()) {
     std::cout << "Usage: ship add <type> <x> <y> | list" << std::endl;
@@ -120,6 +127,7 @@ void System::Console::readCin() {
 
   _cmds["ship"] = &System::Console::ship;
   _cmds["city"] = &System::Console::city;
+  _cmds["help"] = &System::Console::help;
   while (true) {
     std::cout << "> ";
     if (!std::getline(std::cin, in)) {
