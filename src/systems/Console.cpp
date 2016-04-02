@@ -55,7 +55,7 @@ void System::Console::ship(std::stringstream& ss) {
 
 void System::Console::city(std::stringstream& ss) {
   if (ss.eof()) {
-    std::cout << "Usage: city details <city> | list" << std::endl;
+    std::cout << "Usage: city details <city> | list | stock <city>" << std::endl;
     return;
   }
   std::string cmd;
@@ -89,6 +89,24 @@ void System::Console::city(std::stringstream& ss) {
 		    << " wealthy, " << it->getComponent<Component::Inhabitants>()->rich
 		    << " rich, " << it->getComponent<Component::Inhabitants>()->beggar
 		    << " beggars" << std::endl;
+      }
+    }
+  }
+  else if (cmd == "stock") {
+    std::string cityName;
+    if (!(ss >> cityName))
+      std::cerr << "Usage: city details <city>" << std::endl;
+    else {
+      // very inefficient too
+      for (auto *it: _w->getEntities()) {
+	if (it->hasComponent<Component::Type>()
+	    && it->getComponent<Component::Type>()->type == Type::CITY
+	    && it->hasComponent<Component::Name>()
+	    && it->getComponent<Component::Name>()->value == cityName) {
+	  Component::Stock s = *it->getComponent<Component::Stock>();
+	  for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i)
+	    std::cout << infosResource[i].name << " " << s.at(static_cast<Resource>(i)) << std::endl;
+	}
       }
     }
   }
