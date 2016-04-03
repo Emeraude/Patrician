@@ -8,17 +8,17 @@
 #include "CityBuilder.hpp"
 
 int main(void) {
-  Ecs::World w;
-  std::random_device rd;
-  std::srand(rd());
-
-  w.addSystem<System::Console>();
-  w.addSystem<System::Move>();
-  w.addSystem<System::Time>();
-  w.addEntity(CityBuilder::random());
-  w.addEntity(CityBuilder::random());
-  w.addEntity(CityBuilder::random());
   try {
+    Ecs::World w;
+    std::random_device rd;
+    std::srand(rd());
+
+    w.addSystem<System::Console>();
+    w.addSystem<System::Move>();
+    w.addSystem<System::Time>();
+    w.addEntity(CityBuilder::random());
+    w.addEntity(CityBuilder::random());
+    w.addEntity(CityBuilder::random());
     w.run();
   } catch (std::exception &e) {
     std::cerr << e.what() << std::endl;
