@@ -14,6 +14,7 @@ namespace System {
     std::map<std::string, void (System::Console::*)(std::stringstream&)> _cmds;
     std::map<std::string, Ecs::Entity *(*)(uint16_t, uint16_t)> _types;
 
+    void status(std::stringstream&);
     void help(std::stringstream&);
     void ship(std::stringstream&);
     void city(std::stringstream&);

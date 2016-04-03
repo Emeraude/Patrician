@@ -4,6 +4,7 @@
 #include "World.hpp"
 #include "systems/Console.cpp"
 #include "systems/Move.cpp"
+#include "systems/Time.cpp"
 #include "CityBuilder.hpp"
 
 int main(void) {
@@ -13,6 +14,7 @@ int main(void) {
 
   w.addSystem<System::Console>();
   w.addSystem<System::Move>();
+  w.addSystem<System::Time>();
   w.addEntity(CityBuilder::random());
   w.addEntity(CityBuilder::random());
   w.addEntity(CityBuilder::random());

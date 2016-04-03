@@ -19,8 +19,9 @@ namespace Ecs {
   public:
     World();
     ~World();
+    template<typename T> T* getSystem();
     template<typename T, typename ... U> void addSystem(U && ... args);
-    template<typename T> bool hasSystem();
+    template<typename T> bool hasSystem() const;
     template<typename T> void removeSystem();
 
     template<typename T> void removeEntity(T it);
@@ -32,6 +33,13 @@ namespace Ecs {
     unsigned int addEntity(Ecs::Entity *e);
     std::vector<Ecs::Entity *>& getEntities();
   };
+}
+
+template<typename T>
+T* Ecs::World::getSystem() {
+  if (hasSystem<T>() == false)
+    __throw(Ecs::Exception::World, "System not found");
+  return static_cast<T *>(_systems[Ecs::System::Template<T>::getId()]);
 }
 
 template<typename T, typename ... U>
@@ -46,7 +54,7 @@ void Ecs::World::addSystem(U && ... args) {
 }
 
 template<typename T>
-bool Ecs::World::hasSystem() {
+bool Ecs::World::hasSystem() const {
   unsigned int id = Ecs::System::Template<T>::getId();
   return id < _systems.size() && _systems[id];
 }

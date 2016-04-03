@@ -3,6 +3,7 @@
 #include "Components.hpp"
 #include "Console.hpp"
 #include "ShipBuilder.hpp"
+#include "systems/Time.hpp"
 
 System::Console::Console() : _thread(new std::thread(&System::Console::readCin, this)), _w(NULL) {
   _types["snaikka"] = &ShipBuilder::Snaikka;
@@ -17,7 +18,12 @@ void System::Console::help(std::stringstream&) {
   std::cout << "Available commands:" << std::endl
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
-	    << "\tship add <type> <x> <y> | list" << std::endl;
+	    << "\tship add <type> <x> <y> | list" << std::endl
+	    << "\tstatus" << std::endl;
+}
+
+void System::Console::status(std::stringstream&) {
+  std::cout << "Day " << _w->getSystem<System::Time>()->getDay() << std::endl;
 }
 
 void System::Console::ship(std::stringstream& ss) {
@@ -128,6 +134,7 @@ void System::Console::readCin() {
   _cmds["ship"] = &System::Console::ship;
   _cmds["city"] = &System::Console::city;
   _cmds["help"] = &System::Console::help;
+  _cmds["status"] = &System::Console::status;
   while (true) {
     std::cout << "> ";
     if (!std::getline(std::cin, in)) {
