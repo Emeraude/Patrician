@@ -1,3 +1,4 @@
+#include <exception>
 #include "CityBuilder.hpp"
 #include "Components.hpp"
 
@@ -10,7 +11,7 @@ std::string const CityBuilder::getName() {
   static unsigned int i = 0;
 
   if (i >= SIZE(names))
-    return "unamed";
+    throw std::range_error("All city names already used");
   return names[i++];
 }
 
