@@ -7,6 +7,7 @@ namespace System {
   private:
     uint32_t _day;
 
+    void consumption(Ecs::Entity *city);
   public:
     Time();
     void update(Ecs::World &world);
