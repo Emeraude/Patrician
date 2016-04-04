@@ -16,9 +16,9 @@ int main(void) {
     w.addSystem<System::Console>();
     w.addSystem<System::Move>();
     w.addSystem<System::Time>();
-    w.addEntity(CityBuilder::random());
-    w.addEntity(CityBuilder::random());
-    w.addEntity(CityBuilder::random());
+    CityBuilder::add(w);
+    CityBuilder::add(w);
+    CityBuilder::add(w);
     w.run();
   } catch (std::exception &e) {
     std::cerr << e.what() << std::endl;

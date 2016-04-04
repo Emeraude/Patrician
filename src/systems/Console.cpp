@@ -3,6 +3,7 @@
 #include "Components.hpp"
 #include "Console.hpp"
 #include "ShipBuilder.hpp"
+#include "CityBuilder.hpp"
 #include "systems/Time.hpp"
 
 System::Console::Console() : _thread(new std::thread(&System::Console::readCin, this)), _w(NULL) {
@@ -88,20 +89,18 @@ void System::Console::city(std::stringstream& ss) {
     if (!(ss >> cityName))
       std::cerr << "Usage: city details <city>" << std::endl;
     else {
-      // Very inefficient, we have to do O(log(n)) instead of O(n)
-      for (auto *it: _w->getEntities()) {
-	if (it->hasComponent<Component::Type>()
-	    && it->getComponent<Component::Type>()->type == Type::CITY
-	    && it->hasComponent<Component::Name>()
-	    && it->getComponent<Component::Name>()->value == cityName)
-	  std::cout << "\"" << cityName
-		    << "\" in " << it->getComponent<Component::Position>()->x
-		    << "," << it->getComponent<Component::Position>()->y
-		    << ": " << it->getComponent<Component::Inhabitants>()->poor
-		    << " poors, " << it->getComponent<Component::Inhabitants>()->wealthy
-		    << " wealthy, " << it->getComponent<Component::Inhabitants>()->rich
-		    << " rich, " << it->getComponent<Component::Inhabitants>()->beggar
-		    << " beggars" << std::endl;
+      try {
+	Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
+	std::cout << "\"" << cityName
+		  << "\" in " << e->getComponent<Component::Position>()->x
+		  << "," << e->getComponent<Component::Position>()->y
+		  << ": " << e->getComponent<Component::Inhabitants>()->poor
+		  << " poors, " << e->getComponent<Component::Inhabitants>()->wealthy
+		  << " wealthy, " << e->getComponent<Component::Inhabitants>()->rich
+		  << " rich, " << e->getComponent<Component::Inhabitants>()->beggar
+		  << " beggars" << std::endl;
+      } catch (std::out_of_range&) {
+	std::cerr << "No city \"" << cityName << "\" found" << std::endl;
       }
     }
   }
@@ -110,16 +109,13 @@ void System::Console::city(std::stringstream& ss) {
     if (!(ss >> cityName))
       std::cerr << "Usage: city details <city>" << std::endl;
     else {
-      // very inefficient too
-      for (auto *it: _w->getEntities()) {
-	if (it->hasComponent<Component::Type>()
-	    && it->getComponent<Component::Type>()->type == Type::CITY
-	    && it->hasComponent<Component::Name>()
-	    && it->getComponent<Component::Name>()->value == cityName) {
-	  Component::Stock s = *it->getComponent<Component::Stock>();
-	  for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i)
-	    std::cout << infosResource[i].name << " " << s.at(static_cast<Resource>(i)) << std::endl;
-	}
+      try {
+	Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
+	Component::Stock s = *e->getComponent<Component::Stock>();
+	for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i)
+	  std::cout << infosResource[i].name << " " << s.at(static_cast<Resource>(i)) << std::endl;
+      } catch (std::out_of_range&) {
+	std::cerr << "No city \"" << cityName << "\" found" << std::endl;
       }
     }
   }

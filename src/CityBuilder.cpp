@@ -4,6 +4,8 @@
 
 #define SIZE(x) (sizeof(x) / sizeof(*x))
 
+std::map<std::string const, unsigned int> cityNames;
+
 std::string const CityBuilder::getName() {
   static const std::string names[] = {
     "Lüebeck", "Gdansk", "Stockholm", "Edimburg"
@@ -29,4 +31,11 @@ Ecs::Entity *CityBuilder::random() {
   e->getComponent<Component::Stock>()->at(Resource::TIMBER) = 5;
   e->getComponent<Component::Stock>()->at(Resource::BRICK) = 5;
   return e;
+}
+
+unsigned int CityBuilder::add(Ecs::World& w) {
+  Ecs::Entity *e = CityBuilder::random();
+  unsigned int id = w.addEntity(e);
+  ::cityNames[e->getComponent<Component::Name>()->value] = id;
+  return id;
 }
