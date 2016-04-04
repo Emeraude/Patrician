@@ -25,6 +25,7 @@ void System::Console::help(std::stringstream&) {
 
 void System::Console::status(std::stringstream&) {
   std::cout << "Day " << _w->getSystem<System::Time>()->getDay() << std::endl;
+  std::cout << "Speed: 1 day ~= " << (_w->getSystem<System::Time>()->getSpeed() / 100.0) << " seconds" << std::endl;
 }
 
 void System::Console::ship(std::stringstream& ss) {

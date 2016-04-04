@@ -3,7 +3,7 @@
 #include "Components.hpp"
 #include "CityBuilder.hpp"
 
-System::Time::Time() : _day(0) {}
+System::Time::Time() : _day(0), _speed(1000) {}
 
 // Consumption is too heavy, have to find a way to consume less than 1 good per day
 void System::Time::consumption(Ecs::Entity *city) {
@@ -25,8 +25,7 @@ void System::Time::consumption(Ecs::Entity *city) {
 void System::Time::update(Ecs::World& w) {
   static unsigned int i = 0;
 
-  // 1 day ~= 10 seconds
-  if (++i < 1000)
+  if (++i < _speed)
     return;
   ++_day;
   i = 0;
@@ -36,4 +35,8 @@ void System::Time::update(Ecs::World& w) {
 
 uint32_t const& System::Time::getDay() const {
   return _day;
+}
+
+uint32_t const& System::Time::getSpeed() const {
+  return _speed;
 }

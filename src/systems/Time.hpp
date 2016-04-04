@@ -6,6 +6,7 @@ namespace System {
   class Time : public Ecs::System::Base {
   private:
     uint32_t _day;
+    uint32_t _speed;
 
     void consumption(Ecs::Entity *city);
   public:
@@ -13,5 +14,6 @@ namespace System {
     void update(Ecs::World &world);
 
     uint32_t const& getDay() const;
+    uint32_t const& getSpeed() const;
   };
 }
