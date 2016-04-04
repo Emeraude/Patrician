@@ -19,7 +19,7 @@ void System::Console::help(std::stringstream&) {
   std::cout << "Available commands:" << std::endl
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
-	    << "\tship add <type> <x> <y> | list" << std::endl
+	    << "\tship add <type> <x> <y> | list | select <id>" << std::endl
 	    << "\tstatus" << std::endl;
 }
 
@@ -32,7 +32,7 @@ void System::Console::status(std::stringstream&) {
 
 void System::Console::ship(std::stringstream& ss) {
   if (ss.eof()) {
-    std::cout << "Usage: ship add <type> <x> <y> | list" << std::endl;
+    std::cout << "Usage: ship add <type> <x> <y> | list | select <id>" << std::endl;
     return;
   }
   std::string cmd;
@@ -66,6 +66,22 @@ void System::Console::ship(std::stringstream& ss) {
       it->addComponent<Component::Move>(500, 600);
       it->getComponent<Component::Speed>()->current = 2;
       break;
+    }
+  }
+  else if (cmd == "select") {
+    unsigned int id;
+    if (!(ss >> id))
+      std::cerr << "Usage: ship select <id>" << std::endl;
+    else {
+      try {
+	Ecs::Entity& e = *_w->getEntities().at(id);
+	if (e.hasComponent<Component::Type>()
+	    && e.getComponent<Component::Type>()->type != Type::SHIP)
+	  throw std::out_of_range("Not a ship");
+	_selectedShip = id;
+      } catch (std::out_of_range&) {
+	std::cerr << "There is no ship with id #" << id << std::endl;
+      }
     }
   }
 }

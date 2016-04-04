@@ -9,6 +9,7 @@
 namespace System {
   class Console : public Ecs::System::Base {
   private:
+    unsigned int _selectedShip;
     std::thread *_thread;
     Ecs::World *_w;
     std::map<std::string, void (System::Console::*)(std::stringstream&)> _cmds;
