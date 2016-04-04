@@ -107,7 +107,7 @@ void System::Console::city(std::stringstream& ss) {
   else if (cmd == "stock") {
     std::string cityName;
     if (!(ss >> cityName))
-      std::cerr << "Usage: city details <city>" << std::endl;
+      std::cerr << "Usage: city stock <city>" << std::endl;
     else {
       try {
 	Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
