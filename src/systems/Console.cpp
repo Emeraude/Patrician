@@ -6,7 +6,7 @@
 #include "CityBuilder.hpp"
 #include "systems/Time.hpp"
 
-System::Console::Console() : _thread(new std::thread(&System::Console::readCin, this)), _w(NULL) {
+System::Console::Console() : _selectedShip(0), _thread(new std::thread(&System::Console::readCin, this)), _w(NULL) {
   _types["snaikka"] = &ShipBuilder::Snaikka;
   _types["crayer"] = &ShipBuilder::Crayer;
 }
@@ -19,7 +19,7 @@ void System::Console::help(std::stringstream&) {
   std::cout << "Available commands:" << std::endl
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
-	    << "\tship add <type> <x> <y> | list | select <id>" << std::endl
+	    << "\tship add <type> <x> <y> | list | move <x> <y> | select <id>" << std::endl
 	    << "\tstatus" << std::endl;
 }
 
@@ -32,7 +32,7 @@ void System::Console::status(std::stringstream&) {
 
 void System::Console::ship(std::stringstream& ss) {
   if (ss.eof()) {
-    std::cout << "Usage: ship add <type> <x> <y> | list | select <id>" << std::endl;
+    std::cout << "Usage: ship add <type> <x> <y> | list | move <x> <y> | select <id>" << std::endl;
     return;
   }
   std::string cmd;
@@ -62,10 +62,21 @@ void System::Console::ship(std::stringstream& ss) {
   }
   // Test only; find a proper way to do it
   else if (cmd == "move") {
-    for (auto *it: _w->getEntities()) {
-      it->addComponent<Component::Move>(500, 600);
-      it->getComponent<Component::Speed>()->current = 2;
-      break;
+    uint16_t x, y;
+    if (!(ss >> x >> y))
+      std::cerr << "Usage: ship move <x> <y>" << std::endl;
+    else {
+      try {
+	Ecs::Entity& e = *_w->getEntities().at(_selectedShip);
+	if (e.hasComponent<Component::Type>()
+	    && e.getComponent<Component::Type>()->type != Type::SHIP)
+	  throw std::out_of_range("No ship selected");
+	e.addComponent<Component::Move>(x, y);
+	e.getComponent<Component::Speed>()->current = e.getComponent<Component::Speed>()->max;
+      }
+      catch (std::out_of_range&) {
+	std::cerr << "No ship selected" << std::endl;
+      }
     }
   }
   else if (cmd == "select") {
@@ -88,7 +99,7 @@ void System::Console::ship(std::stringstream& ss) {
 
 void System::Console::city(std::stringstream& ss) {
   if (ss.eof()) {
-    std::cout << "Usage: city details <city> | list | stock <city>" << std::endl;
+    std::cout << "Usage: city details <city> | list stock <city>" << std::endl;
     return;
   }
   std::string cmd;
