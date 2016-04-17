@@ -9,7 +9,7 @@ enum Type {
   SHIP, CITY, BUILDING
 };
 
-namespace Component {
+namespace comp {
   struct Id : Ecs::Component::Base {
     uint32_t value;
     Id(uint32_t v) : value(v) {}

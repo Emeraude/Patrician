@@ -2,7 +2,7 @@
 
 #include "World.hpp"
 
-namespace System {
+namespace sys {
   class Move : public Ecs::System::Base {
   public:
     void update(Ecs::World &world);

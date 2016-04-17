@@ -6,16 +6,16 @@
 #include "CityBuilder.hpp"
 #include "systems/Time.hpp"
 
-System::Console::Console() : _selectedShip(0), _thread(new std::thread(&System::Console::readCin, this)), _w(NULL) {
+sys::Console::Console() : _selectedShip(0), _thread(new std::thread(&sys::Console::readCin, this)), _w(NULL) {
   _types["snaikka"] = &ShipBuilder::Snaikka;
   _types["crayer"] = &ShipBuilder::Crayer;
 }
 
-System::Console::~Console() {
+sys::Console::~Console() {
   delete _thread;
 }
 
-void System::Console::help(std::stringstream&) {
+void sys::Console::help(std::stringstream&) {
   std::cout << "Available commands:" << std::endl
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
@@ -23,14 +23,14 @@ void System::Console::help(std::stringstream&) {
 	    << "\tstatus" << std::endl;
 }
 
-void System::Console::status(std::stringstream&) {
-  System::Time& sys = *_w->getSystem<System::Time>();
+void sys::Console::status(std::stringstream&) {
+  sys::Time& sys = *_w->getSystem<sys::Time>();
 
   std::cout << "Day " << sys.getDay() << std::endl
 	    << "Speed: 1 day ~= " << (sys.getSpeed() / 100.0) << " seconds" << std::endl;
 }
 
-void System::Console::ship(std::stringstream& ss) {
+void sys::Console::ship(std::stringstream& ss) {
   if (ss.eof()) {
     std::cout << "Usage: ship add <type> <x> <y> | list | move <x> <y> | select <id>" << std::endl;
     return;
@@ -47,17 +47,17 @@ void System::Console::ship(std::stringstream& ss) {
     else {
       Ecs::Entity *e = _types[type](x, y);
       unsigned int id = _w->addEntity(e);
-      e->addComponent<Component::Id>(id);
+      e->addComponent<comp::Id>(id);
     }
   }
   else if (cmd == "list") {
     for (auto *it: _w->getEntities()) {
-      if (it->hasComponent<Component::Type>()
-	  && it->getComponent<Component::Type>()->type == Type::SHIP)
-	std::cout << "#" << it->getComponent<Component::Id>()->value
-		  << " \"" << it->getComponent<Component::Name>()->value
-		  << "\" in " << it->getComponent<Component::Position>()->x
-		  << "," << it->getComponent<Component::Position>()->y << std::endl;
+      if (it->hasComponent<comp::Type>()
+	  && it->getComponent<comp::Type>()->type == Type::SHIP)
+	std::cout << "#" << it->getComponent<comp::Id>()->value
+		  << " \"" << it->getComponent<comp::Name>()->value
+		  << "\" in " << it->getComponent<comp::Position>()->x
+		  << "," << it->getComponent<comp::Position>()->y << std::endl;
     }
   }
   // Test only; find a proper way to do it
@@ -68,11 +68,11 @@ void System::Console::ship(std::stringstream& ss) {
     else {
       try {
 	Ecs::Entity& e = *_w->getEntities().at(_selectedShip);
-	if (e.hasComponent<Component::Type>()
-	    && e.getComponent<Component::Type>()->type != Type::SHIP)
+	if (e.hasComponent<comp::Type>()
+	    && e.getComponent<comp::Type>()->type != Type::SHIP)
 	  throw std::out_of_range("No ship selected");
-	e.addComponent<Component::Move>(x, y);
-	e.getComponent<Component::Speed>()->current = e.getComponent<Component::Speed>()->max;
+	e.addComponent<comp::Move>(x, y);
+	e.getComponent<comp::Speed>()->current = e.getComponent<comp::Speed>()->max;
       }
       catch (std::out_of_range&) {
 	std::cerr << "No ship selected" << std::endl;
@@ -86,8 +86,8 @@ void System::Console::ship(std::stringstream& ss) {
     else {
       try {
 	Ecs::Entity& e = *_w->getEntities().at(id);
-	if (e.hasComponent<Component::Type>()
-	    && e.getComponent<Component::Type>()->type != Type::SHIP)
+	if (e.hasComponent<comp::Type>()
+	    && e.getComponent<comp::Type>()->type != Type::SHIP)
 	  throw std::out_of_range("Not a ship");
 	_selectedShip = id;
       } catch (std::out_of_range&) {
@@ -97,7 +97,7 @@ void System::Console::ship(std::stringstream& ss) {
   }
 }
 
-void System::Console::city(std::stringstream& ss) {
+void sys::Console::city(std::stringstream& ss) {
   if (ss.eof()) {
     std::cout << "Usage: city details <city> | list stock <city>" << std::endl;
     return;
@@ -106,12 +106,12 @@ void System::Console::city(std::stringstream& ss) {
   ss >> cmd;
   if (cmd == "list") {
     for (auto *it: _w->getEntities()) {
-      if (it->hasComponent<Component::Type>()
-	  && it->getComponent<Component::Type>()->type == Type::CITY)
-	std::cout << "\"" << it->getComponent<Component::Name>()->value
-		  << "\" (" << it->getComponent<Component::Inhabitants>()->total()
-		  << ") in " << it->getComponent<Component::Position>()->x
-		  << "," << it->getComponent<Component::Position>()->y << std::endl;
+      if (it->hasComponent<comp::Type>()
+	  && it->getComponent<comp::Type>()->type == Type::CITY)
+	std::cout << "\"" << it->getComponent<comp::Name>()->value
+		  << "\" (" << it->getComponent<comp::Inhabitants>()->total()
+		  << ") in " << it->getComponent<comp::Position>()->x
+		  << "," << it->getComponent<comp::Position>()->y << std::endl;
     }
   }
   else if (cmd == "details") {
@@ -122,12 +122,12 @@ void System::Console::city(std::stringstream& ss) {
       try {
 	Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
 	std::cout << "\"" << cityName
-		  << "\" in " << e->getComponent<Component::Position>()->x
-		  << "," << e->getComponent<Component::Position>()->y
-		  << ": " << e->getComponent<Component::Inhabitants>()->poor
-		  << " poors, " << e->getComponent<Component::Inhabitants>()->wealthy
-		  << " wealthy, " << e->getComponent<Component::Inhabitants>()->rich
-		  << " rich, " << e->getComponent<Component::Inhabitants>()->beggar
+		  << "\" in " << e->getComponent<comp::Position>()->x
+		  << "," << e->getComponent<comp::Position>()->y
+		  << ": " << e->getComponent<comp::Inhabitants>()->poor
+		  << " poors, " << e->getComponent<comp::Inhabitants>()->wealthy
+		  << " wealthy, " << e->getComponent<comp::Inhabitants>()->rich
+		  << " rich, " << e->getComponent<comp::Inhabitants>()->beggar
 		  << " beggars" << std::endl;
       } catch (std::out_of_range&) {
 	std::cerr << "No city \"" << cityName << "\" found" << std::endl;
@@ -141,7 +141,7 @@ void System::Console::city(std::stringstream& ss) {
     else {
       try {
 	Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
-	Component::Stock s = *e->getComponent<Component::Stock>();
+	comp::Stock s = *e->getComponent<comp::Stock>();
 	for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i)
 	  std::cout << infosResource[i].name << " " << s.at(static_cast<Resource>(i)) << std::endl;
       } catch (std::out_of_range&) {
@@ -154,13 +154,13 @@ void System::Console::city(std::stringstream& ss) {
   }
 }
 
-void System::Console::readCin() {
+void sys::Console::readCin() {
   std::string in;
 
-  _cmds["ship"] = &System::Console::ship;
-  _cmds["city"] = &System::Console::city;
-  _cmds["help"] = &System::Console::help;
-  _cmds["status"] = &System::Console::status;
+  _cmds["ship"] = &sys::Console::ship;
+  _cmds["city"] = &sys::Console::city;
+  _cmds["help"] = &sys::Console::help;
+  _cmds["status"] = &sys::Console::status;
   while (true) {
     std::cout << "> ";
     if (!std::getline(std::cin, in)) {
@@ -185,7 +185,7 @@ void System::Console::readCin() {
   _w->stop();
 }
 
-void System::Console::update(Ecs::World& w) {
+void sys::Console::update(Ecs::World& w) {
   if (!_w) {
     _w = &w;
     _thread->detach();

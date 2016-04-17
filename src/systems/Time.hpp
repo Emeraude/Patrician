@@ -2,7 +2,7 @@
 
 #include "World.hpp"
 
-namespace System {
+namespace sys {
   class Time : public Ecs::System::Base {
   private:
     uint32_t _day;

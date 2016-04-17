@@ -13,9 +13,9 @@ int main(void) {
     std::random_device rd;
     std::srand(rd());
 
-    w.addSystem<System::Console>();
-    w.addSystem<System::Move>();
-    w.addSystem<System::Time>();
+    w.addSystem<sys::Console>();
+    w.addSystem<sys::Move>();
+    w.addSystem<sys::Time>();
     CityBuilder::add(w);
     CityBuilder::add(w);
     CityBuilder::add(w);

@@ -3,12 +3,12 @@
 #include "Components.hpp"
 #include "CityBuilder.hpp"
 
-System::Time::Time() : _day(0), _speed(1000) {}
+sys::Time::Time() : _day(0), _speed(1000) {}
 
 // Consumption is too heavy, have to find a way to consume less than 1 good per day
-void System::Time::consumption(Ecs::Entity *city) {
-  Component::Stock& s = *city->getComponent<Component::Stock>();
-  Component::Inhabitants& inhabitants = *city->getComponent<Component::Inhabitants>();
+void sys::Time::consumption(Ecs::Entity *city) {
+  comp::Stock& s = *city->getComponent<comp::Stock>();
+  comp::Inhabitants& inhabitants = *city->getComponent<comp::Inhabitants>();
 
   for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
     unsigned int consumed = ceil(infosResource[i].consumption.base
@@ -22,7 +22,7 @@ void System::Time::consumption(Ecs::Entity *city) {
   }
 }
 
-void System::Time::update(Ecs::World& w) {
+void sys::Time::update(Ecs::World& w) {
   static unsigned int i = 0;
 
   if (++i < _speed)
@@ -33,10 +33,10 @@ void System::Time::update(Ecs::World& w) {
     this->consumption(w.getEntities()[it.second]);
 }
 
-uint32_t const& System::Time::getDay() const {
+uint32_t const& sys::Time::getDay() const {
   return _day;
 }
 
-uint32_t const& System::Time::getSpeed() const {
+uint32_t const& sys::Time::getSpeed() const {
   return _speed;
 }

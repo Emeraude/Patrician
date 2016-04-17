@@ -20,22 +20,22 @@ std::string const CityBuilder::getName() {
 Ecs::Entity *CityBuilder::random() {
   Ecs::Entity *e = new Ecs::Entity();
 
-  e->addComponent<Component::Position>(rand() % 1000, rand() % 1000);
-  e->addComponent<Component::Type>(Type::CITY);
-  e->addComponent<Component::Name>(getName());
-  e->addComponent<Component::Inhabitants>(rand() % 100 + 1950,
+  e->addComponent<comp::Position>(rand() % 1000, rand() % 1000);
+  e->addComponent<comp::Type>(Type::CITY);
+  e->addComponent<comp::Name>(getName());
+  e->addComponent<comp::Inhabitants>(rand() % 100 + 1950,
 					  rand() % 70 + 860,
 					  rand() % 50 + 470,
 					  rand() % 10 + 85);
-  e->addComponent<Component::Stock>();
-  e->getComponent<Component::Stock>()->at(Resource::TIMBER) = 5;
-  e->getComponent<Component::Stock>()->at(Resource::BRICK) = 5;
+  e->addComponent<comp::Stock>();
+  e->getComponent<comp::Stock>()->at(Resource::TIMBER) = 5;
+  e->getComponent<comp::Stock>()->at(Resource::BRICK) = 5;
   return e;
 }
 
 unsigned int CityBuilder::add(Ecs::World& w) {
   Ecs::Entity *e = CityBuilder::random();
   unsigned int id = w.addEntity(e);
-  ::cityNames[e->getComponent<Component::Name>()->value] = id;
+  ::cityNames[e->getComponent<comp::Name>()->value] = id;
   return id;
 }
