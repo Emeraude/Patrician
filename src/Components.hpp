@@ -71,4 +71,20 @@ namespace comp {
       return _stock.at(r);
     }
   };
+
+  // Used to know where is a building / where live a trader
+  struct City : Ecs::Component::Base {
+    uint32_t id;
+    City(uint32_t _id) : id(_id) {}
+  };
+
+  struct Owner : Ecs::Component::Base {
+    uint32_t id;
+    Owner(uint32_t _id) : id(_id) {}
+  };
+
+  struct Size : Ecs::Component::Base {
+    uint32_t value;
+    Size(uint32_t _value = std::numeric_limits<uint32_t>::max()) : value(_value) {}
+  };
 }
