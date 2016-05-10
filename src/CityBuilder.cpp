@@ -1,5 +1,6 @@
 #include <exception>
 #include "CityBuilder.hpp"
+#include "BuildingBuilder.hpp"
 #include "Components.hpp"
 
 #define SIZE(x) (sizeof(x) / sizeof(*x))
@@ -17,6 +18,7 @@ std::string const CityBuilder::getName() {
   return names[i++];
 }
 
+// This function does not creates any buildings
 Ecs::Entity *CityBuilder::random() {
   Ecs::Entity *e = new Ecs::Entity();
 
@@ -37,5 +39,6 @@ unsigned int CityBuilder::add(Ecs::World& w) {
   Ecs::Entity *e = CityBuilder::random();
   unsigned int id = w.addEntity(e);
   ::cityNames[e->getComponent<comp::Name>()->value] = id;
+  w.addEntity(BuildingBuilder::office(id, id));
   return id;
 }
