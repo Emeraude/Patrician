@@ -3,7 +3,7 @@
 #include <cstdint>
 
 enum Resource {
-  TIMBER, BRICK,
+  TIMBER = 0, BRICK,
   FIRST = TIMBER, LAST = BRICK,
   LENGTH = LAST + 1
 };
