@@ -140,7 +140,8 @@ void sys::Console::city(std::stringstream& ss) {
       std::cerr << "Usage: city stock <city>" << std::endl;
     else {
       try {
-	Ecs::Entity *e = _w->getEntities()[_w->getEntities()[::cityNames.at(cityName)]->getComponent<comp::Buildings>()->office];
+	Ecs::Entity *city = _w->getEntity(::cityNames.at(cityName));
+	Ecs::Entity *e = _w->getEntity(city->getComponent<comp::Buildings>()->office);
 	comp::Stock s = *e->getComponent<comp::Stock>();
 	for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i)
 	  std::cout << infosResource[i].name << " " << s.at(static_cast<Resource>(i)) << std::endl;

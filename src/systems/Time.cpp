@@ -7,7 +7,8 @@ sys::Time::Time() : _day(0), _speed(1000) {}
 
 // Consumption is too heavy, have to find a way to consume less than 1 good per day
 void sys::Time::consumption(Ecs::World& w, Ecs::Entity *city) {
-  comp::Stock& s = *(w.getEntities()[city->getComponent<comp::Buildings>()->office]->getComponent<comp::Stock>());
+  Ecs::Entity *office = w.getEntity(city->getComponent<comp::Buildings>()->office);
+  comp::Stock& s = *office->getComponent<comp::Stock>();
   comp::Inhabitants& inhabitants = *city->getComponent<comp::Inhabitants>();
 
   for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
@@ -30,7 +31,7 @@ void sys::Time::update(Ecs::World& w) {
   ++_day;
   i = 0;
   for (auto& it : ::cityNames)
-    this->consumption(w, w.getEntities()[it.second]);
+    this->consumption(w, w.getEntity(it.second));
 }
 
 uint32_t const& sys::Time::getDay() const {
