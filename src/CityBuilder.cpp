@@ -40,6 +40,6 @@ unsigned int CityBuilder::add(Ecs::World& w) {
   Ecs::Entity *e = CityBuilder::random();
   unsigned int id = w.addEntity(e);
   ::cityNames[e->getComponent<comp::Name>()->value] = id;
-  w.addEntity(BuildingBuilder::office(w, id, id));
+  BuildingBuilder::office(w, id, id);
   return id;
 }
