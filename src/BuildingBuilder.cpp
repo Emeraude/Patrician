@@ -18,3 +18,12 @@ unsigned int BuildingBuilder::addOffice(Ecs::World& w, uint32_t city, uint32_t o
     w.getEntities()[city]->getComponent<comp::Buildings>()->office = id;
   return id;
 }
+
+Ecs::Entity* BuildingBuilder::Production::base(Ecs::World& w, uint32_t city, uint32_t owner) {
+  Ecs::Entity *e = new Ecs::Entity();
+
+  e->addComponent<comp::Type>(Type::BUILDING);
+  e->addComponent<comp::City>(Type::city);
+  e->addComponent<comp::Owner>(Type::owner);
+  return e;
+}
