@@ -4,5 +4,5 @@
 
 class BuildingBuilder {
 public:
-  static Ecs::Entity *office(uint32_t city, uint32_t owner);
+  static Ecs::Entity *office(Ecs::World& w, uint32_t city, uint32_t owner);
 };
