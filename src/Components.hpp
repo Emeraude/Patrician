@@ -87,4 +87,9 @@ namespace comp {
     uint32_t value;
     Size(uint32_t _value = std::numeric_limits<uint32_t>::max()) : value(_value) {}
   };
+
+  // Store ids of the buildings
+  struct Buildings : Ecs::Component::Base {
+    uint32_t office;
+  };
 }
