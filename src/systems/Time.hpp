@@ -8,7 +8,7 @@ namespace sys {
     uint32_t _day;
     uint32_t _speed;
 
-    void consumption(Ecs::Entity *city);
+    void consumption(Ecs::World& w, Ecs::Entity *city);
   public:
     Time();
     void update(Ecs::World &world);

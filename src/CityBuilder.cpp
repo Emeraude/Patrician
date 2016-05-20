@@ -29,9 +29,6 @@ unsigned int CityBuilder::addRandom(Ecs::World& w) {
 					  rand() % 50 + 470,
 					  rand() % 10 + 85);
   e->addComponent<comp::Buildings>();
-  e->addComponent<comp::Stock>();
-  e->getComponent<comp::Stock>()->at(Resource::TIMBER) = 5;
-  e->getComponent<comp::Stock>()->at(Resource::BRICK) = 5;
 
   unsigned int id = w.addEntity(e);
   BuildingBuilder::addOffice(w, id, id);
