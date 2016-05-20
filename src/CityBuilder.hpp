@@ -11,6 +11,5 @@ private:
   static std::string const getName();
 
 public:
-  static Ecs::Entity *random();
-  static unsigned int add(Ecs::World &w);
+  static unsigned int addRandom(Ecs::World &w);
 };

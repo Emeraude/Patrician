@@ -18,8 +18,7 @@ std::string const CityBuilder::getName() {
   return names[i++];
 }
 
-// This function does not creates any buildings
-Ecs::Entity *CityBuilder::random() {
+unsigned int CityBuilder::addRandom(Ecs::World& w) {
   Ecs::Entity *e = new Ecs::Entity();
 
   e->addComponent<comp::Position>(rand() % 1000, rand() % 1000);
@@ -33,13 +32,9 @@ Ecs::Entity *CityBuilder::random() {
   e->addComponent<comp::Stock>();
   e->getComponent<comp::Stock>()->at(Resource::TIMBER) = 5;
   e->getComponent<comp::Stock>()->at(Resource::BRICK) = 5;
-  return e;
-}
 
-unsigned int CityBuilder::add(Ecs::World& w) {
-  Ecs::Entity *e = CityBuilder::random();
   unsigned int id = w.addEntity(e);
+  BuildingBuilder::addOffice(w, id, id);
   ::cityNames[e->getComponent<comp::Name>()->value] = id;
-  BuildingBuilder::office(w, id, id);
   return id;
 }

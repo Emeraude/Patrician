@@ -1,7 +1,7 @@
 #include "Components.hpp"
 #include "BuildingBuilder.hpp"
 
-Ecs::Entity *BuildingBuilder::office(Ecs::World& w, uint32_t city, uint32_t owner) {
+Ecs::Entity *BuildingBuilder::addOffice(Ecs::World& w, uint32_t city, uint32_t owner) {
   Ecs::Entity *e = new Ecs::Entity();
 
   e->addComponent<comp::Type>(Type::BUILDING);
