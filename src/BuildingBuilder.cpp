@@ -1,7 +1,7 @@
 #include "Components.hpp"
 #include "BuildingBuilder.hpp"
 
-Ecs::Entity *BuildingBuilder::addOffice(Ecs::World& w, uint32_t city, uint32_t owner) {
+unsigned int BuildingBuilder::addOffice(Ecs::World& w, uint32_t city, uint32_t owner) {
   Ecs::Entity *e = new Ecs::Entity();
 
   e->addComponent<comp::Type>(Type::BUILDING);
@@ -12,7 +12,9 @@ Ecs::Entity *BuildingBuilder::addOffice(Ecs::World& w, uint32_t city, uint32_t o
   else
     e->addComponent<comp::Size>(500);
   e->addComponent<comp::Stock>();
+
+  unsigned int id = w.addEntity(e);
   if (city == owner)
-    w.getEntities()[city]->getComponent<comp::Buildings>()->office = w.addEntity(e);
-  return e;
+    w.getEntities()[city]->getComponent<comp::Buildings>()->office = id;
+  return id;
 }
