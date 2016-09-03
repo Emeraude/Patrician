@@ -2,9 +2,9 @@
 #include <iostream>
 #include <random>
 #include "World.hpp"
-#include "systems/Console.cpp"
-#include "systems/Move.cpp"
-#include "systems/Time.cpp"
+#include "systems/Console.hpp"
+#include "systems/Move.hpp"
+#include "systems/Time.hpp"
 #include "CityBuilder.hpp"
 
 int main(void) {
