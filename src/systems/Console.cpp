@@ -4,11 +4,14 @@
 #include "Console.hpp"
 #include "ShipBuilder.hpp"
 #include "CityBuilder.hpp"
+#include "BuildingBuilder.hpp"
 #include "systems/Time.hpp"
 
 sys::Console::Console() : _selectedShip(0), _thread(new std::thread(&sys::Console::readCin, this)), _w(NULL) {
   _types["snaikka"] = &ShipBuilder::Snaikka;
   _types["crayer"] = &ShipBuilder::Crayer;
+
+  _buildingTypes["sawmill"] = &BuildingBuilder::Production::addSawmill;
 }
 
 sys::Console::~Console() {
@@ -17,6 +20,7 @@ sys::Console::~Console() {
 
 void sys::Console::help(std::stringstream&) {
   std::cout << "Available commands:" << std::endl
+	    << "\tbuilding create <city> <type>" << std::endl
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
 	    << "\tship add <type> <x> <y> | list | move <x> <y> | select <id>" << std::endl
@@ -155,10 +159,33 @@ void sys::Console::city(std::stringstream& ss) {
   }
 }
 
+void sys::Console::building(std::stringstream& ss) {
+  if (ss.eof()) {
+    std::cout << "Usage: building create <city> <type>" << std::endl;
+    return;
+  }
+  std::string cmd;
+  ss >> cmd;
+  if (cmd == "create") {
+    std::string cityName, type;
+    if (!(ss >> cityName >> type))
+      std::cerr << "Usage: building create <city> <type>" << std::endl;
+    else if (_buildingTypes[type] == NULL)
+      std::cerr << "Unknown building type \"" << type << "\"" << std::endl;
+    else
+      try {
+	_buildingTypes[type](*_w, ::cityNames.at(cityName), 1);
+      } catch (std::out_of_range&) {
+	std::cerr << "No city \"" << cityName << "\" found" << std::endl;
+      }
+  }
+}
+
 void sys::Console::readCin() {
   std::string in;
 
   _cmds["ship"] = &sys::Console::ship;
+  _cmds["building"] = &sys::Console::building;
   _cmds["city"] = &sys::Console::city;
   _cmds["help"] = &sys::Console::help;
   _cmds["status"] = &sys::Console::status;
