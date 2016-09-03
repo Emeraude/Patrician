@@ -25,9 +25,9 @@ unsigned int CityBuilder::addRandom(Ecs::World& w) {
   e->addComponent<comp::Type>(Type::CITY);
   e->addComponent<comp::Name>(getName());
   e->addComponent<comp::Inhabitants>(rand() % 100 + 1950,
-					  rand() % 70 + 860,
-					  rand() % 50 + 470,
-					  rand() % 10 + 85);
+				     rand() % 70 + 860,
+				     rand() % 50 + 470,
+				     rand() % 10 + 85);
   e->addComponent<comp::Buildings>();
 
   unsigned int id = w.addEntity(e);
