@@ -1,5 +1,6 @@
 #include <cmath>
 #include "Move.hpp"
+#include "Components.hpp"
 
 // Too fast now, find a way to slower it
 void sys::Move::update(Ecs::World &w) {
