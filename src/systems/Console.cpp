@@ -20,7 +20,7 @@ sys::Console::~Console() {
 
 void sys::Console::help(std::stringstream&) {
   std::cout << "Available commands:" << std::endl
-	    << "\tbuilding create <city> <type>" << std::endl
+	    << "\tbuilding create <city> <type> | list <city>" << std::endl
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
 	    << "\tship add <type> <x> <y> | list | move <x> <y> | select <id>" << std::endl
@@ -161,7 +161,7 @@ void sys::Console::city(std::stringstream& ss) {
 
 void sys::Console::building(std::stringstream& ss) {
   if (ss.eof()) {
-    std::cout << "Usage: building create <city> <type>" << std::endl;
+    std::cout << "Usage: building create <city> <type> | list <city>" << std::endl;
     return;
   }
   std::string cmd;
@@ -174,7 +174,29 @@ void sys::Console::building(std::stringstream& ss) {
       std::cerr << "Unknown building type \"" << type << "\"" << std::endl;
     else
       try {
+	// TODO: replace by real player id
 	_buildingTypes[type](*_w, ::cityNames.at(cityName), 1);
+      } catch (std::out_of_range&) {
+	std::cerr << "No city \"" << cityName << "\" found" << std::endl;
+      }
+  }
+  else if (cmd == "list") {
+    std::string cityName;
+    if (!(ss >> cityName))
+      std::cerr << "Usage: building list <city>" << std::endl;
+    else
+      try {
+	for (auto *it: _w->getEntities()) {
+	  if (it->hasComponent<comp::Type>()
+	      && it->hasComponent<comp::City>()
+	      && it->getComponent<comp::Type>()->type == Type::BUILDING
+	      && it->getComponent<comp::City>()->id == ::cityNames.at(cityName)) {
+	    if (it->hasComponent<comp::Name>())
+	      std::cout << it->getComponent<comp::Name>()->value << std::endl;
+	    else
+	      std::cout << "Unknown building" << std::endl;
+	  }
+	}
       } catch (std::out_of_range&) {
 	std::cerr << "No city \"" << cityName << "\" found" << std::endl;
       }
