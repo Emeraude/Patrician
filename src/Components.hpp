@@ -72,6 +72,28 @@ namespace comp {
     }
   };
 
+  struct Production : Ecs::Component::Base {
+  private:
+    std::vector<uint16_t> _stock;
+
+  public:
+    Production() : _stock(Resource::LENGTH) {}
+    uint16_t& at(Resource const r) {
+      return _stock.at(r);
+    }
+  };
+
+  struct Consumption : Ecs::Component::Base {
+  private:
+    std::vector<uint16_t> _stock;
+
+  public:
+    Consumption() : _stock(Resource::LENGTH) {}
+    uint16_t& at(Resource const r) {
+      return _stock.at(r);
+    }
+  };
+
   // Used to know where is a building / where live a trader
   struct City : Ecs::Component::Base {
     uint32_t id;
