@@ -23,7 +23,7 @@ void sys::Console::help(std::stringstream&) {
 	    << "\tbuilding create <city> <type> | list <city>" << std::endl
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
-	    << "\tship add <type> <x> <y> | list | move <x> <y> | select <id>" << std::endl
+	    << "\tship add <type> <x> <y> | list | (<city> | <x> <y>) | select <id>" << std::endl
 	    << "\tstatus" << std::endl;
 }
 
@@ -36,7 +36,7 @@ void sys::Console::status(std::stringstream&) {
 
 void sys::Console::ship(std::stringstream& ss) {
   if (ss.eof()) {
-    std::cout << "Usage: ship add <type> <x> <y> | list | move <x> <y> | select <id>" << std::endl;
+    std::cout << "Usage: ship add <type> <x> <y> | list | move (<city> | <x> <y>) | select <id>" << std::endl;
     return;
   }
   std::string cmd;
@@ -64,12 +64,28 @@ void sys::Console::ship(std::stringstream& ss) {
 		  << "," << it->getComponent<comp::Position>()->y << std::endl;
     }
   }
-  // Test only; find a proper way to do it
   else if (cmd == "move") {
     uint16_t x, y;
-    if (!(ss >> x >> y))
-      std::cerr << "Usage: ship move <x> <y>" << std::endl;
-    else {
+    std::string cityName;
+    if (ss >> cityName) {
+      if (ss >> y) {
+	try {
+	  x = std::stoi(cityName);
+	} catch (...) {
+	  std::cerr << "Usage: ship move (<city> | <x> <y>)" << std::endl;
+	  return;
+	}
+      }
+      else {
+	try {
+	  Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
+	  x = e->getComponent<comp::Position>()->x;
+	  y = e->getComponent<comp::Position>()->y;
+	} catch (std::out_of_range&) {
+	  std::cerr << "No city \"" << cityName << "\" found" << std::endl;
+	  return;
+	}
+      }
       try {
 	Ecs::Entity& e = *_w->getEntities().at(_selectedShip);
 	if (e.hasComponent<comp::Type>()
@@ -82,6 +98,8 @@ void sys::Console::ship(std::stringstream& ss) {
 	std::cerr << "No ship selected" << std::endl;
       }
     }
+    else
+      std::cerr << "Usage: ship move (<city> | <x> <y>)" << std::endl;
   }
   else if (cmd == "select") {
     unsigned int id;
