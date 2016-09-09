@@ -30,8 +30,8 @@ void sys::Time::update(Ecs::World& w) {
     return;
   ++_day;
   i = 0;
-  for (auto& it : ::cityNames)
-    this->consumption(w, w.getEntity(it.second));
+  // for (auto& it : ::cityNames)
+  //   this->consumption(w, w.getEntity(it.second));
 }
 
 uint32_t const& sys::Time::getDay() const {
