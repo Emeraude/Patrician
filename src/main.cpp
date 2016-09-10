@@ -6,6 +6,7 @@
 #include "systems/Move.hpp"
 #include "systems/Time.hpp"
 #include "CityBuilder.hpp"
+#include "PlayerBuilder.hpp"
 
 int main(void) {
   try {
@@ -17,6 +18,7 @@ int main(void) {
     w.addSystem<sys::Move>();
     w.addSystem<sys::Time>();
     CityBuilder::addRandom(w);
+    PlayerBuilder::addPlayer(w, cityNames.begin()->second);
     CityBuilder::addRandom(w);
     CityBuilder::addRandom(w);
     w.run();
