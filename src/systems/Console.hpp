@@ -13,7 +13,7 @@ namespace sys {
     std::thread *_thread;
     Ecs::World *_w;
     std::map<std::string, void (sys::Console::*)(std::stringstream&)> _cmds;
-    std::map<std::string, Ecs::Entity *(*)(uint16_t, uint16_t)> _types;
+    std::map<std::string, Ecs::Entity *(*)(Ecs::World &, uint16_t, uint16_t)> _types;
     std::map<std::string, unsigned int (*)(Ecs::World &, uint32_t, uint32_t)> _buildingTypes;
 
     void status(std::stringstream&);

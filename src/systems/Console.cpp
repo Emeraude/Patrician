@@ -8,8 +8,8 @@
 #include "systems/Time.hpp"
 
 sys::Console::Console() : _selectedShip(0), _thread(new std::thread(&sys::Console::readCin, this)), _w(NULL) {
-  _types["snaikka"] = &ShipBuilder::Snaikka;
-  _types["crayer"] = &ShipBuilder::Crayer;
+  _types["snaikka"] = &ShipBuilder::addSnaikka;
+  _types["crayer"] = &ShipBuilder::addCrayer;
 
   _buildingTypes["sawmill"] = &BuildingBuilder::Production::addSawmill;
 }
@@ -48,11 +48,8 @@ void sys::Console::ship(std::stringstream& ss) {
       std::cerr << "Usage: ship add <type> <x> <y>" << std::endl;
     else if (_types[type] == NULL)
       std::cerr << "Unknown ship type \"" << type << "\"" << std::endl;
-    else {
-      Ecs::Entity *e = _types[type](x, y);
-      unsigned int id = _w->addEntity(e);
-      e->addComponent<comp::Id>(id);
-    }
+    else
+      _types[type](*_w, x, y);
   }
   else if (cmd == "list") {
     for (auto *it: _w->getEntities()) {
