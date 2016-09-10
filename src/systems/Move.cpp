@@ -1,6 +1,18 @@
 #include <cmath>
 #include "Move.hpp"
 #include "Components.hpp"
+#include "CityBuilder.hpp"
+
+void sys::Move::checkCities(Ecs::World &w, Ecs::Entity *e) {
+  comp::Position *posE = e->getComponent<comp::Position>();
+  for (auto& it : ::cityNames) {
+    Ecs::Entity *city = w.getEntity(it.second);
+    comp::Position *posCity = city->getComponent<comp::Position>();
+    if (posE->x == posCity->x
+	&& posE->y == posCity->y)
+      e->addComponent<comp::City>(it.second);
+  }
+}
 
 // Too fast now, find a way to slower it
 void sys::Move::update(Ecs::World &w) {
@@ -8,6 +20,9 @@ void sys::Move::update(Ecs::World &w) {
     if (it->hasComponent<comp::Move>()) {
       comp::Move *move = it->getComponent<comp::Move>();
       comp::Position *pos = it->getComponent<comp::Position>();
+
+      if (it->hasComponent<comp::City>())
+	it->removeComponent<comp::City>();
 
       int16_t  diff_x, diff_y;
       diff_x = move->x - pos->x;
@@ -20,6 +35,7 @@ void sys::Move::update(Ecs::World &w) {
 	pos->x = move->x;
 	pos->y = move->y;
 	it->removeComponent<comp::Move>();
+	this->checkCities(w, it);
       }
       else {
 	pos->x += diff_x / turns;

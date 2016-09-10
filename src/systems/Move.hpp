@@ -4,6 +4,9 @@
 
 namespace sys {
   class Move : public Ecs::System::Base {
+  private:
+    void checkCities(Ecs::World &w, Ecs::Entity *e);
+
   public:
     void update(Ecs::World &world);
   };
