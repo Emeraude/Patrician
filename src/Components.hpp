@@ -6,7 +6,7 @@
 #include "Resources.hpp"
 
 enum Type {
-  SHIP, CITY, BUILDING
+  SHIP, CITY, BUILDING, PLAYER
 };
 
 namespace comp {
