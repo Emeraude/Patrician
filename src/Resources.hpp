@@ -11,6 +11,7 @@ enum Resource {
 static const struct {
   char const* name;
   uint8_t size;
+  uint16_t cost;
   struct {
     uint16_t base;
     uint16_t poor;
@@ -18,6 +19,6 @@ static const struct {
     uint16_t rich;
   } consumption;
 } infosResource[] = {
-  {"timber", 10, {5, 1, 0, 0}},
-  {"brick", 10, {7, 1, 0, 0}}
+  {"timber", 10, 100, {5, 1, 0, 0}},
+  {"brick", 10, 150, {7, 1, 0, 0}}
 };
