@@ -113,7 +113,7 @@ void sys::Console::ship(std::stringstream& ss) {
 	  throw std::out_of_range("Not a ship");
 	_selectedShip = id;
       } catch (std::out_of_range&) {
-	std::cerr << "There is no ship with id #" << id << std::endl;
+      	std::cerr << "There is no ship with id #" << id << std::endl;
       }
     }
   }
@@ -244,8 +244,13 @@ void sys::Console::readCin() {
     ss >> cmd;
     if (cmd == "exit")
       break;
-    else if (_cmds[cmd] != NULL)
-      (this->*_cmds[cmd])(ss);
+    else if (_cmds[cmd] != NULL) {
+      try {
+	(this->*_cmds[cmd])(ss);
+      } catch (std::exception const& e) {
+	std::cerr << e.what() << std::endl;
+      }
+    }
     else
       std::cerr << "Unknown command " << cmd << std::endl;
   }
