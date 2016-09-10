@@ -16,10 +16,10 @@ void sys::Time::consumption(Ecs::World& w, Ecs::Entity *city) {
 				  + infosResource[i].consumption.poor * inhabitants.poor / 1000.0
 				  + infosResource[i].consumption.wealthy * inhabitants.wealthy / 1000.0
 				  + infosResource[i].consumption.rich * inhabitants.rich / 1000.0);
-    if (consumed > s.at(static_cast<Resource>(i)))
-      s.at(static_cast<Resource>(i)) = 0;
+    if (consumed > s.at(static_cast<Resource>(i)).quantity)
+      s.at(static_cast<Resource>(i)).quantity = 0;
     else
-      s.at(static_cast<Resource>(i)) -= consumed;
+      s.at(static_cast<Resource>(i)).quantity -= consumed;
   }
 }
 

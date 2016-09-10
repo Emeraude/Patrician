@@ -35,7 +35,7 @@ unsigned int CityBuilder::addRandom(Ecs::World& w) {
   e->getComponent<comp::Buildings>()->office = idOffice;
   comp::Stock *s = w.getEntity(idOffice)->getComponent<comp::Stock>();
   for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
-    s->at(static_cast<Resource>(i)) = 5;
+    s->at(static_cast<Resource>(i)).quantity = 5;
   }
 
   ::cityNames[e->getComponent<comp::Name>()->value] = id;

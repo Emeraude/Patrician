@@ -165,7 +165,7 @@ void sys::Console::city(std::stringstream& ss) {
 	Ecs::Entity *e = _w->getEntity(city->getComponent<comp::Buildings>()->office);
 	comp::Stock *s = e->getComponent<comp::Stock>();
 	for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i)
-	  std::cout << infosResource[i].name << " " << s->at(static_cast<Resource>(i)) << std::endl;
+	  std::cout << infosResource[i].name << " " << s->at(static_cast<Resource>(i)).quantity << std::endl;
       } catch (std::out_of_range&) {
 	std::cerr << "No city \"" << cityName << "\" found" << std::endl;
       }

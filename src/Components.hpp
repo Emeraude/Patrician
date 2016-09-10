@@ -63,11 +63,15 @@ namespace comp {
 
   struct Stock : Ecs::Component::Base {
   private:
-    std::vector<uint16_t> _stock;
+    struct t {
+      uint16_t quantity;
+      uint16_t value;
+    };
+    std::vector<t> _stock;
 
   public:
     Stock() : _stock(Resource::LENGTH) {}
-    uint16_t& at(Resource const r) {
+    t& at(Resource const r) {
       return _stock.at(r);
     }
   };
