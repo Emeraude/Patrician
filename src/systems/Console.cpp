@@ -224,26 +224,49 @@ void sys::Console::buy(std::stringstream& ss) {
     std::cout << "Usage: buy <resource> <quantity>" << std::endl;
     return;
   }
-  std::string resource;
+  std::string resourceStr;
+  Resource resource;
   uint32_t quantity;
-  if (!(ss >> resource >> quantity))
+  if (!(ss >> resourceStr >> quantity)) {
     std::cerr << "Usage: buy <resource> <quantity>" << std::endl;
+    return;
+  }
+  try {
+    resource = resourceNames.at(resourceStr);
+  } catch (std::out_of_range&) {
+    std::cerr << "Resource \"" << resourceStr << "\" does not exist" << std::endl;
+    return;
+  }
+  Ecs::Entity *ship = _w->getEntity(_selectedShip);
+  try {
+    if (!ship->hasComponent<comp::Type>()
+	|| ship->getComponent<comp::Type>()->type != Type::SHIP)
+      throw std::out_of_range("No ship selected");
+  } catch (std::out_of_range&) {
+    std::cerr << "No ship selected" << std::endl;
+    return;
+  }
+  if (!ship->hasComponent<comp::City>()) {
+    std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
+    return;
+  }
+  Ecs::Entity *city = _w->getEntity(ship->getComponent<comp::City>()->id);
+  Ecs::Entity *office = _w->getEntity(city->getComponent<comp::Buildings>()->office);
+  Ecs::Entity *player = _w->getEntity(_player);
+  comp::Stock *cityStock = office->getComponent<comp::Stock>();
+  unsigned int price = infosResource[resource].cost * quantity;
+  if (cityStock->at(resource).quantity < quantity) {
+    std::cerr << "City only have " << cityStock->at(resource).quantity
+	      << " " << resourceStr << std::endl;
+  }
+  else if (player->getComponent<comp::Money>()->value < price) {
+    std::cerr << "You don't have enough money. It costs " << price
+	      << " and you have " << player->getComponent<comp::Money>()->value << std::endl;
+  }
   else {
-    Ecs::Entity *e = _w->getEntity(_selectedShip);
-    try {
-      if (!e->hasComponent<comp::Type>()
-	  || e->getComponent<comp::Type>()->type != Type::SHIP)
-	throw std::out_of_range("No ship selected");
-    } catch (std::out_of_range&) {
-      std::cerr << "No ship selected" << std::endl;
-      return;
-    }
-    if (!e->hasComponent<comp::City>())
-      std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
-    // Get resources informations
-    // calculate total price
-    // check if enough money
-    // lower money and move the goods
+    player->getComponent<comp::Money>()->value -= price;
+    cityStock->at(resource).quantity -= quantity;
+    ship->getComponent<comp::Stock>()->at(resource).quantity += quantity;
   }
 }
 
