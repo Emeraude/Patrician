@@ -51,7 +51,7 @@ void sys::Console::ship(std::stringstream& ss) {
     else if (_types[type] == NULL)
       std::cerr << "Unknown ship type \"" << type << "\"" << std::endl;
     else
-      _types[type](*_w, x, y);
+      _types[type](*_w, _player, x, y);
   }
   else if (cmd == "list") {
     for (auto *it: _w->getEntities()) {
