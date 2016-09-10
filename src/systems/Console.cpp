@@ -5,9 +5,10 @@
 #include "ShipBuilder.hpp"
 #include "CityBuilder.hpp"
 #include "BuildingBuilder.hpp"
+#include "PlayerBuilder.hpp"
 #include "systems/Time.hpp"
 
-sys::Console::Console() : _selectedShip(0), _thread(new std::thread(&sys::Console::readCin, this)), _w(NULL) {
+sys::Console::Console() : _selectedShip(0), _player(0), _thread(new std::thread(&sys::Console::readCin, this)), _w(NULL) {
   _types["snaikka"] = &ShipBuilder::addSnaikka;
   _types["crayer"] = &ShipBuilder::addCrayer;
 
@@ -30,7 +31,8 @@ void sys::Console::help(std::stringstream&) {
 void sys::Console::status(std::stringstream&) {
   sys::Time& sys = *_w->getSystem<sys::Time>();
 
-  std::cout << "Day " << sys.getDay() << std::endl
+  std::cout << "Player #" << _player << std::endl
+	    << "Day " << sys.getDay() << std::endl
 	    << "Speed: 1 day ~= " << (sys.getSpeed() / 100.0) << " seconds" << std::endl;
 }
 
@@ -255,6 +257,8 @@ void sys::Console::readCin() {
 }
 
 void sys::Console::update(Ecs::World& w) {
+  if (!_player)
+    _player = *::players.begin();
   if (!_w) {
     _w = &w;
     _thread->detach();

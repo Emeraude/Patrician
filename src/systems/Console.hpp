@@ -10,6 +10,7 @@ namespace sys {
   class Console : public Ecs::System::Base {
   private:
     unsigned int _selectedShip;
+    unsigned int _player;
     std::thread *_thread;
     Ecs::World *_w;
     std::map<std::string, void (sys::Console::*)(std::stringstream&)> _cmds;
