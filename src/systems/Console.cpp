@@ -190,8 +190,7 @@ void sys::Console::building(std::stringstream& ss) {
       std::cerr << "Unknown building type \"" << type << "\"" << std::endl;
     else
       try {
-	// TODO: replace by real player id
-	_buildingTypes[type](*_w, ::cityNames.at(cityName), 1);
+	_buildingTypes[type](*_w, ::cityNames.at(cityName), _player);
       } catch (std::out_of_range&) {
 	std::cerr << "No city \"" << cityName << "\" found" << std::endl;
       }
