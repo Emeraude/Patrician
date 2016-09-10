@@ -22,6 +22,7 @@ sys::Console::~Console() {
 void sys::Console::help(std::stringstream&) {
   std::cout << "Available commands:" << std::endl
 	    << "\tbuilding create <city> <type> | list <city>" << std::endl
+	    << "\tbuy <resource> <quantity>" << std::endl
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
 	    << "\tship add <type> <x> <y> | list | (<city> | <x> <y>) | select <id>" << std::endl
@@ -218,9 +219,38 @@ void sys::Console::building(std::stringstream& ss) {
   }
 }
 
+void sys::Console::buy(std::stringstream& ss) {
+  if (ss.eof()) {
+    std::cout << "Usage: buy <resource> <quantity>" << std::endl;
+    return;
+  }
+  std::string resource;
+  uint32_t quantity;
+  if (!(ss >> resource >> quantity))
+    std::cerr << "Usage: buy <resource> <quantity>" << std::endl;
+  else {
+    Ecs::Entity *e = _w->getEntity(_selectedShip);
+    try {
+      if (!e->hasComponent<comp::Type>()
+	  || e->getComponent<comp::Type>()->type != Type::SHIP)
+	throw std::out_of_range("No ship selected");
+    } catch (std::out_of_range&) {
+      std::cerr << "No ship selected" << std::endl;
+      return;
+    }
+    if (!e->hasComponent<comp::City>())
+      std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
+    // Get resources informations
+    // calculate total price
+    // check if enough money
+    // lower money and move the goods
+  }
+}
+
 void sys::Console::readCin() {
   std::string in;
 
+  _cmds["buy"] = &sys::Console::buy;
   _cmds["ship"] = &sys::Console::ship;
   _cmds["building"] = &sys::Console::building;
   _cmds["city"] = &sys::Console::city;

@@ -20,6 +20,7 @@ namespace sys {
     void status(std::stringstream&);
     void help(std::stringstream&);
     void ship(std::stringstream&);
+    void buy(std::stringstream&);
     void city(std::stringstream&);
     void building(std::stringstream&);
     void readCin();
