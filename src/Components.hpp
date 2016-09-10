@@ -118,4 +118,9 @@ namespace comp {
   struct Buildings : Ecs::Component::Base {
     uint32_t office;
   };
+
+  struct Money : Ecs::Component::Base {
+    uint32_t value;
+    Money(uint32_t _value = 0) : value(_value) {}
+  };
 }

@@ -8,6 +8,7 @@ Ecs::Entity *PlayerBuilder::addPlayer(Ecs::World& w, uint32_t city) {
 
   e->addComponent<comp::Type>(Type::PLAYER);
   e->addComponent<comp::City>(city);
+  e->addComponent<comp::Money>(10000);
 
   unsigned int id = w.addEntity(e);
   e->addComponent<comp::Id>(id);
