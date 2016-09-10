@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include <map>
+#include <string>
 
 enum Resource {
   TIMBER = 0, BRICK,
@@ -21,4 +23,9 @@ static const struct {
 } infosResource[] = {
   {"timber", 10, 100, {5, 1, 0, 0}},
   {"brick", 10, 150, {7, 1, 0, 0}}
+};
+
+static const std::map<std::string, Resource> resourceNames {
+  {"timber", Resource::TIMBER},
+  {"brick", Resource::BRICK}
 };
