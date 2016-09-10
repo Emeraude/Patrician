@@ -127,13 +127,12 @@ void sys::Console::city(std::stringstream& ss) {
   std::string cmd;
   ss >> cmd;
   if (cmd == "list") {
-    for (auto *it: _w->getEntities()) {
-      if (it->hasComponent<comp::Type>()
-	  && it->getComponent<comp::Type>()->type == Type::CITY)
-	std::cout << "\"" << it->getComponent<comp::Name>()->value
-		  << "\" (" << it->getComponent<comp::Inhabitants>()->total()
-		  << ") in " << it->getComponent<comp::Position>()->x
-		  << "," << it->getComponent<comp::Position>()->y << std::endl;
+    for (auto& it: ::cityNames) {
+      Ecs::Entity *city = _w->getEntity(it.second);
+      std::cout << "\"" << city->getComponent<comp::Name>()->value
+		<< "\" (" << city->getComponent<comp::Inhabitants>()->total()
+		<< ") in " << city->getComponent<comp::Position>()->x
+		<< "," << city->getComponent<comp::Position>()->y << std::endl;
     }
   }
   else if (cmd == "details") {
