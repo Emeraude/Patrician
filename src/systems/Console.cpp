@@ -26,7 +26,7 @@ void sys::Console::help(std::stringstream&) {
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
 	    << "\tsell <resource> <quantity>" << std::endl
-	    << "\tship add <type> <x> <y> | list | (<city> | <x> <y>) | select <id>" << std::endl
+	    << "\tship add <type> <x> <y> | details | list | (<city> | <x> <y>) | select <id>" << std::endl
 	    << "\tstatus" << std::endl;
 }
 
@@ -40,7 +40,7 @@ void sys::Console::status(std::stringstream&) {
 
 void sys::Console::ship(std::stringstream& ss) {
   if (ss.eof()) {
-    std::cout << "Usage: ship add <type> <x> <y> | list | move (<city> | <x> <y>) | select <id>" << std::endl;
+    std::cout << "Usage: ship add <type> <x> <y> | details | list | move (<city> | <x> <y>) | select <id>" << std::endl;
     return;
   }
   std::string cmd;
@@ -116,6 +116,29 @@ void sys::Console::ship(std::stringstream& ss) {
       } catch (std::out_of_range&) {
       	std::cerr << "There is no ship with id #" << id << std::endl;
       }
+    }
+  }
+  else if (cmd == "details") {
+    Ecs::Entity& e = *_w->getEntities().at(_selectedShip);
+    try {
+      if (e.hasComponent<comp::Type>()
+	  && e.getComponent<comp::Type>()->type != Type::SHIP)
+	throw std::out_of_range("No ship selected");
+    }
+    catch (std::out_of_range&) {
+      std::cerr << "No ship selected" << std::endl;
+      return;
+    }
+    std::cout << "Ship \"" << e.getComponent<comp::Name>()->value << "\" #" << _selectedShip
+	      << " in " << e.getComponent<comp::Position>()->x
+	      << "," << e.getComponent<comp::Position>()->y;
+    if (e.hasComponent<comp::City>())
+      std::cout << " (" << _w->getEntity(e.getComponent<comp::City>()->id)->getComponent<comp::Name>()->value << ")";
+    std::cout << std::endl;
+    comp::Stock *s = e.getComponent<comp::Stock>();
+    for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
+      if (s->at(static_cast<Resource>(i)).quantity > 0)
+      std::cout << infosResource[i].name << " " << s->at(static_cast<Resource>(i)).quantity << std::endl;
     }
   }
 }
