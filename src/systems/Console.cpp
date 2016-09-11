@@ -26,7 +26,7 @@ void sys::Console::help(std::stringstream&) {
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
 	    << "\tsell <resource> <quantity>" << std::endl
-	    << "\tship add <type> <x> <y> | details | list | (<city> | <x> <y>) | select <id>" << std::endl
+	    << "\tship add <type> <x> <y> | details | list | move (<city> | <x> <y>) | select <id>" << std::endl
 	    << "\tstatus" << std::endl;
 }
 
