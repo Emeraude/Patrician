@@ -25,6 +25,7 @@ void sys::Console::help(std::stringstream&) {
 	    << "\tbuy <resource> <quantity>" << std::endl
 	    << "\tcity details <city> | list | stock <city>" << std::endl
 	    << "\thelp" << std::endl
+	    << "\tsell <resource> <quantity>" << std::endl
 	    << "\tship add <type> <x> <y> | list | (<city> | <x> <y>) | select <id>" << std::endl
 	    << "\tstatus" << std::endl;
 }
@@ -270,10 +271,58 @@ void sys::Console::buy(std::stringstream& ss) {
   }
 }
 
+void sys::Console::sell(std::stringstream& ss) {
+  if (ss.eof()) {
+    std::cout << "Usage: sell <resource> <quantity>" << std::endl;
+    return;
+  }
+  std::string resourceStr;
+  Resource resource;
+  uint32_t quantity;
+  if (!(ss >> resourceStr >> quantity)) {
+    std::cerr << "Usage: sell <resource> <quantity>" << std::endl;
+    return;
+  }
+  try {
+    resource = resourceNames.at(resourceStr);
+  } catch (std::out_of_range&) {
+    std::cerr << "Resource \"" << resourceStr << "\" does not exist" << std::endl;
+    return;
+  }
+  Ecs::Entity *ship = _w->getEntity(_selectedShip);
+  try {
+    if (!ship->hasComponent<comp::Type>()
+	|| ship->getComponent<comp::Type>()->type != Type::SHIP)
+      throw std::out_of_range("No ship selected");
+  } catch (std::out_of_range&) {
+    std::cerr << "No ship selected" << std::endl;
+    return;
+  }
+  if (!ship->hasComponent<comp::City>()) {
+    std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
+    return;
+  }
+  Ecs::Entity *city = _w->getEntity(ship->getComponent<comp::City>()->id);
+  Ecs::Entity *office = _w->getEntity(city->getComponent<comp::Buildings>()->office);
+  Ecs::Entity *player = _w->getEntity(_player);
+  comp::Stock *cityStock = office->getComponent<comp::Stock>();
+  unsigned int price = infosResource[resource].cost * quantity;
+  if (ship->getComponent<comp::Stock>()->at(resource).quantity < quantity) {
+    std::cerr << "Your ship only have " << ship->getComponent<comp::Stock>()->at(resource).quantity
+	      << " " << resourceStr << std::endl;
+  }
+  else {
+    player->getComponent<comp::Money>()->value += price;
+    cityStock->at(resource).quantity += quantity;
+    ship->getComponent<comp::Stock>()->at(resource).quantity -= quantity;
+  }
+}
+
 void sys::Console::readCin() {
   std::string in;
 
   _cmds["buy"] = &sys::Console::buy;
+  _cmds["sell"] = &sys::Console::sell;
   _cmds["ship"] = &sys::Console::ship;
   _cmds["building"] = &sys::Console::building;
   _cmds["city"] = &sys::Console::city;

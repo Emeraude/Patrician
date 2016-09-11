@@ -21,6 +21,7 @@ namespace sys {
     void help(std::stringstream&);
     void ship(std::stringstream&);
     void buy(std::stringstream&);
+    void sell(std::stringstream&);
     void city(std::stringstream&);
     void building(std::stringstream&);
     void readCin();
