@@ -171,7 +171,7 @@ void sys::Console::city(std::stringstream& ss) {
     }
   }
   else
-    std::cerr << "Usage: city stock <city>" << std::endl;
+    throw Exception::Usage("");
 }
 
 void sys::Console::building(std::stringstream& ss) {
@@ -195,7 +195,7 @@ void sys::Console::building(std::stringstream& ss) {
   else if (cmd == "list") {
     std::string cityName;
     if (!(ss >> cityName))
-      std::cerr << "Usage: building create <city> <type>" << std::endl;
+      throw Exception::Usage("");
     else
       try {
 	for (auto *it: _w->getEntities()) {
