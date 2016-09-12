@@ -22,14 +22,9 @@ sys::Console::~Console() {
 }
 
 void sys::Console::help(std::stringstream&) {
-  std::cout << "Available commands:" << std::endl
-	    << "\tbuilding create <city> <type> | list <city>" << std::endl
-	    << "\tbuy <resource> <quantity>" << std::endl
-	    << "\tcity details <city> | list | stock <city>" << std::endl
-	    << "\thelp" << std::endl
-	    << "\tsell <resource> <quantity>" << std::endl
-	    << "\tship add <type> <x> <y> | details | list | move (<city> | <x> <y>) | select <id>" << std::endl
-	    << "\tstatus" << std::endl;
+  std::cout << "Available commands:" << std::endl;
+  for (auto& it : _cmds)
+    std::cout << "\t" << it.second.usage << std::endl;
 }
 
 void sys::Console::status(std::stringstream&) {
