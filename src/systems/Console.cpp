@@ -88,17 +88,10 @@ void sys::Console::ship(std::stringstream& ss) {
 	  return;
 	}
       }
-      try {
-	Ecs::Entity& e = *_w->getEntities().at(_selectedShip);
-	if (e.hasComponent<comp::Type>()
-	    && e.getComponent<comp::Type>()->type != Type::SHIP)
-	  throw std::out_of_range("No ship selected");
-	e.addComponent<comp::Move>(x, y);
-	e.getComponent<comp::Speed>()->current = e.getComponent<comp::Speed>()->max;
-      }
-      catch (std::out_of_range&) {
-	std::cerr << "No ship selected" << std::endl;
-      }
+      this->checkSelectedShip();
+      Ecs::Entity& e = *_w->getEntities().at(_selectedShip);
+      e.addComponent<comp::Move>(x, y);
+      e.getComponent<comp::Speed>()->current = e.getComponent<comp::Speed>()->max;
     }
     else
       std::cerr << "Usage: ship move (<city> | <x> <y>)" << std::endl;
@@ -121,15 +114,7 @@ void sys::Console::ship(std::stringstream& ss) {
   }
   else if (cmd == "details") {
     Ecs::Entity& e = *_w->getEntities().at(_selectedShip);
-    try {
-      if (e.hasComponent<comp::Type>()
-	  && e.getComponent<comp::Type>()->type != Type::SHIP)
-	throw std::out_of_range("No ship selected");
-    }
-    catch (std::out_of_range&) {
-      std::cerr << "No ship selected" << std::endl;
-      return;
-    }
+    this->checkSelectedShip();
     std::cout << "Ship \"" << e.getComponent<comp::Name>()->value << "\" #" << _selectedShip
 	      << " in " << e.getComponent<comp::Position>()->x
 	      << "," << e.getComponent<comp::Position>()->y;
@@ -262,14 +247,8 @@ void sys::Console::buy(std::stringstream& ss) {
     std::cerr << "Resource \"" << resourceStr << "\" does not exist" << std::endl;
     return;
   }
+  this->checkSelectedShip();
   Ecs::Entity *ship = _w->getEntity(_selectedShip);
-  try {
-    if (!ship->hasComponent<comp::Type>()
-	|| ship->getComponent<comp::Type>()->type != Type::SHIP)
-      throw std::out_of_range("No ship selected");
-  } catch (std::out_of_range& e) {
-    throw Exception::Ship("No ship selected");
-  }
   if (!ship->hasComponent<comp::City>()) {
     std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
     return;
@@ -294,6 +273,17 @@ void sys::Console::buy(std::stringstream& ss) {
   }
 }
 
+void sys::Console::checkSelectedShip() {
+  try {
+    Ecs::Entity *ship = _w->getEntity(_selectedShip);
+    if (!ship->hasComponent<comp::Type>()
+	|| ship->getComponent<comp::Type>()->type != Type::SHIP)
+      throw std::out_of_range("");
+  } catch (std::out_of_range&) {
+    throw Exception::Ship("No ship selected");
+  }
+}
+
 void sys::Console::sell(std::stringstream& ss) {
   if (ss.eof()) {
     std::cout << "Usage: sell <resource> <quantity>" << std::endl;
@@ -312,15 +302,8 @@ void sys::Console::sell(std::stringstream& ss) {
     std::cerr << "Resource \"" << resourceStr << "\" does not exist" << std::endl;
     return;
   }
+  this->checkSelectedShip();
   Ecs::Entity *ship = _w->getEntity(_selectedShip);
-  try {
-    if (!ship->hasComponent<comp::Type>()
-	|| ship->getComponent<comp::Type>()->type != Type::SHIP)
-      throw std::out_of_range("No ship selected");
-  } catch (std::out_of_range&) {
-    std::cerr << "No ship selected" << std::endl;
-    return;
-  }
   if (!ship->hasComponent<comp::City>()) {
     std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
     return;

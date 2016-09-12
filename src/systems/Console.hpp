@@ -25,6 +25,8 @@ namespace sys {
     void city(std::stringstream&);
     void building(std::stringstream&);
     void readCin();
+
+    void checkSelectedShip();
   public:
     Console();
     ~Console();
