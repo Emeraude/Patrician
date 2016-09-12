@@ -308,6 +308,7 @@ void sys::Console::readCin() {
   _cmds["building"] = {&sys::Console::building, "building create <city> <type> | list <city>"};
   _cmds["buy"] = {&sys::Console::buy, "buy <resource> <quantity>"};
   _cmds["city"] = {&sys::Console::city, "city details <city> | list | stock <city>"};
+  _cmds["exit"] = {NULL, "exit"};
   _cmds["help"] = {&sys::Console::help, "help"};
   _cmds["sell"] = {&sys::Console::sell, "sell <resource> <quantity>"};
   _cmds["ship"] = {&sys::Console::ship, "ship add <type> <x> <y> | details | list | move (<city> | <x> <y>) | select <id>"};
