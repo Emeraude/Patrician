@@ -8,8 +8,6 @@
 #include "PlayerBuilder.hpp"
 #include "systems/Time.hpp"
 
-sys::Console::Exception::Usage::Usage(std::string const& str) : ::Exception::Base(str) {}
-
 sys::Console::Console() : _selectedShip(0), _player(0), _thread(new std::thread(&sys::Console::readCin, this)), _w(NULL) {
   _types["snaikka"] = &ShipBuilder::addSnaikka;
   _types["crayer"] = &ShipBuilder::addCrayer;
