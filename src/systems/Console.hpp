@@ -33,6 +33,7 @@ namespace sys {
     void readCin();
 
     void checkSelectedShip();
+    void checkResourceType(std::string const& str);
   public:
     Console();
     ~Console();

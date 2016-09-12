@@ -219,18 +219,13 @@ void sys::Console::buy(std::stringstream& ss) {
   if (ss.eof())
     throw Exception::Usage("");
   std::string resourceStr;
-  Resource resource;
   uint32_t quantity;
   if (!(ss >> resourceStr >> quantity))
     throw Exception::Usage("");
-  try {
-    resource = resourceNames.at(resourceStr);
-  } catch (std::out_of_range&) {
-    std::cerr << "Resource \"" << resourceStr << "\" does not exist" << std::endl;
-    return;
-  }
+  this->checkResourceType(resourceStr);
   this->checkSelectedShip();
   Ecs::Entity *ship = _w->getEntity(_selectedShip);
+  Resource resource = resourceNames.at(resourceStr);
   if (!ship->hasComponent<comp::City>()) {
     std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
     return;
@@ -266,22 +261,27 @@ void sys::Console::checkSelectedShip() {
   }
 }
 
+void sys::Console::checkResourceType(std::string const& str) {
+  try {
+    resourceNames.at(str);
+  } catch (std::out_of_range const&) {
+    std::ostringstream oss("");
+    oss << "Resource \"" << str << "\" does not exist";
+    throw ::Exception::Resource(oss.str());
+  }
+}
+
 void sys::Console::sell(std::stringstream& ss) {
   if (ss.eof())
     throw Exception::Usage("");
   std::string resourceStr;
-  Resource resource;
   uint32_t quantity;
   if (!(ss >> resourceStr >> quantity))
     throw Exception::Usage("");
-  try {
-    resource = resourceNames.at(resourceStr);
-  } catch (std::out_of_range&) {
-    std::cerr << "Resource \"" << resourceStr << "\" does not exist" << std::endl;
-    return;
-  }
+  this->checkResourceType(resourceStr);
   this->checkSelectedShip();
   Ecs::Entity *ship = _w->getEntity(_selectedShip);
+  Resource resource = resourceNames.at(resourceStr);
   if (!ship->hasComponent<comp::City>()) {
     std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
     return;

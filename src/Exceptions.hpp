@@ -18,4 +18,9 @@ namespace Exception {
   public:
     Ship(std::string const& str);
   };
+
+  class Resource : public ::Exception::Base {
+  public:
+    Resource(std::string const& str);
+  };
 }
