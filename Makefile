@@ -1,5 +1,6 @@
 SRC	=	src/BuildingBuilder.cpp \
 		src/CityBuilder.cpp \
+		src/Exceptions.cpp \
 		src/PlayerBuilder.cpp \
 		src/ShipBuilder.cpp \
 		src/main.cpp \
@@ -12,7 +13,7 @@ OBJ	=	$(SRC:.cpp=.o)
 NAME =	patrician
 
 CXXFLAGS += -Wextra -Wall -std=c++11
-CXXFLAGS += -Ilib -Isrc
+CXXFLAGS += -Ilib -Isrc -I.
 LDXXFLAGS += -lpthread
 
 RM	= rm -f

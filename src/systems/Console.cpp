@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Components.hpp"
+#include "src/Exceptions.hpp"
 #include "Console.hpp"
 #include "ShipBuilder.hpp"
 #include "CityBuilder.hpp"
@@ -266,9 +267,8 @@ void sys::Console::buy(std::stringstream& ss) {
     if (!ship->hasComponent<comp::Type>()
 	|| ship->getComponent<comp::Type>()->type != Type::SHIP)
       throw std::out_of_range("No ship selected");
-  } catch (std::out_of_range&) {
-    std::cerr << "No ship selected" << std::endl;
-    return;
+  } catch (std::out_of_range& e) {
+    throw Exception::Ship("No ship selected");
   }
   if (!ship->hasComponent<comp::City>()) {
     std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
