@@ -1,13 +1,14 @@
 #include <iostream>
 #include <string>
 #include "Components.hpp"
-#include "src/Exceptions.hpp"
 #include "Console.hpp"
 #include "ShipBuilder.hpp"
 #include "CityBuilder.hpp"
 #include "BuildingBuilder.hpp"
 #include "PlayerBuilder.hpp"
 #include "systems/Time.hpp"
+
+sys::Console::Exception::Usage::Usage(std::string const& str) : ::Exception::Base(str) {}
 
 sys::Console::Console() : _selectedShip(0), _player(0), _thread(new std::thread(&sys::Console::readCin, this)), _w(NULL) {
   _types["snaikka"] = &ShipBuilder::addSnaikka;
@@ -40,17 +41,15 @@ void sys::Console::status(std::stringstream&) {
 }
 
 void sys::Console::ship(std::stringstream& ss) {
-  if (ss.eof()) {
-    std::cout << "Usage: ship add <type> <x> <y> | details | list | move (<city> | <x> <y>) | select <id>" << std::endl;
-    return;
-  }
+  if (ss.eof())
+    throw Exception::Usage("");
   std::string cmd;
   ss >> cmd;
   if (cmd == "add") {
     uint16_t x, y;
     std::string type;
     if (!(ss >> type >> x >> y))
-      std::cerr << "Usage: ship add <type> <x> <y>" << std::endl;
+      throw Exception::Usage("");
     else if (_types[type] == NULL)
       std::cerr << "Unknown ship type \"" << type << "\"" << std::endl;
     else
@@ -74,8 +73,7 @@ void sys::Console::ship(std::stringstream& ss) {
 	try {
 	  x = std::stoi(cityName);
 	} catch (...) {
-	  std::cerr << "Usage: ship move (<city> | <x> <y>)" << std::endl;
-	  return;
+	  throw Exception::Usage("");
 	}
       }
       else {
@@ -94,12 +92,12 @@ void sys::Console::ship(std::stringstream& ss) {
       e.getComponent<comp::Speed>()->current = e.getComponent<comp::Speed>()->max;
     }
     else
-      std::cerr << "Usage: ship move (<city> | <x> <y>)" << std::endl;
+      throw Exception::Usage("");
   }
   else if (cmd == "select") {
     unsigned int id;
     if (!(ss >> id))
-      std::cerr << "Usage: ship select <id>" << std::endl;
+      throw Exception::Usage("");
     else {
       try {
 	Ecs::Entity& e = *_w->getEntities().at(id);
@@ -130,10 +128,8 @@ void sys::Console::ship(std::stringstream& ss) {
 }
 
 void sys::Console::city(std::stringstream& ss) {
-  if (ss.eof()) {
-    std::cout << "Usage: city details <city> | list stock <city>" << std::endl;
-    return;
-  }
+  if (ss.eof())
+    throw Exception::Usage("");
   std::string cmd;
   ss >> cmd;
   if (cmd == "list") {
@@ -148,7 +144,7 @@ void sys::Console::city(std::stringstream& ss) {
   else if (cmd == "details") {
     std::string cityName;
     if (!(ss >> cityName))
-      std::cerr << "Usage: city details <city>" << std::endl;
+      throw Exception::Usage("");
     else {
       try {
 	Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
@@ -168,7 +164,7 @@ void sys::Console::city(std::stringstream& ss) {
   else if (cmd == "stock") {
     std::string cityName;
     if (!(ss >> cityName))
-      std::cerr << "Usage: city stock <city>" << std::endl;
+      throw Exception::Usage("");
     else {
       try {
 	Ecs::Entity *city = _w->getEntity(::cityNames.at(cityName));
@@ -181,22 +177,19 @@ void sys::Console::city(std::stringstream& ss) {
       }
     }
   }
-  else {
-    std::cerr << "Unknown command \"city " << cmd << "\"" << std::endl;
-  }
+  else
+    std::cerr << "Usage: city stock <city>" << std::endl;
 }
 
 void sys::Console::building(std::stringstream& ss) {
-  if (ss.eof()) {
-    std::cout << "Usage: building create <city> <type> | list <city>" << std::endl;
-    return;
-  }
+  if (ss.eof())
+    throw Exception::Usage("");
   std::string cmd;
   ss >> cmd;
   if (cmd == "create") {
     std::string cityName, type;
     if (!(ss >> cityName >> type))
-      std::cerr << "Usage: building create <city> <type>" << std::endl;
+      throw Exception::Usage("");
     else if (_buildingTypes[type] == NULL)
       std::cerr << "Unknown building type \"" << type << "\"" << std::endl;
     else
@@ -209,7 +202,7 @@ void sys::Console::building(std::stringstream& ss) {
   else if (cmd == "list") {
     std::string cityName;
     if (!(ss >> cityName))
-      std::cerr << "Usage: building list <city>" << std::endl;
+      std::cerr << "Usage: building create <city> <type>" << std::endl;
     else
       try {
 	for (auto *it: _w->getEntities()) {
@@ -230,17 +223,13 @@ void sys::Console::building(std::stringstream& ss) {
 }
 
 void sys::Console::buy(std::stringstream& ss) {
-  if (ss.eof()) {
-    std::cout << "Usage: buy <resource> <quantity>" << std::endl;
-    return;
-  }
+  if (ss.eof())
+    throw Exception::Usage("");
   std::string resourceStr;
   Resource resource;
   uint32_t quantity;
-  if (!(ss >> resourceStr >> quantity)) {
-    std::cerr << "Usage: buy <resource> <quantity>" << std::endl;
-    return;
-  }
+  if (!(ss >> resourceStr >> quantity))
+    throw Exception::Usage("");
   try {
     resource = resourceNames.at(resourceStr);
   } catch (std::out_of_range&) {
@@ -280,22 +269,18 @@ void sys::Console::checkSelectedShip() {
 	|| ship->getComponent<comp::Type>()->type != Type::SHIP)
       throw std::out_of_range("");
   } catch (std::out_of_range&) {
-    throw Exception::Ship("No ship selected");
+    throw ::Exception::Ship("No ship selected");
   }
 }
 
 void sys::Console::sell(std::stringstream& ss) {
-  if (ss.eof()) {
-    std::cout << "Usage: sell <resource> <quantity>" << std::endl;
-    return;
-  }
+  if (ss.eof())
+    throw Exception::Usage("");
   std::string resourceStr;
   Resource resource;
   uint32_t quantity;
-  if (!(ss >> resourceStr >> quantity)) {
-    std::cerr << "Usage: sell <resource> <quantity>" << std::endl;
-    return;
-  }
+  if (!(ss >> resourceStr >> quantity))
+    throw Exception::Usage("");
   try {
     resource = resourceNames.at(resourceStr);
   } catch (std::out_of_range&) {
@@ -327,13 +312,13 @@ void sys::Console::sell(std::stringstream& ss) {
 void sys::Console::readCin() {
   std::string in;
 
-  _cmds["buy"] = &sys::Console::buy;
-  _cmds["sell"] = &sys::Console::sell;
-  _cmds["ship"] = &sys::Console::ship;
-  _cmds["building"] = &sys::Console::building;
-  _cmds["city"] = &sys::Console::city;
-  _cmds["help"] = &sys::Console::help;
-  _cmds["status"] = &sys::Console::status;
+  _cmds["building"] = {&sys::Console::building, "building create <city> <type> | list <city>"};
+  _cmds["buy"] = {&sys::Console::buy, "buy <resource> <quantity>"};
+  _cmds["city"] = {&sys::Console::city, "city details <city> | list | stock <city>"};
+  _cmds["help"] = {&sys::Console::help, "help"};
+  _cmds["sell"] = {&sys::Console::sell, "sell <resource> <quantity>"};
+  _cmds["ship"] = {&sys::Console::ship, "ship add <type> <x> <y> | details | list | move (<city> | <x> <y>) | select <id>"};
+  _cmds["status"] = {&sys::Console::status, "status"};
   while (true) {
     std::cout << "> ";
     if (!std::getline(std::cin, in)) {
@@ -350,9 +335,11 @@ void sys::Console::readCin() {
     ss >> cmd;
     if (cmd == "exit")
       break;
-    else if (_cmds[cmd] != NULL) {
+    else if (_cmds[cmd].ft != NULL) {
       try {
-	(this->*_cmds[cmd])(ss);
+	(this->*_cmds[cmd].ft)(ss);
+      } catch (Exception::Usage const&) {
+	std::cerr << "Usage: " << _cmds[cmd].usage << std::endl;
       } catch (std::exception const& e) {
 	std::cerr << e.what() << std::endl;
       }
