@@ -1,4 +1,5 @@
 #include "PlayerBuilder.hpp"
+#include "BuildingBuilder.hpp"
 #include "Components.hpp"
 
 std::vector<unsigned int> players;
@@ -13,5 +14,7 @@ Ecs::Entity *PlayerBuilder::addPlayer(Ecs::World& w, uint32_t city) {
   unsigned int id = w.addEntity(e);
   e->addComponent<comp::Id>(id);
   ::players.push_back(id);
+
+  BuildingBuilder::addOffice(w, city, id);
   return e;
 }
