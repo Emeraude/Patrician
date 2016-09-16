@@ -76,23 +76,13 @@ namespace comp {
     }
   };
 
+  // Also used for consumption (consumption is a negative production)
   struct Production : Ecs::Component::Base {
   private:
     std::vector<uint16_t> _stock;
 
   public:
     Production() : _stock(Resource::LENGTH) {}
-    uint16_t& at(Resource const r) {
-      return _stock.at(r);
-    }
-  };
-
-  struct Consumption : Ecs::Component::Base {
-  private:
-    std::vector<uint16_t> _stock;
-
-  public:
-    Consumption() : _stock(Resource::LENGTH) {}
     uint16_t& at(Resource const r) {
       return _stock.at(r);
     }
