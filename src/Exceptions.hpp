@@ -23,4 +23,9 @@ namespace Exception {
   public:
     Resource(std::string const& str);
   };
+
+  class Building : public ::Exception::Base {
+  public:
+    Building(std::string const& str);
+  };
 }

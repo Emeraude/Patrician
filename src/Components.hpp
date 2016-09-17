@@ -109,6 +109,11 @@ namespace comp {
     uint32_t office;
   };
 
+  struct Office : Ecs::Component::Base {
+    uint32_t id;
+    Office(uint32_t _id) : id(_id) {}
+  };
+
   struct Money : Ecs::Component::Base {
     uint32_t value;
     Money(uint32_t _value = 0) : value(_value) {}

@@ -11,3 +11,5 @@ const char *::Exception::Base::what() const throw() {
 ::Exception::Ship::Ship(std::string const& str) : Exception::Base(str) {}
 
 ::Exception::Resource::Resource(std::string const& str) : Exception::Base(str) {}
+
+::Exception::Building::Building(std::string const& str) : Exception::Base(str) {}
