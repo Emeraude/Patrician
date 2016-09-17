@@ -12,5 +12,6 @@ public:
   class Production {
   public:
     static unsigned int addSawmill(Ecs::World& w, uint32_t city, uint32_t owner);
+    static unsigned int addBrickworks(Ecs::World& w, uint32_t city, uint32_t owner);
   };
 };

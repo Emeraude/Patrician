@@ -34,3 +34,13 @@ unsigned int BuildingBuilder::Production::addSawmill(Ecs::World& w, uint32_t cit
   e->getComponent<comp::Production>()->at(Resource::TIMBER) = 5;
   return w.addEntity(e);
 }
+
+unsigned int BuildingBuilder::Production::addBrickworks(Ecs::World& w, uint32_t city, uint32_t owner) {
+  Ecs::Entity *e = BuildingBuilder::base(w, city, owner);
+
+  e->addComponent<comp::Name>("Brickworks");
+  e->addComponent<comp::Production>();
+  e->getComponent<comp::Production>()->at(Resource::TIMBER) = -1;
+  e->getComponent<comp::Production>()->at(Resource::BRICK) = 5;
+  return w.addEntity(e);
+}

@@ -13,6 +13,7 @@ sys::Console::Console() : _selectedShip(0), _player(0), _thread(new std::thread(
   _types["crayer"] = &ShipBuilder::addCrayer;
 
   _buildingTypes["sawmill"] = &BuildingBuilder::Production::addSawmill;
+  _buildingTypes["brickworks"] = &BuildingBuilder::Production::addBrickworks;
 }
 
 sys::Console::~Console() {
