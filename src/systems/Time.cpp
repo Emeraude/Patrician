@@ -23,6 +23,20 @@ void sys::Time::consumption(Ecs::World& w, Ecs::Entity *city) {
   }
 }
 
+// Same problem as consumption one
+void sys::Time::production(Ecs::World& w, Ecs::Entity *building) {
+  Ecs::Entity *office = w.getEntity(building->getComponent<comp::Office>()->id);
+  comp::Stock& stock = *office->getComponent<comp::Stock>();
+  comp::Production& prod = *building->getComponent<comp::Production>();
+
+  for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
+    if (prod.at(static_cast<Resource>(i)) < 0
+	&& stock.at(static_cast<Resource>(i)).quantity < prod.at(static_cast<Resource>(i)))
+      continue;
+    stock.at(static_cast<Resource>(i)).quantity += prod.at(static_cast<Resource>(i));
+  }
+}
+
 void sys::Time::update(Ecs::World& w) {
   static unsigned int i = 0;
 
@@ -30,8 +44,13 @@ void sys::Time::update(Ecs::World& w) {
     return;
   ++_day;
   i = 0;
-  // for (auto& it : ::cityNames)
-  //   this->consumption(w, w.getEntity(it.second));
+  for (auto* it : w.getEntities()) {
+    if (it->getComponent<comp::Type>()->type == Type::CITY)
+      this->consumption(w, it);
+    else if (it->getComponent<comp::Type>()->type == Type::BUILDING
+	     && it->hasComponent<comp::Production>())
+      this->production(w, it);
+  }
 }
 
 uint32_t const& sys::Time::getDay() const {

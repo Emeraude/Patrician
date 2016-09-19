@@ -9,6 +9,7 @@ namespace sys {
     uint32_t _speed;
 
     void consumption(Ecs::World& w, Ecs::Entity *city);
+    void production(Ecs::World& w, Ecs::Entity *building);
   public:
     Time();
     void update(Ecs::World &world);
