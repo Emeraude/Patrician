@@ -34,6 +34,7 @@ Ecs::Entity* BuildingBuilder::Production::base(Ecs::World& w, uint32_t city, uin
 
   for (auto* it : w.getEntities()) {
     if (it->getComponent<comp::Type>()->type == Type::BUILDING
+	&& it->hasComponent<comp::Stock>()
 	&& it->getComponent<comp::City>()->id == city
 	&& it->getComponent<comp::Owner>()->id == owner)
       id = it->getComponent<comp::Id>()->value;
