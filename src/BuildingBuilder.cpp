@@ -36,8 +36,10 @@ Ecs::Entity* BuildingBuilder::Production::base(Ecs::World& w, uint32_t city, uin
     if (it->getComponent<comp::Type>()->type == Type::BUILDING
 	&& it->hasComponent<comp::Stock>()
 	&& it->getComponent<comp::City>()->id == city
-	&& it->getComponent<comp::Owner>()->id == owner)
+	&& it->getComponent<comp::Owner>()->id == owner) {
       id = it->getComponent<comp::Id>()->value;
+      break;
+    }
   }
   if (id == -1)
     throw Exception::Building("There is no office in this town");
