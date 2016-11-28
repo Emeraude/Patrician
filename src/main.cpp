@@ -4,6 +4,7 @@
 #include "World.hpp"
 #include "systems/Console.hpp"
 #include "systems/Move.hpp"
+#include "systems/Sdl.hpp"
 #include "systems/Time.hpp"
 #include "CityBuilder.hpp"
 #include "PlayerBuilder.hpp"
@@ -16,6 +17,7 @@ int main(void) {
 
     w.addSystem<sys::Console>();
     w.addSystem<sys::Move>();
+    w.addSystem<sys::Sdl>();
     w.addSystem<sys::Time>();
     CityBuilder::addRandom(w);
     PlayerBuilder::addPlayer(w, cityNames.begin()->second);
