@@ -67,7 +67,7 @@ void sys::Sdl::events(Ecs::World &world) {
 }
 
 // Returns true if the surface has be drawn (within the window), false otherwise
-bool sys::Sdl::blitSurface(SDL_Surface *s, Ecs::Entity *e) {
+bool sys::Sdl::blitSurface(std::string const& name, Ecs::Entity *e) {
   SDL_Rect dst;
   comp::Position *pos = e->getComponent<comp::Position>();
 
@@ -76,7 +76,7 @@ bool sys::Sdl::blitSurface(SDL_Surface *s, Ecs::Entity *e) {
       && pos->y < pos_y + win_h) {
     dst.x = pos->x - pos_x;
     dst.y = pos->y - pos_y;
-    SDL_BlitSurface(s, NULL, screen, &dst);
+    SDL_BlitSurface(sprites[name], NULL, screen, &dst);
     return true;
   }
   return false;
@@ -86,10 +86,10 @@ void sys::Sdl::display(Ecs::World &world) {
   SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
   for (auto *it: world.getEntities()) {
     if (it->getComponent<comp::Type>()->type == Type::CITY) {
-      blitSurface(sprites["city"], it);
+      blitSurface("city", it);
     }
     else if (it->getComponent<comp::Type>()->type == Type::SHIP) {
-      blitSurface(sprites["ship"], it);
+      blitSurface("ship", it);
     }
   }
   SDL_UpdateWindowSurface(window);
