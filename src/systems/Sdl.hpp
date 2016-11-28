@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+#include <map>
 #include <SDL.h>
 #include "World.hpp"
 #include "src/Exceptions.hpp"
@@ -7,6 +9,7 @@
 namespace sys {
   class Sdl : public Ecs::System::Base {
   private:
+    std::map<std::string, SDL_Surface *> sprites;
     SDL_Window *window;
     SDL_Surface *screen;
     int pos_x;

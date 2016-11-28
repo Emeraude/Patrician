@@ -11,9 +11,16 @@ sys::Sdl::Sdl() : pos_x(0), pos_y(0), win_w(640), win_h(480) {
   screen = SDL_GetWindowSurface(window);
   if (screen == NULL)
     throw Exception();
+  sprites["city"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
+  SDL_FillRect(sprites["city"], NULL, SDL_MapRGB(sprites["city"]->format, 255, 0, 0));
+  sprites["ship"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
+  SDL_FillRect(sprites["ship"], NULL, SDL_MapRGB(sprites["ship"]->format, 255, 255, 255));
 }
 
 sys::Sdl::~Sdl() {
+  for (auto& it: sprites) {
+    SDL_FreeSurface(it.second);
+  }
   SDL_DestroyWindow(window);
   SDL_Quit();
 }
@@ -76,22 +83,15 @@ bool sys::Sdl::blitSurface(SDL_Surface *s, Ecs::Entity *e) {
 }
 
 void sys::Sdl::display(Ecs::World &world) {
-  SDL_Surface *city, *ship;
-  city = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
-  ship = SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
   SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
-  SDL_FillRect(city, NULL, SDL_MapRGB(city->format, 255, 0, 0));
-  SDL_FillRect(ship, NULL, SDL_MapRGB(ship->format, 255, 255, 255));
   for (auto *it: world.getEntities()) {
     if (it->getComponent<comp::Type>()->type == Type::CITY) {
-      blitSurface(city, it);
+      blitSurface(sprites["city"], it);
     }
     else if (it->getComponent<comp::Type>()->type == Type::SHIP) {
-      blitSurface(ship, it);
+      blitSurface(sprites["ship"], it);
     }
   }
-  SDL_FreeSurface(city);
-  SDL_FreeSurface(ship);
   SDL_UpdateWindowSurface(window);
 }
 
