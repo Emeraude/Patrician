@@ -5,7 +5,7 @@ sys::Sdl::Sdl() : pos_x(0), pos_y(0), win_w(640), win_h(480) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
     throw Exception();
   window = SDL_CreateWindow("Patrician", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			    win_w, win_h, 0);
+			    win_w, win_h, SDL_WINDOW_RESIZABLE);
   if (window == NULL)
     throw Exception();
   screen = SDL_GetWindowSurface(window);
@@ -36,6 +36,16 @@ void sys::Sdl::events(Ecs::World &world) {
     	break;
       case SDLK_LEFT:
     	pos_x -= 10;
+      }
+    }
+    else if (event.type == SDL_WINDOWEVENT) {
+      if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED
+	  || event.window.event == SDL_WINDOWEVENT_RESIZED) {
+	win_w = event.window.data1;
+	win_h = event.window.data2;
+	screen = SDL_GetWindowSurface(window);
+	if (screen == NULL)
+	  throw Exception();
       }
     }
   }
