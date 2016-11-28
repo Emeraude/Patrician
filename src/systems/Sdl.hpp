@@ -17,12 +17,13 @@ namespace sys {
     int _win_w;
     int _win_h;
 
-  public:
-    Sdl();
-    ~Sdl();
     void events(Ecs::World &world);
     bool blitSurface(std::string const& name, Ecs::Entity *e);
     void display(Ecs::World &world);
+
+  public:
+    Sdl();
+    ~Sdl();
     void update(Ecs::World &world);
 
   private:
