@@ -9,13 +9,13 @@
 namespace sys {
   class Sdl : public Ecs::System::Base {
   private:
-    std::map<std::string, SDL_Surface *> sprites;
-    SDL_Window *window;
-    SDL_Surface *screen;
-    int pos_x;
-    int pos_y;
-    int win_w;
-    int win_h;
+    std::map<std::string, SDL_Surface *> _sprites;
+    SDL_Window *_window;
+    SDL_Surface *_screen;
+    int _pos_x;
+    int _pos_y;
+    int _win_w;
+    int _win_h;
 
   public:
     Sdl();

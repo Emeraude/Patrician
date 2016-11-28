@@ -1,69 +1,70 @@
 #include "Sdl.hpp"
 #include "Components.hpp"
 
-sys::Sdl::Sdl() : pos_x(0), pos_y(0), win_w(640), win_h(480) {
+sys::Sdl::Sdl() : _pos_x(0), _pos_y(0), _win_w(640), _win_h(480) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
     throw Exception();
-  window = SDL_CreateWindow("Patrician", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			    win_w, win_h, SDL_WINDOW_RESIZABLE);
-  if (window == NULL)
+  _window = SDL_CreateWindow("Patrician", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+			    _win_w, _win_h, SDL_WINDOW_RESIZABLE);
+  if (_window == NULL)
     throw Exception();
-  screen = SDL_GetWindowSurface(window);
-  if (screen == NULL)
+  _screen = SDL_GetWindowSurface(_window);
+  if (_screen == NULL)
     throw Exception();
-  sprites["city"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
-  SDL_FillRect(sprites["city"], NULL, SDL_MapRGB(sprites["city"]->format, 255, 0, 0));
-  sprites["ship"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
-  SDL_FillRect(sprites["ship"], NULL, SDL_MapRGB(sprites["ship"]->format, 255, 255, 255));
+  _sprites["city"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
+  SDL_FillRect(_sprites["city"], NULL, SDL_MapRGB(_sprites["city"]->format, 255, 0, 0));
+  _sprites["ship"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
+  SDL_FillRect(_sprites["ship"], NULL, SDL_MapRGB(_sprites["ship"]->format, 255, 255, 255));
 }
 
 sys::Sdl::~Sdl() {
-  for (auto& it: sprites) {
+  for (auto& it: _sprites) {
     SDL_FreeSurface(it.second);
   }
-  SDL_DestroyWindow(window);
+  SDL_DestroyWindow(_window);
   SDL_Quit();
 }
 
 void sys::Sdl::events(Ecs::World &world) {
   SDL_Event event;
+
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT)
       world.stop();
     else if (event.type == SDL_KEYDOWN) {
       switch (event.key.keysym.sym) {
       case SDLK_UP:
-    	pos_y -=10;
+    	_pos_y -=10;
     	break;
       case SDLK_DOWN:
-    	pos_y += 10;
+    	_pos_y += 10;
     	break;
       case SDLK_RIGHT:
-    	pos_x += 10;
+    	_pos_x += 10;
     	break;
       case SDLK_LEFT:
-    	pos_x -= 10;
+    	_pos_x -= 10;
       }
     }
     else if (event.type == SDL_WINDOWEVENT) {
       if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED
 	  || event.window.event == SDL_WINDOWEVENT_RESIZED) {
-	win_w = event.window.data1;
-	win_h = event.window.data2;
-	screen = SDL_GetWindowSurface(window);
-	if (screen == NULL)
+	_win_w = event.window.data1;
+	_win_h = event.window.data2;
+	_screen = SDL_GetWindowSurface(_window);
+	if (_screen == NULL)
 	  throw Exception();
       }
     }
   }
-  if (pos_x > 1000 - win_w)
-    pos_x = 1000 - win_w;
-  if (pos_x < 0)
-    pos_x = 0;
-  if (pos_y > 1000 - win_h)
-    pos_y = 1000 - win_h;
-  if (pos_y < 0)
-    pos_y = 0;
+  if (_pos_x > 1000 - _win_w)
+    _pos_x = 1000 - _win_w;
+  if (_pos_x < 0)
+    _pos_x = 0;
+  if (_pos_y > 1000 - _win_h)
+    _pos_y = 1000 - _win_h;
+  if (_pos_y < 0)
+    _pos_y = 0;
 }
 
 // Returns true if the surface has be drawn (within the window), false otherwise
@@ -71,19 +72,20 @@ bool sys::Sdl::blitSurface(std::string const& name, Ecs::Entity *e) {
   SDL_Rect dst;
   comp::Position *pos = e->getComponent<comp::Position>();
 
-  if (pos->x > pos_x && pos->y > pos_y
-      && pos->x < pos_x + win_w
-      && pos->y < pos_y + win_h) {
-    dst.x = pos->x - pos_x;
-    dst.y = pos->y - pos_y;
-    SDL_BlitSurface(sprites[name], NULL, screen, &dst);
+  if (pos->x > _pos_x
+      && pos->y > _pos_y
+      && pos->x < _pos_x + _win_w
+      && pos->y < _pos_y + _win_h) {
+    dst.x = pos->x - _pos_x;
+    dst.y = pos->y - _pos_y;
+    SDL_BlitSurface(_sprites[name], NULL, _screen, &dst);
     return true;
   }
   return false;
 }
 
 void sys::Sdl::display(Ecs::World &world) {
-  SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
+  SDL_FillRect(_screen, NULL, SDL_MapRGB(_screen->format, 0, 0, 0));
   for (auto *it: world.getEntities()) {
     if (it->getComponent<comp::Type>()->type == Type::CITY) {
       blitSurface("city", it);
@@ -92,7 +94,7 @@ void sys::Sdl::display(Ecs::World &world) {
       blitSurface("ship", it);
     }
   }
-  SDL_UpdateWindowSurface(window);
+  SDL_UpdateWindowSurface(_window);
 }
 
 void sys::Sdl::update(Ecs::World &world) {
