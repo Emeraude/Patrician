@@ -18,6 +18,7 @@ namespace sys {
     Sdl();
     ~Sdl();
     void events(Ecs::World &world);
+    bool blitSurface(SDL_Surface *s, Ecs::Entity *e);
     void display(Ecs::World &world);
     void update(Ecs::World &world);
 

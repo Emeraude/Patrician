@@ -59,9 +59,24 @@ void sys::Sdl::events(Ecs::World &world) {
     pos_y = 0;
 }
 
+// Returns true if the surface has be drawn (within the window), false otherwise
+bool sys::Sdl::blitSurface(SDL_Surface *s, Ecs::Entity *e) {
+  SDL_Rect dst;
+  comp::Position *pos = e->getComponent<comp::Position>();
+
+  if (pos->x > pos_x && pos->y > pos_y
+      && pos->x < pos_x + win_w
+      && pos->y < pos_y + win_h) {
+    dst.x = pos->x - pos_x;
+    dst.y = pos->y - pos_y;
+    SDL_BlitSurface(s, NULL, screen, &dst);
+    return true;
+  }
+  return false;
+}
+
 void sys::Sdl::display(Ecs::World &world) {
   SDL_Surface *city, *ship;
-  SDL_Rect dst;
   city = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
   ship = SDL_CreateRGBSurface(0, 5, 5, 32, 0, 0, 0, 0);
   SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
@@ -69,24 +84,10 @@ void sys::Sdl::display(Ecs::World &world) {
   SDL_FillRect(ship, NULL, SDL_MapRGB(ship->format, 255, 255, 255));
   for (auto *it: world.getEntities()) {
     if (it->getComponent<comp::Type>()->type == Type::CITY) {
-      comp::Position *pos = it->getComponent<comp::Position>();
-      if (pos->x > pos_x && pos->y > pos_y
-	  && pos->x < pos_x + win_w
-	  && pos->y < pos_y + win_h) {
-	dst.x = pos->x - pos_x;
-	dst.y = pos->y - pos_y;
-	SDL_BlitSurface(city, NULL, screen, &dst);
-      }
+      blitSurface(city, it);
     }
     else if (it->getComponent<comp::Type>()->type == Type::SHIP) {
-      comp::Position *pos = it->getComponent<comp::Position>();
-      if (pos->x > pos_x && pos->y > pos_y
-	  && pos->x < pos_x + win_w
-	  && pos->y < pos_y + win_h) {
-	dst.x = pos->x - pos_x;
-	dst.y = pos->y - pos_y;
-	SDL_BlitSurface(ship, NULL, screen, &dst);
-      }
+      blitSurface(ship, it);
     }
   }
   SDL_FreeSurface(city);
