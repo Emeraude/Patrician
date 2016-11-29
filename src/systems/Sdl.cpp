@@ -1,8 +1,9 @@
 #include "Sdl.hpp"
 #include "Components.hpp"
+#include "PlayerBuilder.hpp"
+#include "Time.hpp"
 
-#include <iostream>
-sys::Sdl::Sdl() : _pos_x(0), _pos_y(0), _win_w(640), _win_h(480) {
+sys::Sdl::Sdl() : _pos_x(0), _pos_y(0), _win_w(640), _win_h(480), _player(0) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
     throw Exception();
   if (TTF_Init() == -1)
@@ -21,6 +22,14 @@ sys::Sdl::Sdl() : _pos_x(0), _pos_y(0), _win_w(640), _win_h(480) {
   SDL_FillRect(_sprites["city"], NULL, SDL_MapRGB(_sprites["city"]->format, 255, 0, 0));
   _sprites["ship"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
   SDL_FillRect(_sprites["ship"], NULL, SDL_MapRGB(_sprites["ship"]->format, 255, 255, 255));
+  _sprites["ui"] = SDL_CreateRGBSurface(0, _win_w, 20, 32, 0, 0, 0, 0);
+  SDL_Surface *bar = SDL_CreateRGBSurface(0, _win_w, 1, 32, 0, 0, 0, 0);
+  SDL_FillRect(bar, NULL, SDL_MapRGB(bar->format, 127, 127, 127));
+  SDL_Rect dst;
+  dst.x = 0;
+  dst.y = 19;
+  SDL_BlitSurface(bar, NULL, _sprites["ui"], &dst);
+  SDL_FreeSurface(bar);
 }
 
 sys::Sdl::~Sdl() {
@@ -92,10 +101,33 @@ bool sys::Sdl::blitSurface(std::string const& name, Ecs::Entity *e) {
   return false;
 }
 
+void sys::Sdl::printUI(Ecs::World &world) {
+  SDL_Rect dst;
+
+  Ecs::Entity *player = world.getEntity(_player);
+  unsigned int money = player->getComponent<comp::Money>()->value;
+  dst.x = 0;
+  dst.y = 0;
+  SDL_BlitSurface(_sprites["ui"], NULL, _screen, &dst);
+  SDL_Color white = {255, 255, 255};
+  SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, (std::to_string(money) + "po").c_str(), white);
+  dst.x = 0;
+  dst.y = 0;
+  SDL_BlitSurface(msg, NULL, _screen, &dst);
+  SDL_FreeSurface(msg);
+  sys::Time& sys = *world.getSystem<sys::Time>();
+  msg= TTF_RenderUTF8_Blended(_font, (std::string("day") + std::to_string(sys.getDay())).c_str(), white);
+  dst.x = _win_w - msg->w;
+  dst.y = 0;
+  SDL_BlitSurface(msg, NULL, _screen, &dst);
+  SDL_FreeSurface(msg);
+}
+
 void sys::Sdl::display(Ecs::World &world) {
   SDL_Color white = {255, 255, 255};
 
   SDL_FillRect(_screen, NULL, SDL_MapRGB(_screen->format, 0, 0, 0));
+  printUI(world);
   for (auto *it: world.getEntities()) {
     if (it->getComponent<comp::Type>()->type == Type::CITY) {
       comp::Position *pos = it->getComponent<comp::Position>();
@@ -120,6 +152,8 @@ void sys::Sdl::display(Ecs::World &world) {
 }
 
 void sys::Sdl::update(Ecs::World &world) {
+  if (!_player)
+    _player = *::players.begin();
   events(world);
   display(world);
 }

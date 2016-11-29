@@ -18,9 +18,11 @@ namespace sys {
     int _pos_y;
     int _win_w;
     int _win_h;
+    unsigned int _player;
 
     void events(Ecs::World &world);
     bool blitSurface(std::string const& name, Ecs::Entity *e);
+    void printUI(Ecs::World &world);
     void display(Ecs::World &world);
 
   public:
