@@ -17,7 +17,7 @@ CXXFLAGS += -Wextra -Wall -std=c++11
 CXXFLAGS += -Ilib -Isrc -I.
 CXXFLAGS += `sdl2-config --cflags`
 LDXXFLAGS += -lpthread
-LDXXFLAGS += `sdl2-config --libs`
+LDXXFLAGS += -lSDL2 -lSDL2_ttf
 
 RM	= rm -f
 

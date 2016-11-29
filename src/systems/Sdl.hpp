@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include "World.hpp"
 #include "src/Exceptions.hpp"
 
@@ -12,6 +13,7 @@ namespace sys {
     std::map<std::string, SDL_Surface *> _sprites;
     SDL_Window *_window;
     SDL_Surface *_screen;
+    TTF_Font *_font;
     int _pos_x;
     int _pos_y;
     int _win_w;
@@ -30,6 +32,11 @@ namespace sys {
     class Exception : public ::Exception::Base {
     public:
       Exception() : ::Exception::Base(std::string("SDL error: ") + SDL_GetError()) {}
+    };
+
+    class TTF : public ::Exception::Base {
+    public:
+      TTF() : ::Exception::Base(std::string("TTF error: ") + TTF_GetError()) {}
     };
   };
 }
