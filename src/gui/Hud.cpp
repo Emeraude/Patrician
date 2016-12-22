@@ -1,6 +1,5 @@
 #include "Hud.hpp"
 #include "Components.hpp"
-#include "PlayerBuilder.hpp"
 #include "systems/Time.hpp"
 
 Gui::Hud::Hud(uint32_t width, uint32_t height) : _width(width), _height(height), _surface(NULL) {

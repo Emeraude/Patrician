@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-#include <map>
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include "World.hpp"

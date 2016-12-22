@@ -1,7 +1,5 @@
 #include "Sdl.hpp"
-#include "Components.hpp"
 #include "PlayerBuilder.hpp"
-#include "Time.hpp"
 
 sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _player(0) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
