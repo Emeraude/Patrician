@@ -51,7 +51,6 @@ void Gui::Hud::writeText(std::string const& content, int x, int y, std::string a
     dst.x = x - msg->w / 2;
   SDL_BlitSurface(msg, NULL, _surface, &dst);
   SDL_FreeSurface(msg);
-  return true;
 }
 
 SDL_Surface *Gui::Hud::draw(Ecs::World &world, uint32_t player) {
