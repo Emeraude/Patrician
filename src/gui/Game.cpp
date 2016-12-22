@@ -76,20 +76,18 @@ bool Gui::Game::blitSurface(std::string const& name, Ecs::Entity *e) {
 }
 
 
-void Gui::Game::writeText(std::string const& content, int x, int y, std::string alignment) {
+void Gui::Game::writeText(std::string const& content, int x, int y, Gui::align alignment) {
   SDL_Color white = {255, 255, 255, 0};
   SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, content.c_str(), white);
 
-  //TODO: replace by a macro (bitwise)
-  if (alignment == "top"
-      || alignment == "top-right"
-      || alignment == "top-center")
+  if (alignment & Gui::align::TOP)
     y -= msg->h;
-  if (alignment == "right"
-      || alignment == "top-right")
-    x -= - msg->w;
-  else if (alignment == "center"
-	   || alignment == "top-center")
+  else if (alignment & Gui::align::MIDDLE)
+    y -= msg->h / 2;
+
+  if (alignment & Gui::align::RIGHT)
+    x -= msg->w;
+  else if (alignment & Gui::align::CENTER)
     x -= msg->w / 2;
   blitSurface(msg, x, y);
   SDL_FreeSurface(msg);
@@ -102,7 +100,7 @@ SDL_Surface *Gui::Game::draw(Ecs::World &world, uint32_t player) {
       blitSurface("city", it);
       comp::Position *pos = it->getComponent<comp::Position>();
       writeText(it->getComponent<comp::Name>()->value.c_str(),
-		pos->x, pos->y, "top-center");
+		pos->x, pos->y, Gui::align::TOP_CENTER);
     }
     else if (it->getComponent<comp::Type>()->type == Type::SHIP) {
       blitSurface("ship", it);

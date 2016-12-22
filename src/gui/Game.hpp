@@ -7,6 +7,7 @@
 #include <SDL_ttf.h>
 #include "World.hpp"
 #include "src/Exceptions.hpp"
+#include "gui/Base.hpp"
 
 namespace Gui {
   class Game {
@@ -31,6 +32,6 @@ namespace Gui {
     bool blitSurface(SDL_Surface *surface, Ecs::Entity *it);
     bool blitSurface(std::string const& name, uint32_t x, uint32_t y);
     bool blitSurface(std::string const& name, Ecs::Entity *it);
-    void writeText(std::string const& content, int x, int y, std::string alignment = "left");
+    void writeText(std::string const& content, int x, int y, Gui::align alignment = Gui::align::LEFT);
   };
 }

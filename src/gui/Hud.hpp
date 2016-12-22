@@ -7,6 +7,7 @@
 #include <SDL_ttf.h>
 #include "World.hpp"
 #include "src/Exceptions.hpp"
+#include "gui/Base.hpp"
 
 namespace Gui {
   class Hud {
@@ -24,6 +25,6 @@ namespace Gui {
     SDL_Surface *draw(Ecs::World &world, uint32_t player);
 
   private:
-    void writeText(std::string const& content, int x, int y, std::string alignment);
+    void writeText(std::string const& content, int x, int y, Gui::align alignment = Gui::align::LEFT);
   };
 }

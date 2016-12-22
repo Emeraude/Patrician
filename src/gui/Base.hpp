@@ -1,0 +1,24 @@
+#pragma once
+
+namespace Gui {
+  enum align {
+    TOP = 0b000001,
+    MIDDLE = 0b000010,
+    BOTTOM = 0b000100,
+    LEFT = 0b001000,
+    CENTER = 0b010000,
+    RIGHT = 0b100000,
+
+    TOP_LEFT = TOP | LEFT,
+    TOP_CENTER = TOP | CENTER,
+    TOP_RIGHT = TOP | RIGHT,
+
+    MIDDLE_LEFT = MIDDLE | LEFT,
+    MIDDLE_CENTER = MIDDLE | CENTER,
+    MIDDLE_RIGHT = MIDDLE | RIGHT,
+
+    BOTTOM_LEFT = BOTTOM | LEFT,
+    BOTTOM_CENTER = BOTTOM | CENTER,
+    BOTTOM_RIGHT = BOTTOM | RIGHT
+  };
+}

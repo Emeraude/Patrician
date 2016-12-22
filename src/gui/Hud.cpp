@@ -38,17 +38,22 @@ void Gui::Hud::updateSize(uint32_t width, uint32_t height) {
   SDL_FreeSurface(bar);
 }
 
-void Gui::Hud::writeText(std::string const& content, int x, int y, std::string alignment) {
+void Gui::Hud::writeText(std::string const& content, int x, int y, Gui::align alignment) {
   SDL_Rect dst;
   SDL_Color white = {255, 255, 255, 0};
   SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, content.c_str(), white);
 
   dst.x = x;
   dst.y = y;
-  if (alignment == "right")
-    dst.x = x - msg->w;
-  else if (alignment == "center")
-    dst.x = x - msg->w / 2;
+  if (alignment & Gui::align::TOP)
+    dst.y -= msg->h;
+  else if (alignment & Gui::align::MIDDLE)
+    dst.y -= msg->h / 2;
+
+  if (alignment & Gui::align::RIGHT)
+    dst.x -= msg->w;
+  else if (alignment & Gui::align::CENTER)
+    dst.x -= msg->w / 2;
   SDL_BlitSurface(msg, NULL, _surface, &dst);
   SDL_FreeSurface(msg);
 }
@@ -60,7 +65,7 @@ SDL_Surface *Gui::Hud::draw(Ecs::World &world, uint32_t player) {
 
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 0, 0, 0));
   SDL_BlitSurface(_sprites["top"], NULL, _surface, NULL);
-  this->writeText(std::to_string(money) + "po", 0, 0, "left");
-  this->writeText(std::string("day ") + std::to_string(time), _width, 0, "right");
+  this->writeText(std::to_string(money) + "po", 0, 0, Gui::align::LEFT);
+  this->writeText(std::string("day ") + std::to_string(time), _width, 0, Gui::align::RIGHT);
   return _surface;
 }
