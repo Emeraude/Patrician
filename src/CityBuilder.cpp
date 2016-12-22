@@ -38,6 +38,7 @@ unsigned int CityBuilder::addRandom(Ecs::World& w) {
     s->at(static_cast<Resource>(i)).quantity = 5;
   }
 
+  e->addComponent<comp::Id>(id);
   ::cityNames[e->getComponent<comp::Name>()->value] = id;
   return id;
 }
