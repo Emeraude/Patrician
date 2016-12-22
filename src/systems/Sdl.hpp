@@ -6,24 +6,23 @@
 #include <SDL_ttf.h>
 #include "World.hpp"
 #include "src/Exceptions.hpp"
+#include "gui/Game.hpp"
 #include "gui/Hud.hpp"
 
 namespace sys {
   class Sdl : public Ecs::System::Base {
   private:
-    std::map<std::string, SDL_Surface *> _sprites;
     SDL_Window *_window;
     SDL_Surface *_screen;
-    int _pos_x;
-    int _pos_y;
     int _win_w;
     int _win_h;
+    int _velocity_x;
+    int _velocity_y;
     unsigned int _player;
     Gui::Hud *_hud;
-    TTF_Font *_font;
+    Gui::Game *_game;
 
     void events(Ecs::World &world);
-    bool blitSurface(std::string const& name, Ecs::Entity *e);
     void display(Ecs::World &world);
 
   public:
