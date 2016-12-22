@@ -31,15 +31,23 @@ void Gui::Game::updateSize(uint32_t width, uint32_t height) {
 }
 
 void Gui::Game::updatePos(int32_t x, int32_t y) {
-  if ((int32_t)_pos_x + x >= (int32_t)(1000 - _width))
-    _pos_x = 1000 - _width;
+  if ((int32_t)_pos_x + x >= (int32_t)(1000 - _width)) {
+    if ((int32_t)(1000 - _width) < 0)
+      _pos_x = 0;
+    else
+      _pos_x = 1000 - _width;
+  }
   else if ((int32_t)_pos_x + x <= 0)
     _pos_x = 0;
   else
     _pos_x += x;
 
-  if ((int32_t)_pos_y + y >= (int32_t)(1000 - _height))
-    _pos_y = 1000 - _height;
+  if ((int32_t)_pos_y + y >= (int32_t)(1000 - _height)) {
+    if ((int32_t)(1000 - _height) < 0)
+      _pos_y = 0;
+    else
+      _pos_y = 1000 - _height;
+  }
   else if ((int32_t)_pos_y + y <= 0)
     _pos_y = 0;
   else
