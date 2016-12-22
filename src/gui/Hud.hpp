@@ -23,6 +23,6 @@ namespace Gui {
     SDL_Surface *draw(Ecs::World &world, uint32_t player);
 
   private:
-    bool writeText(std::string const& content, int x, int y, std::string alignment);
+    void writeText(std::string const& content, int x, int y, std::string alignment);
   };
 }

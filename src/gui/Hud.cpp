@@ -38,7 +38,7 @@ void Gui::Hud::updateSize(uint32_t width, uint32_t height) {
   SDL_FreeSurface(bar);
 }
 
-bool Gui::Hud::writeText(std::string const& content, int x, int y, std::string alignment) {
+void Gui::Hud::writeText(std::string const& content, int x, int y, std::string alignment) {
   SDL_Rect dst;
   SDL_Color white = {255, 255, 255, 0};
   SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, content.c_str(), white);
