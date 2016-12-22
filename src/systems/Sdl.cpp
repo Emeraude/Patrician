@@ -1,7 +1,7 @@
 #include "Sdl.hpp"
 #include "PlayerBuilder.hpp"
 
-sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _player(0) {
+sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _player(0), _selected(NULL) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
     throw Exception::Sdl();
   if (TTF_Init() == -1)
@@ -68,6 +68,11 @@ void sys::Sdl::events(Ecs::World &world) {
 	if (_screen == NULL)
 	  throw Exception::Sdl();
       }
+    }
+    else if (event.type == SDL_MOUSEBUTTONUP
+	     && event.button.button == SDL_BUTTON_LEFT
+	     && event.button.y >= 20) {
+      _selected = _game->click(event.button.x, event.button.y - 20);
     }
   }
   _game->updatePos(_velocity_x, _velocity_y);

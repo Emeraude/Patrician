@@ -71,7 +71,15 @@ bool Gui::Game::blitSurface(SDL_Surface *surface, uint32_t x, uint32_t y) {
 
 bool Gui::Game::blitSurface(SDL_Surface *surface, Ecs::Entity *e) {
   comp::Position *pos = e->getComponent<comp::Position>();
-  return blitSurface(surface, pos->x, pos->y);
+  bool blitted = blitSurface(surface, pos->x, pos->y);
+  SDL_Rect dst;
+
+  dst.x = pos->x - _pos_x;
+  dst.y = pos->y - _pos_y;
+  dst.w = surface->w;
+  dst.h = surface->h;
+  _blittedEntities.push_back(std::pair<SDL_Rect, Ecs::Entity*>(dst, e));
+  return blitted;
 }
 
 bool Gui::Game::blitSurface(std::string const& name, uint32_t x, uint32_t y) {
@@ -79,10 +87,8 @@ bool Gui::Game::blitSurface(std::string const& name, uint32_t x, uint32_t y) {
 }
 
 bool Gui::Game::blitSurface(std::string const& name, Ecs::Entity *e) {
-  comp::Position *pos = e->getComponent<comp::Position>();
-  return blitSurface(name, pos->x, pos->y);
+  return blitSurface(_sprites[name], e);
 }
-
 
 void Gui::Game::writeText(std::string const& content, int x, int y, Gui::align alignment) {
   SDL_Color white = {255, 255, 255, 0};
@@ -103,6 +109,7 @@ void Gui::Game::writeText(std::string const& content, int x, int y, Gui::align a
 
 SDL_Surface *Gui::Game::draw(Ecs::World &world, uint32_t player) {
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 0, 0, 0));
+  _blittedEntities.clear();
   for (auto *it: world.getEntities()) {
     if (it->getComponent<comp::Type>()->type == Type::CITY) {
       blitSurface("city", it);
@@ -115,4 +122,16 @@ SDL_Surface *Gui::Game::draw(Ecs::World &world, uint32_t player) {
     }
   }
   return _surface;
+}
+
+Ecs::Entity *Gui::Game::click(int32_t x, int32_t y) {
+  for (auto& it: _blittedEntities) {
+    if (x >= it.first.x
+	&& x < it.first.x + it.first.w
+	&& y >= it.first.y
+	&& y < it.first.y + it.first.h) {
+      return it.second;
+    }
+  }
+  return NULL;
 }

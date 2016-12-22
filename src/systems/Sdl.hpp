@@ -19,6 +19,7 @@ namespace sys {
     unsigned int _player;
     Gui::Hud *_hud;
     Gui::Game *_game;
+    Ecs::Entity *_selected;
 
     void events(Ecs::World &world);
     void display(Ecs::World &world);

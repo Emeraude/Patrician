@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <map>
+#include <list>
 #include <string>
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -18,6 +19,7 @@ namespace Gui {
     uint32_t _pos_y;
     SDL_Surface *_surface;
     TTF_Font *_font;
+    std::list<std::pair<SDL_Rect, Ecs::Entity *>> _blittedEntities;
     std::map<std::string, SDL_Surface *> _sprites;
 
   public:
@@ -26,6 +28,7 @@ namespace Gui {
     void updateSize(uint32_t width, uint32_t height);
     void updatePos(int32_t x, int32_t y);
     SDL_Surface *draw(Ecs::World &world, uint32_t player);
+    Ecs::Entity *click(int32_t x, int32_t y);
 
   private:
     bool blitSurface(SDL_Surface *surface, uint32_t x, uint32_t y);
