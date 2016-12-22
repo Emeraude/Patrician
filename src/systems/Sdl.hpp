@@ -29,16 +29,5 @@ namespace sys {
     Sdl();
     ~Sdl();
     void update(Ecs::World &world);
-
-  private:
-    class Exception : public ::Exception::Base {
-    public:
-      Exception() : ::Exception::Base(std::string("SDL error: ") + SDL_GetError()) {}
-    };
-
-    class TTF : public ::Exception::Base {
-    public:
-      TTF() : ::Exception::Base(std::string("TTF error: ") + TTF_GetError()) {}
-    };
   };
 }

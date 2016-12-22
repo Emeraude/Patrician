@@ -28,4 +28,14 @@ namespace Exception {
   public:
     Building(std::string const& str);
   };
+
+  class Sdl : public ::Exception::Base {
+  public:
+    Sdl(std::string const& str = "");
+  };
+
+  class Ttf : public ::Exception::Base {
+  public:
+    Ttf(std::string const& str = "");
+  };
 }

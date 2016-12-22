@@ -1,10 +1,12 @@
 #include "Game.hpp"
 #include "Components.hpp"
 
-//TODO: exceptions
 Gui::Game::Game(uint32_t width, uint32_t height) : _width(width), _height(height), _pos_x(0), _pos_y(0), _surface(NULL) {
   updateSize(width, height);
   _font = TTF_OpenFont("./resources/fonts/DejaVuSansMono.ttf", 12);
+  if (_font == NULL)
+    throw Exception::Ttf("Unable to load font");
+
   _sprites["city"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
   SDL_FillRect(_sprites["city"], NULL, SDL_MapRGB(_sprites["city"]->format, 255, 0, 0));
   _sprites["ship"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);

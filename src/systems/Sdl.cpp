@@ -5,16 +5,16 @@
 
 sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _player(0) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    throw Exception();
+    throw Exception::Sdl();
   if (TTF_Init() == -1)
-    throw TTF();
+    throw Exception::Ttf();
   _window = SDL_CreateWindow("Patrician", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 			    _win_w, _win_h, SDL_WINDOW_RESIZABLE);
   if (_window == NULL)
-    throw Exception();
+    throw Exception::Sdl();
   _screen = SDL_GetWindowSurface(_window);
   if (_screen == NULL)
-    throw Exception();
+    throw Exception::Sdl();
   _hud = new Gui::Hud(640, 480);
   _game = new Gui::Game(640, 480 - 20);
 }
@@ -68,7 +68,7 @@ void sys::Sdl::events(Ecs::World &world) {
 	_game->updateSize(_win_w, _win_h - 20);
 	_screen = SDL_GetWindowSurface(_window);
 	if (_screen == NULL)
-	  throw Exception();
+	  throw Exception::Sdl();
       }
     }
   }

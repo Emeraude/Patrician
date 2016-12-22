@@ -4,9 +4,10 @@
 #include "systems/Time.hpp"
 
 Gui::Hud::Hud(uint32_t width, uint32_t height) : _width(width), _height(height), _surface(NULL) {
-  //TODO: exceptions
   updateSize(width, height);
   _font = TTF_OpenFont("./resources/fonts/DejaVuSansMono.ttf", 12);
+  if (_font == NULL)
+    throw Exception::Ttf("Unable to load font");
 }
 
 Gui::Hud::~Hud() {
