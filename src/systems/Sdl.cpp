@@ -15,27 +15,21 @@ sys::Sdl::Sdl() : _pos_x(0), _pos_y(0), _win_w(640), _win_h(480), _player(0) {
   _screen = SDL_GetWindowSurface(_window);
   if (_screen == NULL)
     throw Exception();
-  _font = TTF_OpenFont("./resources/fonts/DejaVuSansMono.ttf", 12);
+   _font = TTF_OpenFont("./resources/fonts/DejaVuSansMono.ttf", 12);
   if (_font == NULL)
     throw TTF();
   _sprites["city"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
   SDL_FillRect(_sprites["city"], NULL, SDL_MapRGB(_sprites["city"]->format, 255, 0, 0));
   _sprites["ship"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
   SDL_FillRect(_sprites["ship"], NULL, SDL_MapRGB(_sprites["ship"]->format, 255, 255, 255));
-  _sprites["ui"] = SDL_CreateRGBSurface(0, _win_w, 20, 32, 0, 0, 0, 0);
-  SDL_Surface *bar = SDL_CreateRGBSurface(0, _win_w, 1, 32, 0, 0, 0, 0);
-  SDL_FillRect(bar, NULL, SDL_MapRGB(bar->format, 127, 127, 127));
-  SDL_Rect dst;
-  dst.x = 0;
-  dst.y = 19;
-  SDL_BlitSurface(bar, NULL, _sprites["ui"], &dst);
-  SDL_FreeSurface(bar);
+  _hud = new Gui::Hud(640, 480);
 }
 
 sys::Sdl::~Sdl() {
   for (auto& it: _sprites) {
     SDL_FreeSurface(it.second);
   }
+  delete _hud;
   TTF_CloseFont(_font);
   TTF_Quit();
   SDL_DestroyWindow(_window);
@@ -68,6 +62,7 @@ void sys::Sdl::events(Ecs::World &world) {
 	  || event.window.event == SDL_WINDOWEVENT_RESIZED) {
 	_win_w = event.window.data1;
 	_win_h = event.window.data2;
+	_hud->updateSize(_win_w, _win_h);
 	_screen = SDL_GetWindowSurface(_window);
 	if (_screen == NULL)
 	  throw Exception();
@@ -101,33 +96,11 @@ bool sys::Sdl::blitSurface(std::string const& name, Ecs::Entity *e) {
   return false;
 }
 
-void sys::Sdl::printUI(Ecs::World &world) {
-  SDL_Rect dst;
-
-  Ecs::Entity *player = world.getEntity(_player);
-  unsigned int money = player->getComponent<comp::Money>()->value;
-  dst.x = 0;
-  dst.y = 0;
-  SDL_BlitSurface(_sprites["ui"], NULL, _screen, &dst);
-  SDL_Color white = {255, 255, 255};
-  SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, (std::to_string(money) + "po").c_str(), white);
-  dst.x = 0;
-  dst.y = 0;
-  SDL_BlitSurface(msg, NULL, _screen, &dst);
-  SDL_FreeSurface(msg);
-  sys::Time& sys = *world.getSystem<sys::Time>();
-  msg= TTF_RenderUTF8_Blended(_font, (std::string("day") + std::to_string(sys.getDay())).c_str(), white);
-  dst.x = _win_w - msg->w;
-  dst.y = 0;
-  SDL_BlitSurface(msg, NULL, _screen, &dst);
-  SDL_FreeSurface(msg);
-}
-
 void sys::Sdl::display(Ecs::World &world) {
-  SDL_Color white = {255, 255, 255};
+  SDL_Color white = {255, 255, 255, 0};
 
   SDL_FillRect(_screen, NULL, SDL_MapRGB(_screen->format, 0, 0, 0));
-  printUI(world);
+  SDL_BlitSurface(_hud->draw(world, _player), NULL, _screen, NULL);
   for (auto *it: world.getEntities()) {
     if (it->getComponent<comp::Type>()->type == Type::CITY) {
       comp::Position *pos = it->getComponent<comp::Position>();

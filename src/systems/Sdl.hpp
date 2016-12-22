@@ -6,6 +6,7 @@
 #include <SDL_ttf.h>
 #include "World.hpp"
 #include "src/Exceptions.hpp"
+#include "gui/Hud.hpp"
 
 namespace sys {
   class Sdl : public Ecs::System::Base {
@@ -13,16 +14,16 @@ namespace sys {
     std::map<std::string, SDL_Surface *> _sprites;
     SDL_Window *_window;
     SDL_Surface *_screen;
-    TTF_Font *_font;
     int _pos_x;
     int _pos_y;
     int _win_w;
     int _win_h;
     unsigned int _player;
+    Gui::Hud *_hud;
+    TTF_Font *_font;
 
     void events(Ecs::World &world);
     bool blitSurface(std::string const& name, Ecs::Entity *e);
-    void printUI(Ecs::World &world);
     void display(Ecs::World &world);
 
   public:
