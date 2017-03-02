@@ -15,11 +15,14 @@ sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _pla
     throw Exception::Sdl();
   _hud = new Gui::Hud(640, 480);
   _game = new Gui::Game(640, 480 - 20);
+  _button = new Gui::Button(20, 60, "test");
+  _button->setPos(30, 30);
 }
 
 sys::Sdl::~Sdl() {
   delete _hud;
   delete _game;
+  delete _button;
   TTF_Quit();
   SDL_DestroyWindow(_window);
   SDL_Quit();
@@ -72,6 +75,7 @@ void sys::Sdl::events(Ecs::World &world) {
     else if (event.type == SDL_MOUSEBUTTONUP
 	     && event.button.button == SDL_BUTTON_LEFT
 	     && event.button.y >= 20) {
+      _button->click(event.button.x, event.button.y);
       _selected = _game->click(event.button.x, event.button.y - 20);
     }
   }
@@ -86,6 +90,8 @@ void sys::Sdl::display(Ecs::World &world) {
   dst.x = 0;
   dst.y = 20;
   SDL_BlitSurface(_game->draw(world, _player), NULL, _screen, &dst);
+  dst.x = dst.y = 30;
+  SDL_BlitSurface(_button->getSurface(), NULL, _screen, &dst);
   SDL_UpdateWindowSurface(_window);
 }
 

@@ -6,6 +6,7 @@
 #include "src/Exceptions.hpp"
 #include "gui/Game.hpp"
 #include "gui/Hud.hpp"
+#include "gui/Button.hpp"
 
 namespace sys {
   class Sdl : public Ecs::System::Base {
@@ -20,6 +21,7 @@ namespace sys {
     Gui::Hud *_hud;
     Gui::Game *_game;
     Ecs::Entity *_selected;
+    Gui::Button *_button;
 
     void events(Ecs::World &world);
     void display(Ecs::World &world);
