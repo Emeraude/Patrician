@@ -7,9 +7,9 @@ Gui::Button::Button(uint32_t w, uint32_t h, std::string const& content) : _w(w),
   if (_font == NULL)
     throw Exception::Ttf("Unable to load font");
 
-  _surface = SDL_CreateRGBSurface(0, h, w, 32, 0, 0, 0, 0);
+  _surface = SDL_CreateRGBSurface(0, _h, _w, 32, 0, 0, 0, 0);
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 127, 127, 127));
-  in = SDL_CreateRGBSurface(0, h - 2, w - 2, 32, 0, 0, 0, 0);
+  in = SDL_CreateRGBSurface(0, _h - 2, _w - 2, 32, 0, 0, 0, 0);
   SDL_FillRect(in, NULL, SDL_MapRGB(in->format, 255, 255, 255));
 
   SDL_Rect dst;
@@ -17,7 +17,7 @@ Gui::Button::Button(uint32_t w, uint32_t h, std::string const& content) : _w(w),
   dst.y = 1;
   SDL_BlitSurface(in, NULL, _surface, &dst);
 
-  this->writeText(_content, _w / 2, _h / 2, Gui::align::MIDDLE_CENTER);
+  this->writeText();
   SDL_FreeSurface(in);
 }
 
@@ -35,22 +35,14 @@ void Gui::Button::click(uint32_t x, uint32_t y) {
     std::cout << "Button is clicked!" << std::endl;
 }
 
-void Gui::Button::writeText(std::string const& content, int x, int y, Gui::align alignment) {
+#define ABS(x) ((int32_t)(x) >= 0 ? x : -(int32_t)(x))
+void Gui::Button::writeText() {
   SDL_Color black = {0, 0, 0, 0};
-  SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, content.c_str(), black);
+  SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, _content.c_str(), black);
   SDL_Rect dst;
 
-  if (alignment & Gui::align::TOP)
-    y -= msg->h;
-  else if (alignment & Gui::align::MIDDLE)
-    y -= msg->h / 2;
-
-  if (alignment & Gui::align::RIGHT)
-    x -= msg->w;
-  else if (alignment & Gui::align::CENTER)
-    x -= msg->w / 2;
-  dst.y = x;
-  dst.x = y;
+  dst.x = ABS(_h - msg->w) / 2;
+  dst.y = ABS(_w - msg->h) / 2;
   SDL_BlitSurface(msg, NULL, _surface, &dst);
   SDL_FreeSurface(msg);
 }

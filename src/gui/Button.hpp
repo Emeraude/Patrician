@@ -27,6 +27,6 @@ namespace Gui {
     SDL_Surface *getSurface();
 
   private:
-    void writeText(std::string const& content, int x, int y, Gui::align alignment = Gui::align::LEFT);
+    void writeText();
   };
 }
