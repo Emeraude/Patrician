@@ -7,6 +7,7 @@ SRC	=	src/BuildingBuilder.cpp \
 		src/gui/Button.cpp \
 		src/gui/Game.cpp \
 		src/gui/Hud.cpp \
+		src/gui/Popin.cpp \
 		src/systems/Console.cpp \
 		src/systems/Move.cpp \
 		src/systems/Sdl.cpp \

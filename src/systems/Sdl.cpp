@@ -7,7 +7,7 @@ sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _pla
   if (TTF_Init() == -1)
     throw Exception::Ttf();
   _window = SDL_CreateWindow("Patrician", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			    _win_w, _win_h, SDL_WINDOW_RESIZABLE);
+			     _win_w, _win_h, SDL_WINDOW_RESIZABLE);
   if (_window == NULL)
     throw Exception::Sdl();
   _screen = SDL_GetWindowSurface(_window);
@@ -15,11 +15,13 @@ sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _pla
     throw Exception::Sdl();
   _hud = new Gui::Hud(640, 480);
   _game = new Gui::Game(640, 480 - 20);
+  _popin = new Gui::Popin(300, 300);
 }
 
 sys::Sdl::~Sdl() {
   delete _hud;
   delete _game;
+  delete _popin;
   TTF_Quit();
   SDL_DestroyWindow(_window);
   SDL_Quit();
@@ -86,6 +88,13 @@ void sys::Sdl::display(Ecs::World &world) {
   dst.x = 0;
   dst.y = 20;
   SDL_BlitSurface(_game->draw(world, _player), NULL, _screen, &dst);
+  if (_selected
+      && _selected->getComponent<comp::Type>()->type == Type::CITY) {
+    SDL_Surface *popinSurface = _popin->draw(world, _selected);
+    dst.x = (_screen->w - popinSurface->w) / 2;
+    dst.y = (_screen->h - popinSurface->h) / 2;
+    SDL_BlitSurface(popinSurface, NULL, _screen, &dst);
+  }
   SDL_UpdateWindowSurface(_window);
 }
 
