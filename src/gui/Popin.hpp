@@ -21,6 +21,9 @@ namespace Gui {
     ~Popin();
 
     SDL_Surface *draw(Ecs::World &world, Ecs::Entity *city);
+    uint32_t getW() const;
+    uint32_t getH() const;
+    void click(uint32_t x, uint32_t y);
 
   private:
     void writeText(std::string const& content, int x, int y, Gui::align alignment = Gui::align::LEFT);

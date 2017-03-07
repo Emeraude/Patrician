@@ -68,10 +68,20 @@ void sys::Sdl::events(Ecs::World &world) {
 	  throw Exception::Sdl();
       }
     }
-    else if (event.type == SDL_MOUSEBUTTONUP
-	     && event.button.button == SDL_BUTTON_LEFT
-	     && event.button.y >= 20) {
-      _selected = _game->click(event.button.x, event.button.y - 20);
+    else if (event.type == SDL_MOUSEBUTTONUP) {
+      if (_selected
+	  && event.button.button == SDL_BUTTON_LEFT
+	  && (uint32_t)event.button.x > (_screen->w - _popin->getW()) / 2
+	  && (uint32_t)event.button.x < (_screen->w + _popin->getW()) / 2
+	  && (uint32_t)event.button.y > (_screen->h - _popin->getW()) / 2
+	  && (uint32_t)event.button.y < (_screen->h + _popin->getW()) / 2) {
+	_popin->click(event.button.x - (_screen->w - _popin->getW()) / 2,
+		       event.button.y - (_screen->h - _popin->getH()) / 2);
+      }
+      else if (event.button.button == SDL_BUTTON_LEFT
+	       && event.button.y >= 20) {
+	_selected = _game->click(event.button.x, event.button.y - 20);
+      }
     }
   }
   _game->updatePos(_velocity_x, _velocity_y);

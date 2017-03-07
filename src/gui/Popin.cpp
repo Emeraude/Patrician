@@ -56,3 +56,16 @@ SDL_Surface *Gui::Popin::draw(Ecs::World &world, Ecs::Entity *city) {
 
   return _surface;
 }
+
+uint32_t Gui::Popin::getW() const {
+  return _w;
+}
+
+uint32_t Gui::Popin::getH() const {
+  return _h;
+}
+
+#include <iostream>
+void Gui::Popin::click(uint32_t x, uint32_t y) {
+  std::cout << "Popin is clicked" << std::endl;
+}
