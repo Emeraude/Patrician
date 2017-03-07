@@ -4,8 +4,6 @@
 sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _player(0), _selected(NULL) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
     throw Exception::Sdl();
-  if (TTF_Init() == -1)
-    throw Exception::Ttf();
   _window = SDL_CreateWindow("Patrician", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 			     _win_w, _win_h, SDL_WINDOW_RESIZABLE);
   if (_window == NULL)
@@ -22,7 +20,6 @@ sys::Sdl::~Sdl() {
   delete _hud;
   delete _game;
   delete _popin;
-  TTF_Quit();
   SDL_DestroyWindow(_window);
   SDL_Quit();
 }

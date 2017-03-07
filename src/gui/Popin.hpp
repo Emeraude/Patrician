@@ -3,11 +3,11 @@
 #include <cstdint>
 #include <string>
 #include <SDL.h>
-#include <SDL_ttf.h>
 #include "World.hpp"
 #include "Components.hpp"
 #include "src/Exceptions.hpp"
 #include "gui/Base.hpp"
+#include "gui/TextRender.hpp"
 
 namespace Gui {
   class Popin {
@@ -15,7 +15,6 @@ namespace Gui {
     uint32_t _w;
     uint32_t _h;
     SDL_Surface *_surface;
-    TTF_Font *_font;
 
   public:
     Popin(uint32_t w, uint32_t h);

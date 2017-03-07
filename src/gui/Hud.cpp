@@ -4,9 +4,6 @@
 
 Gui::Hud::Hud(uint32_t width, uint32_t height) : _width(width), _height(height), _surface(NULL) {
   updateSize(width, height);
-  _font = TTF_OpenFont("./resources/fonts/DejaVuSansMono.ttf", 12);
-  if (_font == NULL)
-    throw Exception::Ttf("Unable to load font");
 }
 
 Gui::Hud::~Hud() {
@@ -14,7 +11,6 @@ Gui::Hud::~Hud() {
     SDL_FreeSurface(it.second);
   }
   SDL_FreeSurface(_surface);
-  TTF_CloseFont(_font);
 }
 
 void Gui::Hud::updateSize(uint32_t width, uint32_t height) {
@@ -40,8 +36,7 @@ void Gui::Hud::updateSize(uint32_t width, uint32_t height) {
 
 void Gui::Hud::writeText(std::string const& content, int x, int y, Gui::align alignment) {
   SDL_Rect dst;
-  SDL_Color white = {255, 255, 255, 0};
-  SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, content.c_str(), white);
+  SDL_Surface *msg = Gui::TextRender::getInstance().writeText(content, "white");
 
   dst.x = x;
   dst.y = y;

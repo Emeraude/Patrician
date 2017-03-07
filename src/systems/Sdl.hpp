@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SDL.h>
-#include <SDL_ttf.h>
 #include "World.hpp"
 #include "Components.hpp"
 #include "src/Exceptions.hpp"

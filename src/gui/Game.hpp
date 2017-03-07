@@ -5,10 +5,10 @@
 #include <list>
 #include <string>
 #include <SDL.h>
-#include <SDL_ttf.h>
 #include "World.hpp"
 #include "src/Exceptions.hpp"
 #include "gui/Base.hpp"
+#include "gui/TextRender.hpp"
 
 namespace Gui {
   class Game {
@@ -18,7 +18,6 @@ namespace Gui {
     uint32_t _pos_x;
     uint32_t _pos_y;
     SDL_Surface *_surface;
-    TTF_Font *_font;
     std::list<std::pair<SDL_Rect, Ecs::Entity *>> _blittedEntities;
     std::map<std::string, SDL_Surface *> _sprites;
 

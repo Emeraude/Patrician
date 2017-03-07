@@ -3,9 +3,9 @@
 #include <cstdint>
 #include <string>
 #include <SDL.h>
-#include <SDL_ttf.h>
 #include "src/Exceptions.hpp"
 #include "gui/Base.hpp"
+#include "gui/TextRender.hpp"
 
 namespace Gui {
   class Button {
@@ -17,7 +17,6 @@ namespace Gui {
     bool _disabled;
     std::string const& _content;
     SDL_Surface *_surface;
-    TTF_Font *_font;
 
   public:
     Button(uint32_t w, uint32_t h, std::string const& content);

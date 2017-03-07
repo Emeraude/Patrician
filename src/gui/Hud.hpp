@@ -4,10 +4,10 @@
 #include <map>
 #include <string>
 #include <SDL.h>
-#include <SDL_ttf.h>
 #include "World.hpp"
 #include "src/Exceptions.hpp"
 #include "gui/Base.hpp"
+#include "gui/TextRender.hpp"
 
 namespace Gui {
   class Hud {
@@ -15,7 +15,6 @@ namespace Gui {
     uint32_t _width;
     uint32_t _height;
     SDL_Surface *_surface;
-    TTF_Font *_font;
     std::map<std::string, SDL_Surface *> _sprites;
 
   public:

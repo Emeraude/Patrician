@@ -3,10 +3,6 @@
 Gui::Button::Button(uint32_t w, uint32_t h, std::string const& content) : _w(w), _h(h), _content(content) {
   SDL_Surface *in;
 
-  _font = TTF_OpenFont("./resources/fonts/DejaVuSansMono.ttf", 12);
-  if (_font == NULL)
-    throw Exception::Ttf("Unable to load font");
-
   _surface = SDL_CreateRGBSurface(0, _h, _w, 32, 0, 0, 0, 0);
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 127, 127, 127));
   in = SDL_CreateRGBSurface(0, _h - 2, _w - 2, 32, 0, 0, 0, 0);
@@ -23,7 +19,6 @@ Gui::Button::Button(uint32_t w, uint32_t h, std::string const& content) : _w(w),
 
 Gui::Button::~Button() {
   SDL_FreeSurface(_surface);
-  TTF_CloseFont(_font);
 }
 
 #include <iostream>
@@ -37,8 +32,7 @@ void Gui::Button::click(uint32_t x, uint32_t y) {
 
 #define ABS(x) ((int32_t)(x) >= 0 ? x : -(int32_t)(x))
 void Gui::Button::writeText() {
-  SDL_Color black = {0, 0, 0, 0};
-  SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, _content.c_str(), black);
+  SDL_Surface *msg = Gui::TextRender::getInstance().writeText(_content, "black");
   SDL_Rect dst;
 
   dst.x = ABS(_h - msg->w) / 2;

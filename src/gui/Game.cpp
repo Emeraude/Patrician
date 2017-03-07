@@ -3,9 +3,6 @@
 
 Gui::Game::Game(uint32_t width, uint32_t height) : _width(width), _height(height), _pos_x(0), _pos_y(0), _surface(NULL) {
   updateSize(width, height);
-  _font = TTF_OpenFont("./resources/fonts/DejaVuSansMono.ttf", 12);
-  if (_font == NULL)
-    throw Exception::Ttf("Unable to load font");
 
   _sprites["city"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
   SDL_FillRect(_sprites["city"], NULL, SDL_MapRGB(_sprites["city"]->format, 255, 0, 0));
@@ -18,7 +15,6 @@ Gui::Game::~Game() {
     SDL_FreeSurface(it.second);
   }
   SDL_FreeSurface(_surface);
-  TTF_CloseFont(_font);
 }
 
 void Gui::Game::updateSize(uint32_t width, uint32_t height) {
@@ -91,8 +87,7 @@ bool Gui::Game::blitSurface(std::string const& name, Ecs::Entity *e) {
 }
 
 void Gui::Game::writeText(std::string const& content, int x, int y, Gui::align alignment) {
-  SDL_Color white = {255, 255, 255, 0};
-  SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, content.c_str(), white);
+  SDL_Surface *msg = Gui::TextRender::getInstance().writeText(content, "white");
 
   if (alignment & Gui::align::TOP)
     y -= msg->h;

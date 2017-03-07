@@ -1,20 +1,14 @@
 #include "Popin.hpp"
 
-Gui::Popin::Popin(uint32_t w, uint32_t h) : _w(w), _h(h), _surface(NULL) {
-  _font = TTF_OpenFont("./resources/fonts/DejaVuSansMono.ttf", 12);
-  if (_font == NULL)
-    throw Exception::Ttf("Unable to load font");
-}
+Gui::Popin::Popin(uint32_t w, uint32_t h) : _w(w), _h(h), _surface(NULL) {}
 
 Gui::Popin::~Popin() {
   if (_surface)
     SDL_FreeSurface(_surface);
-  TTF_CloseFont(_font);
 }
 
 void Gui::Popin::writeText(std::string const& content, int x, int y, Gui::align alignment) {
-  SDL_Color black = {0, 0, 0, 0};
-  SDL_Surface *msg= TTF_RenderUTF8_Blended(_font, content.c_str(), black);
+  SDL_Surface *msg = Gui::TextRender::getInstance().writeText(content, "black");
 
   if (alignment & Gui::align::TOP)
     y -= msg->h;
