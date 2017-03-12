@@ -27,7 +27,7 @@ void sys::Console::help(std::stringstream&) {
 }
 
 void sys::Console::status(std::stringstream&) {
-  sys::Time& sys = *_w->getSystem<sys::Time>();
+  sys::Time& sys = *_w->get<sys::Time>();
 
   std::cout << "Player #" << _player << std::endl
 	    << "Day " << sys.getDay() << std::endl
@@ -51,12 +51,12 @@ void sys::Console::ship(std::stringstream& ss) {
   }
   else if (cmd == "list") {
     for (auto *it: _w->getEntities()) {
-      if (it->hasComponent<comp::Type>()
-	  && it->getComponent<comp::Type>()->type == Type::SHIP)
-	std::cout << "#" << it->getComponent<comp::Id>()->value
-		  << " \"" << it->getComponent<comp::Name>()->value
-		  << "\" in " << it->getComponent<comp::Position>()->x
-		  << "," << it->getComponent<comp::Position>()->y << std::endl;
+      if (it->has<comp::Type>()
+	  && it->get<comp::Type>()->type == Type::SHIP)
+	std::cout << "#" << it->get<comp::Id>()->value
+		  << " \"" << it->get<comp::Name>()->value
+		  << "\" in " << it->get<comp::Position>()->x
+		  << "," << it->get<comp::Position>()->y << std::endl;
     }
   }
   else if (cmd == "move") {
@@ -73,8 +73,8 @@ void sys::Console::ship(std::stringstream& ss) {
       else {
 	try {
 	  Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
-	  x = e->getComponent<comp::Position>()->x;
-	  y = e->getComponent<comp::Position>()->y;
+	  x = e->get<comp::Position>()->x;
+	  y = e->get<comp::Position>()->y;
 	} catch (std::out_of_range&) {
 	  std::cerr << "No city \"" << cityName << "\" found" << std::endl;
 	  return;
@@ -82,8 +82,8 @@ void sys::Console::ship(std::stringstream& ss) {
       }
       this->checkSelectedShip();
       Ecs::Entity& e = *_w->getEntities().at(_selectedShip);
-      e.addComponent<comp::Move>(x, y);
-      e.getComponent<comp::Speed>()->current = e.getComponent<comp::Speed>()->max;
+      e.add<comp::Move>(x, y);
+      e.get<comp::Speed>()->current = e.get<comp::Speed>()->max;
     }
     else
       throw Exception::Usage("");
@@ -95,8 +95,8 @@ void sys::Console::ship(std::stringstream& ss) {
     else {
       try {
 	Ecs::Entity& e = *_w->getEntities().at(id);
-	if (e.hasComponent<comp::Type>()
-	    && e.getComponent<comp::Type>()->type != Type::SHIP)
+	if (e.has<comp::Type>()
+	    && e.get<comp::Type>()->type != Type::SHIP)
 	  throw std::out_of_range("Not a ship");
 	_selectedShip = id;
       } catch (std::out_of_range&) {
@@ -107,13 +107,13 @@ void sys::Console::ship(std::stringstream& ss) {
   else if (cmd == "details") {
     Ecs::Entity& e = *_w->getEntities().at(_selectedShip);
     this->checkSelectedShip();
-    std::cout << "Ship \"" << e.getComponent<comp::Name>()->value << "\" #" << _selectedShip
-	      << " in " << e.getComponent<comp::Position>()->x
-	      << "," << e.getComponent<comp::Position>()->y;
-    if (e.hasComponent<comp::City>())
-      std::cout << " (" << _w->getEntity(e.getComponent<comp::City>()->id)->getComponent<comp::Name>()->value << ")";
+    std::cout << "Ship \"" << e.get<comp::Name>()->value << "\" #" << _selectedShip
+	      << " in " << e.get<comp::Position>()->x
+	      << "," << e.get<comp::Position>()->y;
+    if (e.has<comp::City>())
+      std::cout << " (" << _w->get(e.get<comp::City>()->id)->get<comp::Name>()->value << ")";
     std::cout << std::endl;
-    comp::Stock *s = e.getComponent<comp::Stock>();
+    comp::Stock *s = e.get<comp::Stock>();
     for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
       if (s->at(static_cast<Resource>(i)).quantity > 0)
       std::cout << infosResource[i].name << " " << s->at(static_cast<Resource>(i)).quantity << std::endl;
@@ -128,11 +128,11 @@ void sys::Console::city(std::stringstream& ss) {
   ss >> cmd;
   if (cmd == "list") {
     for (auto& it: ::cityNames) {
-      Ecs::Entity *city = _w->getEntity(it.second);
-      std::cout << "\"" << city->getComponent<comp::Name>()->value
-		<< "\" (" << city->getComponent<comp::Inhabitants>()->total()
-		<< ") in " << city->getComponent<comp::Position>()->x
-		<< "," << city->getComponent<comp::Position>()->y << std::endl;
+      Ecs::Entity *city = _w->get(it.second);
+      std::cout << "\"" << city->get<comp::Name>()->value
+		<< "\" (" << city->get<comp::Inhabitants>()->total()
+		<< ") in " << city->get<comp::Position>()->x
+		<< "," << city->get<comp::Position>()->y << std::endl;
     }
   }
   else if (cmd == "details") {
@@ -143,12 +143,12 @@ void sys::Console::city(std::stringstream& ss) {
       try {
 	Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
 	std::cout << "\"" << cityName
-		  << "\" in " << e->getComponent<comp::Position>()->x
-		  << "," << e->getComponent<comp::Position>()->y
-		  << ": " << e->getComponent<comp::Inhabitants>()->poor
-		  << " poors, " << e->getComponent<comp::Inhabitants>()->wealthy
-		  << " wealthy, " << e->getComponent<comp::Inhabitants>()->rich
-		  << " rich, " << e->getComponent<comp::Inhabitants>()->beggar
+		  << "\" in " << e->get<comp::Position>()->x
+		  << "," << e->get<comp::Position>()->y
+		  << ": " << e->get<comp::Inhabitants>()->poor
+		  << " poors, " << e->get<comp::Inhabitants>()->wealthy
+		  << " wealthy, " << e->get<comp::Inhabitants>()->rich
+		  << " rich, " << e->get<comp::Inhabitants>()->beggar
 		  << " beggars" << std::endl;
       } catch (std::out_of_range&) {
 	std::cerr << "No city \"" << cityName << "\" found" << std::endl;
@@ -161,9 +161,9 @@ void sys::Console::city(std::stringstream& ss) {
       throw Exception::Usage("");
     else {
       try {
-	Ecs::Entity *city = _w->getEntity(::cityNames.at(cityName));
-	Ecs::Entity *e = _w->getEntity(city->getComponent<comp::Buildings>()->office);
-	comp::Stock *s = e->getComponent<comp::Stock>();
+	Ecs::Entity *city = _w->get(::cityNames.at(cityName));
+	Ecs::Entity *e = _w->get(city->get<comp::Buildings>()->office);
+	comp::Stock *s = e->get<comp::Stock>();
 	for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i)
 	  std::cout << infosResource[i].name << " " << s->at(static_cast<Resource>(i)).quantity << std::endl;
       } catch (std::out_of_range&) {
@@ -200,12 +200,12 @@ void sys::Console::building(std::stringstream& ss) {
     else
       try {
 	for (auto *it: _w->getEntities()) {
-	  if (it->hasComponent<comp::Type>()
-	      && it->hasComponent<comp::City>()
-	      && it->getComponent<comp::Type>()->type == Type::BUILDING
-	      && it->getComponent<comp::City>()->id == ::cityNames.at(cityName)) {
-	    if (it->hasComponent<comp::Name>())
-	      std::cout << it->getComponent<comp::Name>()->value << std::endl;
+	  if (it->has<comp::Type>()
+	      && it->has<comp::City>()
+	      && it->get<comp::Type>()->type == Type::BUILDING
+	      && it->get<comp::City>()->id == ::cityNames.at(cityName)) {
+	    if (it->has<comp::Name>())
+	      std::cout << it->get<comp::Name>()->value << std::endl;
 	    else
 	      std::cout << "Unknown building" << std::endl;
 	  }
@@ -225,37 +225,37 @@ void sys::Console::buy(std::stringstream& ss) {
     throw Exception::Usage("");
   this->checkResourceType(resourceStr);
   this->checkSelectedShip();
-  Ecs::Entity *ship = _w->getEntity(_selectedShip);
+  Ecs::Entity *ship = _w->get(_selectedShip);
   Resource resource = resourceNames.at(resourceStr);
-  if (!ship->hasComponent<comp::City>()) {
+  if (!ship->has<comp::City>()) {
     std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
     return;
   }
-  Ecs::Entity *city = _w->getEntity(ship->getComponent<comp::City>()->id);
-  Ecs::Entity *office = _w->getEntity(city->getComponent<comp::Buildings>()->office);
-  Ecs::Entity *player = _w->getEntity(_player);
-  comp::Stock *cityStock = office->getComponent<comp::Stock>();
+  Ecs::Entity *city = _w->get(ship->get<comp::City>()->id);
+  Ecs::Entity *office = _w->get(city->get<comp::Buildings>()->office);
+  Ecs::Entity *player = _w->get(_player);
+  comp::Stock *cityStock = office->get<comp::Stock>();
   unsigned int price = infosResource[resource].cost * quantity;
   if (cityStock->at(resource).quantity < quantity) {
     std::cerr << "City only have " << cityStock->at(resource).quantity
 	      << " " << resourceStr << std::endl;
   }
-  else if (player->getComponent<comp::Money>()->value < price) {
+  else if (player->get<comp::Money>()->value < price) {
     std::cerr << "You don't have enough money. It costs " << price
-	      << " and you have " << player->getComponent<comp::Money>()->value << std::endl;
+	      << " and you have " << player->get<comp::Money>()->value << std::endl;
   }
   else {
-    player->getComponent<comp::Money>()->value -= price;
+    player->get<comp::Money>()->value -= price;
     cityStock->at(resource).quantity -= quantity;
-    ship->getComponent<comp::Stock>()->at(resource).quantity += quantity;
+    ship->get<comp::Stock>()->at(resource).quantity += quantity;
   }
 }
 
 void sys::Console::checkSelectedShip() {
   try {
-    Ecs::Entity *ship = _w->getEntity(_selectedShip);
-    if (!ship->hasComponent<comp::Type>()
-	|| ship->getComponent<comp::Type>()->type != Type::SHIP)
+    Ecs::Entity *ship = _w->get(_selectedShip);
+    if (!ship->has<comp::Type>()
+	|| ship->get<comp::Type>()->type != Type::SHIP)
       throw std::out_of_range("");
   } catch (std::out_of_range&) {
     throw ::Exception::Ship("No ship selected");
@@ -281,25 +281,25 @@ void sys::Console::sell(std::stringstream& ss) {
     throw Exception::Usage("");
   this->checkResourceType(resourceStr);
   this->checkSelectedShip();
-  Ecs::Entity *ship = _w->getEntity(_selectedShip);
+  Ecs::Entity *ship = _w->get(_selectedShip);
   Resource resource = resourceNames.at(resourceStr);
-  if (!ship->hasComponent<comp::City>()) {
+  if (!ship->has<comp::City>()) {
     std::cerr << "Ship #" << _selectedShip << " is not in a city" << std::endl;
     return;
   }
-  Ecs::Entity *city = _w->getEntity(ship->getComponent<comp::City>()->id);
-  Ecs::Entity *office = _w->getEntity(city->getComponent<comp::Buildings>()->office);
-  Ecs::Entity *player = _w->getEntity(_player);
-  comp::Stock *cityStock = office->getComponent<comp::Stock>();
+  Ecs::Entity *city = _w->get(ship->get<comp::City>()->id);
+  Ecs::Entity *office = _w->get(city->get<comp::Buildings>()->office);
+  Ecs::Entity *player = _w->get(_player);
+  comp::Stock *cityStock = office->get<comp::Stock>();
   unsigned int price = infosResource[resource].cost * quantity;
-  if (ship->getComponent<comp::Stock>()->at(resource).quantity < quantity) {
-    std::cerr << "Your ship only have " << ship->getComponent<comp::Stock>()->at(resource).quantity
+  if (ship->get<comp::Stock>()->at(resource).quantity < quantity) {
+    std::cerr << "Your ship only have " << ship->get<comp::Stock>()->at(resource).quantity
 	      << " " << resourceStr << std::endl;
   }
   else {
-    player->getComponent<comp::Money>()->value += price;
+    player->get<comp::Money>()->value += price;
     cityStock->at(resource).quantity += quantity;
-    ship->getComponent<comp::Stock>()->at(resource).quantity -= quantity;
+    ship->get<comp::Stock>()->at(resource).quantity -= quantity;
   }
 }
 

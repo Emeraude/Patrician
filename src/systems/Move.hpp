@@ -3,7 +3,7 @@
 #include "World.hpp"
 
 namespace sys {
-  class Move : public Ecs::System::Base {
+  class Move : public Ecs::System {
   private:
     void checkCities(Ecs::World &w, Ecs::Entity *e);
 

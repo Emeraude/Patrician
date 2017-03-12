@@ -96,7 +96,7 @@ void sys::Sdl::display(Ecs::World &world) {
   dst.y = 20;
   SDL_BlitSurface(_game->draw(world, _player), NULL, _screen, &dst);
   if (_selected
-      && _selected->getComponent<comp::Type>()->type == Type::CITY) {
+      && _selected->get<comp::Type>()->type == Type::CITY) {
     SDL_Surface *popinSurface = _popin->draw(world, _selected);
     dst.x = (_screen->w - popinSurface->w) / 2;
     dst.y = (_screen->h - popinSurface->h) / 2;

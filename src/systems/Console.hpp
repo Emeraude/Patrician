@@ -8,7 +8,7 @@
 #include "src/Exceptions.hpp"
 
 namespace sys {
-  class Console : public Ecs::System::Base {
+  class Console : public Ecs::System {
   private:
     struct Cmd {
       void (sys::Console::*ft)(std::stringstream&);

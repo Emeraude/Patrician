@@ -17,27 +17,27 @@ std::string const ShipBuilder::randomName() {
 Ecs::Entity *ShipBuilder::core(Ecs::World& w, uint32_t owner, uint16_t x, uint16_t y) {
   Ecs::Entity *e = new Ecs::Entity();
 
-  e->addComponent<comp::Position>(x, y);
-  e->addComponent<comp::Type>(Type::SHIP);
-  e->addComponent<comp::Name>(randomName());
-  e->addComponent<comp::Stock>();
-  e->addComponent<comp::Owner>(owner);
-  e->addComponent<comp::Id>(w.addEntity(e));
+  e->add<comp::Position>(x, y);
+  e->add<comp::Type>(Type::SHIP);
+  e->add<comp::Name>(randomName());
+  e->add<comp::Stock>();
+  e->add<comp::Owner>(owner);
+  e->add<comp::Id>(w.add(e));
   return e;
 }
 
 Ecs::Entity *ShipBuilder::addSnaikka(Ecs::World& w, uint32_t owner, uint16_t x, uint16_t y) {
   Ecs::Entity *e = core(w, owner, x, y);
 
-  e->addComponent<comp::Speed>(6);
-  e->addComponent<comp::Hull>(80);
+  e->add<comp::Speed>(6);
+  e->add<comp::Hull>(80);
   return e;
 }
 
 Ecs::Entity *ShipBuilder::addCrayer(Ecs::World& w, uint32_t owner, uint16_t x, uint16_t y) {
   Ecs::Entity *e = core(w, owner, x, y);
 
-  e->addComponent<comp::Speed>(5);
-  e->addComponent<comp::Hull>(100);
+  e->add<comp::Speed>(5);
+  e->add<comp::Hull>(100);
   return e;
 }

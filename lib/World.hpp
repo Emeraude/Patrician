@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <mutex>
 #include <queue>
 #include <thread>
 #include <vector>
@@ -11,66 +12,66 @@ namespace Ecs {
   class World {
   private:
     std::vector<Ecs::Entity *> _entities;
-    std::vector<Ecs::System::Base *> _systems;
+    std::vector<Ecs::System *> _systems;
     std::queue<int> _garbage;
+    std::mutex _mutex;
     bool _stopped;
-    double _time;
+    std::chrono::nanoseconds _time;
+    std::chrono::nanoseconds _sleepDuration;
 
   public:
     World();
     ~World();
-    template<typename T> T* getSystem();
-    template<typename T, typename ... U> void addSystem(U && ... args);
-    template<typename T> bool hasSystem() const;
-    template<typename T> void removeSystem();
-
-    template<typename T> void removeEntity(T it);
-    void removeEntity(int i);
+    template<typename T> T* get();
+    template<typename T, typename ... U> void add(U && ... args);
+    template<typename T> bool has() const;
+    template<typename T> void remove();
 
     void run();
     void update();
     void stop();
-    unsigned int addEntity(Ecs::Entity *e);
-    Ecs::Entity *getEntity(unsigned int const id);
+    void lock();
+    void unlock();
+
+    unsigned int add(Ecs::Entity *e);
+    Ecs::Entity *get(unsigned int const id);
+    void remove(std::vector<Ecs::Entity*>::iterator it);
+    void remove(unsigned int const i);
     std::vector<Ecs::Entity *>& getEntities();
+
+    void setSleepDuration(std::chrono::nanoseconds const& sleepDuration);
+    std::chrono::nanoseconds getSleepDuration() const;
   };
 }
 
 template<typename T>
-T* Ecs::World::getSystem() {
-  if (hasSystem<T>() == false)
+T* Ecs::World::get() {
+  if (has<T>() == false)
     __throw(Ecs::Exception::World, "System not found");
-  return static_cast<T *>(_systems[Ecs::System::Template<T>::getId()]);
+  return static_cast<T *>(_systems[Ecs::TemplateSystem<T>::getId()]);
 }
 
 template<typename T, typename ... U>
-void Ecs::World::addSystem(U && ... args) {
-  if (hasSystem<T>() == true)
+void Ecs::World::add(U && ... args) {
+  if (has<T>() == true)
     __throw(Ecs::Exception::World, "System already exists");
 
-  unsigned int id = Ecs::System::Template<T>::getId();
+  unsigned int id = Ecs::TemplateSystem<T>::getId();
   if (id >= _systems.size())
     _systems.resize(id + 1);
   _systems[id] = new T(std::forward<U>(args) ...);
 }
 
 template<typename T>
-bool Ecs::World::hasSystem() const {
-  unsigned int id = Ecs::System::Template<T>::getId();
+bool Ecs::World::has() const {
+  unsigned int id = Ecs::TemplateSystem<T>::getId();
   return id < _systems.size() && _systems[id];
 }
 
 template<typename T>
-void Ecs::World::removeSystem() {
-  if (hasSystem<T>() == false)
+void Ecs::World::remove() {
+  if (has<T>() == false)
     __throw(Ecs::Exception::World, "System not found");
-  delete _systems[Ecs::System::Template<T>::getId()];
-  _systems[Ecs::System::Template<T>::getId()] = 0;
-}
-
-template<typename T>
-void Ecs::World::removeEntity(T it) {
-  delete *it;
-  *it = NULL;
-  _garbage.push(std::distance(_entities.begin(), it));
+  delete _systems[Ecs::TemplateSystem<T>::getId()];
+  _systems[Ecs::TemplateSystem<T>::getId()] = 0;
 }

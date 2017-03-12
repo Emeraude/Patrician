@@ -3,7 +3,7 @@
 #include "World.hpp"
 
 namespace sys {
-  class Time : public Ecs::System::Base {
+  class Time : public Ecs::System {
   private:
     uint32_t _day;
     uint32_t _speed;

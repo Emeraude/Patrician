@@ -66,7 +66,7 @@ bool Gui::Game::blitSurface(SDL_Surface *surface, uint32_t x, uint32_t y) {
 }
 
 bool Gui::Game::blitSurface(SDL_Surface *surface, Ecs::Entity *e) {
-  comp::Position *pos = e->getComponent<comp::Position>();
+  comp::Position *pos = e->get<comp::Position>();
   bool blitted = blitSurface(surface, pos->x, pos->y);
   SDL_Rect dst;
 
@@ -106,13 +106,13 @@ SDL_Surface *Gui::Game::draw(Ecs::World &world, uint32_t player) {
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 0, 0, 0));
   _blittedEntities.clear();
   for (auto *it: world.getEntities()) {
-    if (it->getComponent<comp::Type>()->type == Type::CITY) {
+    if (it->get<comp::Type>()->type == Type::CITY) {
       blitSurface("city", it);
-      comp::Position *pos = it->getComponent<comp::Position>();
-      writeText(it->getComponent<comp::Name>()->value.c_str(),
+      comp::Position *pos = it->get<comp::Position>();
+      writeText(it->get<comp::Name>()->value.c_str(),
 		pos->x, pos->y, Gui::align::TOP_CENTER);
     }
-    else if (it->getComponent<comp::Type>()->type == Type::SHIP) {
+    else if (it->get<comp::Type>()->type == Type::SHIP) {
       blitSurface("ship", it);
     }
   }

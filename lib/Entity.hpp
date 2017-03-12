@@ -8,44 +8,44 @@
 namespace Ecs {
   class Entity {
   private:
-    std::vector<Ecs::Component::Base*> _components;
+    std::vector<Ecs::Component*> _components;
 
   public:
     ~Entity();
-    template<typename T> T* getComponent();
-    template<typename T> bool hasComponent() const;
-    template<typename T> void removeComponent();
-    template<typename T, typename ... U> void addComponent(U && ... args);
+    template<typename T> T* get();
+    template<typename T> bool has() const;
+    template<typename T> void remove();
+    template<typename T, typename ... U> void add(U && ... args);
   };
 }
 
 template<typename T>
-T* Ecs::Entity::getComponent() {
-  if (hasComponent<T>() == false)
+T* Ecs::Entity::get() {
+  if (has<T>() == false)
     __throw(Ecs::Exception::Entity, "Component not found");
-  return static_cast<T *>(_components[Ecs::Component::Template<T>::getId()]);
+  return static_cast<T *>(_components[Ecs::TemplateComponent<T>::getId()]);
 }
 
 template<typename T>
-bool Ecs::Entity::hasComponent() const {
-  unsigned int id = Ecs::Component::Template<T>::getId();
+bool Ecs::Entity::has() const {
+  unsigned int id = Ecs::TemplateComponent<T>::getId();
   return id < _components.size() && _components[id];
 }
 
 template<typename T>
-void Ecs::Entity::removeComponent() {
-  if (hasComponent<T>() == false)
+void Ecs::Entity::remove() {
+  if (has<T>() == false)
     __throw(Ecs::Exception::Entity, "Component not found");
-  delete _components[Ecs::Component::Template<T>::getId()];
-  _components[Ecs::Component::Template<T>::getId()] = 0;
+  delete _components[Ecs::TemplateComponent<T>::getId()];
+  _components[Ecs::TemplateComponent<T>::getId()] = 0;
 }
 
 template<typename T, typename ... U>
-void Ecs::Entity::addComponent(U && ... args) {
-  if (hasComponent<T>() == true)
+void Ecs::Entity::add(U && ... args) {
+  if (has<T>() == true)
     __throw(Ecs::Exception::Entity, "Component already exists");
 
-  unsigned int id = Ecs::Component::Template<T>::getId();
+  unsigned int id = Ecs::TemplateComponent<T>::getId();
   if (id >= _components.size())
     _components.resize(id + 1);
   _components[id] = new T(std::forward<U>(args) ...);

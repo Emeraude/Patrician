@@ -1,17 +1,17 @@
 #pragma once
 
 namespace Ecs {
-  namespace Component {
-    class Base {};
-    extern int _idCount;
+  class Component {
+  protected:
+    static unsigned int _idCount;
+  };
 
-    template<typename T>
-    class Template : public Base {
-    public:
-      static int getId() {
-	static int id = Ecs::Component::_idCount++;
-	return id;
-      }
-    };
-  }
+  template<typename T>
+  class TemplateComponent : public Component {
+  public:
+    static unsigned int getId() {
+      static unsigned int id = Ecs::Component::_idCount++;
+      return id;
+    }
+  };
 }

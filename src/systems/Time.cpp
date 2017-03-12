@@ -7,9 +7,9 @@ sys::Time::Time() : _day(0), _speed(1000) {}
 
 // Consumption is too heavy, have to find a way to consume less than 1 good per day
 void sys::Time::consumption(Ecs::World& w, Ecs::Entity *city) {
-  Ecs::Entity *office = w.getEntity(city->getComponent<comp::Buildings>()->office);
-  comp::Stock& s = *office->getComponent<comp::Stock>();
-  comp::Inhabitants& inhabitants = *city->getComponent<comp::Inhabitants>();
+  Ecs::Entity *office = w.get(city->get<comp::Buildings>()->office);
+  comp::Stock& s = *office->get<comp::Stock>();
+  comp::Inhabitants& inhabitants = *city->get<comp::Inhabitants>();
 
   for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
     unsigned int consumed = ceil(infosResource[i].consumption.base
@@ -25,9 +25,9 @@ void sys::Time::consumption(Ecs::World& w, Ecs::Entity *city) {
 
 // Same problem as consumption one
 void sys::Time::production(Ecs::World& w, Ecs::Entity *building) {
-  Ecs::Entity *office = w.getEntity(building->getComponent<comp::Office>()->id);
-  comp::Stock& stock = *office->getComponent<comp::Stock>();
-  comp::Production& prod = *building->getComponent<comp::Production>();
+  Ecs::Entity *office = w.get(building->get<comp::Office>()->id);
+  comp::Stock& stock = *office->get<comp::Stock>();
+  comp::Production& prod = *building->get<comp::Production>();
 
   for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
     if (prod.at(static_cast<Resource>(i)) < 0
@@ -45,10 +45,10 @@ void sys::Time::update(Ecs::World& w) {
   ++_day;
   i = 0;
   for (auto* it : w.getEntities()) {
-    if (it->getComponent<comp::Type>()->type == Type::CITY)
+    if (it->get<comp::Type>()->type == Type::CITY)
       this->consumption(w, it);
-    else if (it->getComponent<comp::Type>()->type == Type::BUILDING
-	     && it->hasComponent<comp::Production>())
+    else if (it->get<comp::Type>()->type == Type::BUILDING
+	     && it->has<comp::Production>())
       this->production(w, it);
   }
 }

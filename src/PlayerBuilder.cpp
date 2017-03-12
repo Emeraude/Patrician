@@ -7,12 +7,12 @@ std::vector<unsigned int> players;
 Ecs::Entity *PlayerBuilder::addPlayer(Ecs::World& w, uint32_t city) {
   Ecs::Entity *e = new Ecs::Entity();
 
-  e->addComponent<comp::Type>(Type::PLAYER);
-  e->addComponent<comp::City>(city);
-  e->addComponent<comp::Money>(10000);
+  e->add<comp::Type>(Type::PLAYER);
+  e->add<comp::City>(city);
+  e->add<comp::Money>(10000);
 
-  unsigned int id = w.addEntity(e);
-  e->addComponent<comp::Id>(id);
+  unsigned int id = w.add(e);
+  e->add<comp::Id>(id);
   ::players.push_back(id);
 
   BuildingBuilder::addOffice(w, city, id);

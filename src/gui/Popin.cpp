@@ -44,11 +44,11 @@ SDL_Surface *Gui::Popin::draw(Ecs::World &world, Ecs::Entity *city) {
 
   SDL_FreeSurface(in);
 
-  std::string cityName = city->getComponent<comp::Name>()->value;
+  std::string cityName = city->get<comp::Name>()->value;
   this->writeText(cityName, _w / 2, 10, Gui::align::CENTER);
 
-  Ecs::Entity *e = world.getEntity(city->getComponent<comp::Buildings>()->office);
-  comp::Stock *s = e->getComponent<comp::Stock>();
+  Ecs::Entity *e = world.get(city->get<comp::Buildings>()->office);
+  comp::Stock *s = e->get<comp::Stock>();
   for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
     this->writeText(std::string(infosResource[i].name) + " " + std::to_string(s->at(static_cast<Resource>(i)).quantity),
 		    10, 50 + 15 * i);

@@ -15,10 +15,10 @@ int main(void) {
     std::random_device rd;
     std::srand(rd());
 
-    w.addSystem<sys::Console>();
-    w.addSystem<sys::Move>();
-    w.addSystem<sys::Sdl>();
-    w.addSystem<sys::Time>();
+    w.add<sys::Console>();
+    w.add<sys::Move>();
+    w.add<sys::Sdl>();
+    w.add<sys::Time>();
     CityBuilder::addRandom(w);
     PlayerBuilder::addPlayer(w, cityNames.begin()->second);
     CityBuilder::addRandom(w);

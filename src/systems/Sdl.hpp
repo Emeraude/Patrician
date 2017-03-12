@@ -9,7 +9,7 @@
 #include "gui/Popin.hpp"
 
 namespace sys {
-  class Sdl : public Ecs::System::Base {
+  class Sdl : public Ecs::System {
   private:
     SDL_Window *_window;
     SDL_Surface *_screen;
