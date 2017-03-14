@@ -1,5 +1,6 @@
 SRC	=	src/BuildingBuilder.cpp \
 		src/CityBuilder.cpp \
+		src/Duration.cpp \
 		src/Exceptions.cpp \
 		src/PlayerBuilder.cpp \
 		src/ShipBuilder.cpp \
