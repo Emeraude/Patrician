@@ -53,3 +53,11 @@ Duration& Duration::operator++() {
   this->simplify();
   return *this;
 }
+
+std::string const Duration::toString() {
+  return std::to_string(_days) + "/"
+    + std::to_string(_months) + "/"
+    + std::to_string(_years) + " "
+    + std::to_string(_hours) + ":"
+    + std::to_string(_minutes);
+}

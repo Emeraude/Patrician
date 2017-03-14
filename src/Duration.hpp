@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 class Duration {
 private:
@@ -17,4 +18,5 @@ public:
   Duration& operator+=(Duration const& rhs);
   Duration& operator++(int);
   Duration& operator++();
+  std::string const toString();
 };
