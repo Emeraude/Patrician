@@ -3,7 +3,6 @@
 #include <random>
 #include "World.hpp"
 #include "systems/Console.hpp"
-#include "systems/Move.hpp"
 #include "systems/Sdl.hpp"
 #include "systems/Time.hpp"
 #include "CityBuilder.hpp"
@@ -16,7 +15,6 @@ int main(void) {
     std::srand(rd());
 
     w.add<sys::Console>();
-    w.add<sys::Move>();
     w.add<sys::Sdl>();
     w.add<sys::Time>();
     CityBuilder::addRandom(w);

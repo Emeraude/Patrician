@@ -11,6 +11,7 @@ namespace sys {
 
     void consumption(Ecs::World& w, Ecs::Entity *city);
     void production(Ecs::World& w, Ecs::Entity *building);
+    void move(Ecs::World&w, Ecs::Entity *e);
   public:
     Time();
     void update(Ecs::World &world);

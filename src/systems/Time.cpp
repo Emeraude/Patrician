@@ -37,6 +37,37 @@ void sys::Time::production(Ecs::World& w, Ecs::Entity *building) {
   }
 }
 
+void sys::Time::move(Ecs::World&w, Ecs::Entity *e) {
+  comp::Move *move = e->get<comp::Move>();
+  comp::Position *pos = e->get<comp::Position>();
+
+  if (e->has<comp::City>())
+    e->remove<comp::City>();
+
+  int16_t diff_x = move->x - pos->x,
+    diff_y = move->y - pos->y,
+    dist = sqrt((diff_x << 2) + (diff_y << 2)),
+    turns = dist / e->get<comp::Speed>()->current;
+  if (turns == 0) {
+    e->get<comp::Speed>()->current = 0;
+    pos->x = move->x;
+    pos->y = move->y;
+    e->remove<comp::Move>();
+    for (auto& it : ::cityNames) {
+      comp::Position *posCity = w.get(it.second)->get<comp::Position>();
+      if (pos->x == posCity->x
+	  && pos->y == posCity->y) {
+	e->add<comp::City>(it.second);
+	break;
+      }
+    }
+  }
+  else {
+    pos->x += diff_x / turns;
+    pos->y += diff_y / turns;
+  }
+}
+
 void sys::Time::update(Ecs::World& w) {
   static unsigned int i = 0;
 
@@ -50,6 +81,8 @@ void sys::Time::update(Ecs::World& w) {
     else if (it->get<comp::Type>()->type == Type::BUILDING
 	     && it->has<comp::Production>())
       this->production(w, it);
+    if (it->has<comp::Move>())
+      this->move(w, it);
   }
 }
 

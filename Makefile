@@ -11,7 +11,6 @@ SRC	=	src/BuildingBuilder.cpp \
 		src/gui/Popin.cpp \
 		src/gui/TextRender.cpp \
 		src/systems/Console.cpp \
-		src/systems/Move.cpp \
 		src/systems/Sdl.cpp \
 		src/systems/Time.cpp
 
