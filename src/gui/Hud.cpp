@@ -56,11 +56,11 @@ void Gui::Hud::writeText(std::string const& content, int x, int y, Gui::align al
 SDL_Surface *Gui::Hud::draw(Ecs::World &world, uint32_t player) {
   Ecs::Entity *playerEntity = world.get(player);
   uint32_t money = playerEntity->get<comp::Money>()->value;
-  uint32_t time = world.get<sys::Time>()->getDay();
+  std::string const& date = world.get<sys::Time>()->getDate().toString();
 
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 0, 0, 0));
   SDL_BlitSurface(_sprites["top"], NULL, _surface, NULL);
   this->writeText(std::to_string(money) + "po", 0, 0, Gui::align::LEFT);
-  this->writeText(std::string("day ") + std::to_string(time), _width, 0, Gui::align::RIGHT);
+  this->writeText(date, _width, 0, Gui::align::RIGHT);
   return _surface;
 }

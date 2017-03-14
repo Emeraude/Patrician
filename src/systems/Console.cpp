@@ -30,8 +30,8 @@ void sys::Console::status(std::stringstream&) {
   sys::Time& sys = *_w->get<sys::Time>();
 
   std::cout << "Player #" << _player << std::endl
-	    << "Day " << sys.getDay() << std::endl
-	    << "Speed: 1 day ~= " << (sys.getSpeed() / 100.0) << " seconds" << std::endl;
+	    << "Date: " << sys.getDate().toString() << std::endl
+	    << "Speed: 1 day ~= " << (sys.getSpeed() * 1.440) << " seconds" << std::endl;
 }
 
 void sys::Console::ship(std::stringstream& ss) {

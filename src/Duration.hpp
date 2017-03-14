@@ -18,5 +18,5 @@ public:
   Duration& operator+=(Duration const& rhs);
   Duration& operator++(int);
   Duration& operator++();
-  std::string const toString();
+  std::string const toString() const;
 };

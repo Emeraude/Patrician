@@ -1,11 +1,12 @@
 #pragma once
 
 #include "World.hpp"
+#include "Duration.hpp"
 
 namespace sys {
   class Time : public Ecs::System {
   private:
-    uint32_t _day;
+    Duration _date;
     uint32_t _speed;
 
     void consumption(Ecs::World& w, Ecs::Entity *city);
@@ -14,7 +15,7 @@ namespace sys {
     Time();
     void update(Ecs::World &world);
 
-    uint32_t const& getDay() const;
+    Duration const& getDate() const;
     uint32_t const& getSpeed() const;
   };
 }

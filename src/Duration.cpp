@@ -54,10 +54,14 @@ Duration& Duration::operator++() {
   return *this;
 }
 
-std::string const Duration::toString() {
-  return std::to_string(_days) + "/"
-    + std::to_string(_months) + "/"
+std::string const Duration::toString() const {
+  return (_days < 9 ? "0" : "")
+    + std::to_string(_days + 1) + "/"
+    + (_months < 9 ? "0" : "")
+    + std::to_string(_months + 1) + "/"
     + std::to_string(_years) + " "
+    + (_hours < 10 ? "0" : "")
     + std::to_string(_hours) + ":"
+    + (_minutes < 10 ? "0" : "")
     + std::to_string(_minutes);
 }
