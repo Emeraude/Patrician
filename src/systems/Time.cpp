@@ -46,7 +46,7 @@ void sys::Time::move(Ecs::World&w, Ecs::Entity *e) {
 
   int16_t diff_x = move->x - pos->x,
     diff_y = move->y - pos->y,
-    dist = sqrt((diff_x << 2) + (diff_y << 2)),
+    dist = sqrt(diff_x * diff_x + diff_y * diff_y),
     turns = dist / e->get<comp::Speed>()->current;
   if (turns == 0) {
     e->get<comp::Speed>()->current = 0;
