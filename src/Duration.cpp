@@ -65,3 +65,23 @@ std::string const Duration::toString() const {
     + (_minutes < 10 ? "0" : "")
     + std::to_string(_minutes);
 }
+
+uint32_t Duration::getYears() const {
+  return _years;
+}
+
+uint32_t Duration::getMonths() const {
+  return _months;
+}
+
+uint32_t Duration::getDays() const {
+  return _days;
+}
+
+uint32_t Duration::getHours() const {
+  return _hours;
+}
+
+uint32_t Duration::getMinutes() const {
+  return _minutes;
+}

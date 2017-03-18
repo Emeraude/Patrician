@@ -18,5 +18,11 @@ public:
   Duration& operator+=(Duration const& rhs);
   Duration& operator++(int);
   Duration& operator++();
+
   std::string const toString() const;
+  uint32_t getYears() const;
+  uint32_t getMonths() const;
+  uint32_t getDays() const;
+  uint32_t getHours() const;
+  uint32_t getMinutes() const;
 };
