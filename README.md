@@ -18,7 +18,7 @@ Production facility buying | Partial | ✗
 
 ## Planned
 
-Here is a list of things that will differ from the ogirinal game:
+Here is a list of things that will differ from the original game:
 
 - Removal of sailor mood (useless)
 - Addition of AI interactions
