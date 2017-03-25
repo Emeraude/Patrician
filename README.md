@@ -15,3 +15,13 @@ Players info display | ✓ | ✓
 World info display | ✓ | Partial
 Ships buying | Partial | ✗
 Production facility buying | Partial | ✗
+
+Here is a list of things that will differ from the ogirinal game:
+- Removal of sailor mood (useless)
+- Addition of AI interactions
+- Modification of the captain research
+- Addition of shares buying/selling in solo
+- Newly created ships should have a default name
+- Modification of the auctions system (simultaneous auctions are awful)
+- Addition of a manager for the bank
+- A lot of UI modifications
