@@ -16,7 +16,10 @@ World info display | ✓ | Partial
 Ships buying | Partial | ✗
 Production facility buying | Partial | ✗
 
+## Planned
+
 Here is a list of things that will differ from the ogirinal game:
+
 - Removal of sailor mood (useless)
 - Addition of AI interactions
 - Modification of the captain research
