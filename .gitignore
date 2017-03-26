@@ -1,5 +1,5 @@
 *.o
 *.so
 *.out
-#!/lib/ECS.so
+!/lib/ECS.so
 patrician
