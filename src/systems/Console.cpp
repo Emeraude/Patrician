@@ -30,6 +30,7 @@ void sys::Console::status(std::stringstream&) {
   sys::Time& sys = *_w->get<sys::Time>();
 
   std::cout << "Player #" << _player << std::endl
+	    << "Money: " << _w->get(_player)->get<comp::Money>()->value << "po" << std::endl
 	    << "Date: " << sys.getDate().toString() << std::endl
 	    << "Speed: 1 day ~= " << (sys.getSpeed() * 1.440) << " seconds" << std::endl;
 }
