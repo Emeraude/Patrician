@@ -14,6 +14,7 @@ sys::Console::Console() : _selectedShip(0), _player(0), _thread(new std::thread(
 
   _buildingTypes["sawmill"] = &BuildingBuilder::Production::addSawmill;
   _buildingTypes["brickworks"] = &BuildingBuilder::Production::addBrickworks;
+  _buildingTypes["office"] = &BuildingBuilder::addOffice;
 }
 
 sys::Console::~Console() {
