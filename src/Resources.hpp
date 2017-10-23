@@ -5,9 +5,9 @@
 #include <string>
 
 enum Resource {
-  TIMBER = 0, BRICK,
-  FIRST = TIMBER, LAST = BRICK,
-  LENGTH = LAST + 1
+  BRICK = 0, TIMBER,
+  FIRST = BRICK, LAST = TIMBER,
+  LENGTH = TIMBER + 1
 };
 
 static const struct {
@@ -21,11 +21,11 @@ static const struct {
     uint16_t rich;
   } consumption;
 } infosResource[] = {
-  {"timber", 10, 100, {5, 1, 0, 0}},
-  {"brick", 10, 150, {7, 1, 0, 0}}
+  {"brick", 10, 150, {7, 1, 0, 0}},
+  {"timber", 10, 100, {5, 1, 0, 0}}
 };
 
 static const std::map<std::string, Resource> resourceNames {
-  {"timber", Resource::TIMBER},
-  {"brick", Resource::BRICK}
+  {"brick", Resource::BRICK},
+  {"timber", Resource::TIMBER}
 };
