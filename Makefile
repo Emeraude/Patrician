@@ -21,7 +21,7 @@ NAME =	patrician
 CXXFLAGS += -Wextra -Wall -std=c++11
 CXXFLAGS += -Ilib -Isrc -I.
 CXXFLAGS += `sdl2-config --cflags`
-LDXXFLAGS += -lpthread
+LDXXFLAGS += -lpthread -lm
 LDXXFLAGS += -lSDL2 -lSDL2_ttf
 
 RM	= rm -f
@@ -29,7 +29,7 @@ RM	= rm -f
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	g++ $(OBJ) -o $(NAME) $(LDXXFLAGS) lib/ECS.so
+	$(CXX) $(OBJ) -o $(NAME) lib/ECS.so $(LDXXFLAGS)
 
 debug:	CXXFLAGS+=-DDEBUG -g
 debug:	re
