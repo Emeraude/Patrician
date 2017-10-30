@@ -5,7 +5,7 @@
 #include <string>
 
 enum Resource {
-  BRICK = 0, TIMBER,
+  BRICK = 0, IRON_GOODS, TIMBER,
   FIRST = BRICK, LAST = TIMBER,
   LENGTH = TIMBER + 1
 };
@@ -22,10 +22,12 @@ static const struct {
   } consumption;
 } infosResource[] = {
   {"brick", 10, 150, {7, 1, 0, 0}},
+  {"iron goods", 1, 300, {20, 0, 0, 0}},
   {"timber", 10, 100, {5, 1, 0, 0}}
 };
 
 static const std::map<std::string, Resource> resourceNames {
   {"brick", Resource::BRICK},
+  {"iron goods", Resource::IRON_GOODS},
   {"timber", Resource::TIMBER}
 };
