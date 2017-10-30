@@ -16,8 +16,8 @@ namespace comp {
   };
 
   struct Position : Ecs::Component {
-    int16_t x;
-    int16_t y;
+    uint16_t x;
+    uint16_t y;
     Position(int16_t _x, int16_t _y) : x(_x), y(_y) {}
   };
 
