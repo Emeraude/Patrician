@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include "Components.hpp"
 
-Gui::Game::Game(uint32_t width, uint32_t height) : _width(width), _height(height), _pos_x(0), _pos_y(0), _surface(NULL) {
+Gui::Game::Game(uint16_t width, uint16_t height) : AElement(width, height), _pos_x(0), _pos_y(0) {
   updateSize(width, height);
 
   _sprites["city"] = SDL_CreateRGBSurface(0, 3, 3, 32, 0, 0, 0, 0);
@@ -14,7 +14,6 @@ Gui::Game::~Game() {
   for (auto& it: _sprites) {
     SDL_FreeSurface(it.second);
   }
-  SDL_FreeSurface(_surface);
 }
 
 void Gui::Game::updateSize(uint32_t width, uint32_t height) {
@@ -102,7 +101,7 @@ void Gui::Game::writeText(std::string const& content, int x, int y, Gui::align a
   SDL_FreeSurface(msg);
 }
 
-SDL_Surface *Gui::Game::draw(Ecs::World &world, uint32_t player) {
+SDL_Surface *Gui::Game::render(Ecs::World &world, uint32_t player) {
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 0, 0, 0));
   _blittedEntities.clear();
   for (auto *it: world.getEntities()) {
@@ -119,7 +118,7 @@ SDL_Surface *Gui::Game::draw(Ecs::World &world, uint32_t player) {
   return _surface;
 }
 
-Ecs::Entity *Gui::Game::click(int32_t x, int32_t y) {
+Ecs::Entity *Gui::Game::onClickEvent(uint16_t x, uint16_t y) {
   for (auto& it: _blittedEntities) {
     if (x >= it.first.x
 	&& x < it.first.x + it.first.w

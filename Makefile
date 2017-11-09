@@ -5,6 +5,7 @@ SRC	=	src/BuildingBuilder.cpp \
 		src/PlayerBuilder.cpp \
 		src/ShipBuilder.cpp \
 		src/main.cpp \
+		src/gui/AElement.cpp \
 		src/gui/Button.cpp \
 		src/gui/Game.cpp \
 		src/gui/Hud.cpp \

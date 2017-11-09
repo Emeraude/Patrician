@@ -71,16 +71,16 @@ void sys::Sdl::events(Ecs::World &world) {
     else if (event.type == SDL_MOUSEBUTTONUP) {
       if (_selected
 	  && event.button.button == SDL_BUTTON_LEFT
-	  && (uint32_t)event.button.x > (_screen->w - _popin->getW()) / 2
-	  && (uint32_t)event.button.x < (_screen->w + _popin->getW()) / 2
-	  && (uint32_t)event.button.y > (_screen->h - _popin->getW()) / 2
-	  && (uint32_t)event.button.y < (_screen->h + _popin->getW()) / 2) {
-	_popin->click(event.button.x - (_screen->w - _popin->getW()) / 2,
-		       event.button.y - (_screen->h - _popin->getH()) / 2);
+	  && (uint32_t)event.button.x > ((uint32_t)_screen->w - _popin->getWidth()) / 2
+	  && (uint32_t)event.button.x < ((uint32_t)_screen->w + _popin->getWidth()) / 2
+	  && (uint32_t)event.button.y > ((uint32_t)_screen->h - _popin->getHeight()) / 2
+	  && (uint32_t)event.button.y < ((uint32_t)_screen->h + _popin->getHeight()) / 2) {
+	_popin->dispatchClickEvent(event.button.x - (_screen->w - _popin->getWidth()) / 2,
+			     event.button.y - (_screen->h - _popin->getHeight()) / 2);
       }
       else if (event.button.button == SDL_BUTTON_LEFT
 	       && event.button.y >= 20) {
-	_selected = _game->click(event.button.x, event.button.y - 20);
+	_selected = _game->dispatchClickEvent(event.button.x, event.button.y - 20);
       }
     }
   }
@@ -89,15 +89,15 @@ void sys::Sdl::events(Ecs::World &world) {
 
 void sys::Sdl::display(Ecs::World &world) {
   SDL_FillRect(_screen, NULL, SDL_MapRGB(_screen->format, 0, 0, 0));
-  SDL_BlitSurface(_hud->draw(world, _player), NULL, _screen, NULL);
+  SDL_BlitSurface(_hud->render(world, _player), NULL, _screen, NULL);
 
   SDL_Rect dst;
   dst.x = 0;
   dst.y = 20;
-  SDL_BlitSurface(_game->draw(world, _player), NULL, _screen, &dst);
+  SDL_BlitSurface(_game->render(world, _player), NULL, _screen, &dst);
   if (_selected
       && _selected->get<comp::Type>()->type == Type::CITY) {
-    SDL_Surface *popinSurface = _popin->draw(world, _selected);
+    SDL_Surface *popinSurface = _popin->render(world, _selected->get<comp::Id>()->value);
     dst.x = (_screen->w - popinSurface->w) / 2;
     dst.y = (_screen->h - popinSurface->h) / 2;
     SDL_BlitSurface(popinSurface, NULL, _screen, &dst);

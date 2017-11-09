@@ -4,26 +4,21 @@
 #include <string>
 #include <SDL.h>
 #include "src/Exceptions.hpp"
+#include "gui/AElement.hpp"
 #include "gui/Base.hpp"
 #include "gui/TextRender.hpp"
 
 namespace Gui {
-  class Button {
+  class Button : public Gui::AElement {
   private:
-    uint32_t _x;
-    uint32_t _y;
-    uint32_t _w;
-    uint32_t _h;
     bool _disabled;
     std::string const& _content;
-    SDL_Surface *_surface;
 
   public:
-    Button(uint32_t w, uint32_t h, std::string const& content);
-    ~Button();
-    void click(uint32_t x, uint32_t y);
-    void setPos(uint32_t x, uint32_t y);
-    SDL_Surface *getSurface();
+    Button(uint16_t w, uint16_t h, std::string const& content);
+    Ecs::Entity *onClickEvent(uint16_t x, uint16_t y);
+    void setPos(uint16_t x, uint16_t y);
+    SDL_Surface *render(Ecs::World& w, uint32_t player);
 
   private:
     void writeText();

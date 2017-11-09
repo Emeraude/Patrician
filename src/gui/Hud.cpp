@@ -1,8 +1,9 @@
 #include "Hud.hpp"
 #include "Components.hpp"
 #include "systems/Time.hpp"
+#include "TextRender.hpp"
 
-Gui::Hud::Hud(uint32_t width, uint32_t height) : _width(width), _height(height), _surface(NULL) {
+Gui::Hud::Hud(uint16_t width, uint16_t height) : AElement(width, height) {
   updateSize(width, height);
 }
 
@@ -10,10 +11,9 @@ Gui::Hud::~Hud() {
   for(auto& it: _sprites) {
     SDL_FreeSurface(it.second);
   }
-  SDL_FreeSurface(_surface);
 }
 
-void Gui::Hud::updateSize(uint32_t width, uint32_t height) {
+void Gui::Hud::updateSize(uint16_t width, uint16_t height) {
   _width = width;
   _height = height;
   if (_sprites["top"])
@@ -53,7 +53,7 @@ void Gui::Hud::writeText(std::string const& content, int x, int y, Gui::align al
   SDL_FreeSurface(msg);
 }
 
-SDL_Surface *Gui::Hud::draw(Ecs::World &world, uint32_t player) {
+SDL_Surface *Gui::Hud::render(Ecs::World& world, uint32_t player) {
   Ecs::Entity *playerEntity = world.get(player);
   uint32_t money = playerEntity->get<comp::Money>()->value;
   std::string const& date = world.get<sys::Time>()->getDate().toString();
@@ -63,4 +63,8 @@ SDL_Surface *Gui::Hud::draw(Ecs::World &world, uint32_t player) {
   this->writeText(std::to_string(money) + "po", 0, 0, Gui::align::LEFT);
   this->writeText(date, _width, 0, Gui::align::RIGHT);
   return _surface;
+}
+
+Ecs::Entity *Gui::Hud::onClickEvent(uint16_t, uint16_t) {
+  return NULL;
 }

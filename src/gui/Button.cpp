@@ -1,11 +1,10 @@
 #include "Button.hpp"
 
-Gui::Button::Button(uint32_t w, uint32_t h, std::string const& content) : _w(w), _h(h), _content(content) {
+Gui::Button::Button(uint16_t w, uint16_t h, std::string const& content) : AElement(w, h), _content(content) {
   SDL_Surface *in;
 
-  _surface = SDL_CreateRGBSurface(0, _h, _w, 32, 0, 0, 0, 0);
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 127, 127, 127));
-  in = SDL_CreateRGBSurface(0, _h - 2, _w - 2, 32, 0, 0, 0, 0);
+  in = SDL_CreateRGBSurface(0, _height - 2, _width - 2, 32, 0, 0, 0, 0);
   SDL_FillRect(in, NULL, SDL_MapRGB(in->format, 255, 255, 255));
 
   SDL_Rect dst;
@@ -17,35 +16,32 @@ Gui::Button::Button(uint32_t w, uint32_t h, std::string const& content) : _w(w),
   SDL_FreeSurface(in);
 }
 
-Gui::Button::~Button() {
-  SDL_FreeSurface(_surface);
-}
-
 #include <iostream>
-void Gui::Button::click(uint32_t x, uint32_t y) {
+Ecs::Entity *Gui::Button::onClickEvent(uint16_t x, uint16_t y) {
   if (x >= _x
-      && x < _x + _h
+      && x < _x + _height
       && y >= _y
-      && y < _y + _w)
+      && y < _y + _width)
     std::cout << "Button is clicked!" << std::endl;
+  return NULL;
 }
 
-#define ABS(x) ((int32_t)(x) >= 0 ? x : -(int32_t)(x))
+#define ABS(x) ((int16_t)(x) >= 0 ? x : -(int16_t)(x))
 void Gui::Button::writeText() {
   SDL_Surface *msg = Gui::TextRender::getInstance().writeText(_content, "black");
   SDL_Rect dst;
 
-  dst.x = ABS(_h - msg->w) / 2;
-  dst.y = ABS(_w - msg->h) / 2;
+  dst.x = ABS(_height - msg->w) / 2;
+  dst.y = ABS(_width - msg->h) / 2;
   SDL_BlitSurface(msg, NULL, _surface, &dst);
   SDL_FreeSurface(msg);
 }
 
-void Gui::Button::setPos(uint32_t x, uint32_t y) {
+void Gui::Button::setPos(uint16_t x, uint16_t y) {
   _x = x;
   _y = y;
 }
 
-SDL_Surface *Gui::Button::getSurface() {
+SDL_Surface *Gui::Button::render(Ecs::World&, uint32_t) {
   return _surface;
 }
