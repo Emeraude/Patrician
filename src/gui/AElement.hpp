@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <list>
+#include <vector>
 #include <SDL.h>
 #include "World.hpp"
 #include "../Exceptions.hpp"
@@ -9,7 +10,8 @@
 namespace Gui {
   class AElement {
   protected:
-    std::list<AElement *> _children;
+    std::vector<AElement *> _children;
+    std::list<AElement *> _blitted;
     SDL_Surface *_surface;
     uint16_t _width;
     uint16_t _height;
@@ -24,8 +26,16 @@ namespace Gui {
     Ecs::Entity *dispatchClickEvent(uint16_t x, uint16_t y);
     uint16_t getWidth() const;
     uint16_t getHeight() const;
+    uint16_t getX() const;
+    uint16_t getY() const;
+
+    void setX(uint16_t x);
+    void setY(uint16_t y);
+    void setPos(uint16_t x, uint16_t y);
 
   protected:
     virtual Ecs::Entity *onClickEvent(uint16_t x, uint16_t y) = 0;
+
+    void blit(AElement *e, Ecs::World &world, uint32_t player);
   };
 }

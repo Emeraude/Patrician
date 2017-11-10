@@ -12,13 +12,11 @@ sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _pla
   if (_screen == NULL)
     throw Exception::Sdl();
   _hud = new Gui::Hud(640, 480);
-  _game = new Gui::Game(640, 480 - 20);
   _popin = new Gui::Popin(300, 300);
 }
 
 sys::Sdl::~Sdl() {
   delete _hud;
-  delete _game;
   delete _popin;
   SDL_DestroyWindow(_window);
   SDL_Quit();
@@ -62,29 +60,17 @@ void sys::Sdl::events(Ecs::World &world) {
 	_win_w = event.window.data1;
 	_win_h = event.window.data2;
 	_hud->updateSize(_win_w, _win_h);
-	_game->updateSize(_win_w, _win_h - 20);
+	// _game->updateSize(_win_w, _win_h - 20);
 	_screen = SDL_GetWindowSurface(_window);
 	if (_screen == NULL)
 	  throw Exception::Sdl();
       }
     }
     else if (event.type == SDL_MOUSEBUTTONUP) {
-      if (_selected
-	  && event.button.button == SDL_BUTTON_LEFT
-	  && (uint32_t)event.button.x > ((uint32_t)_screen->w - _popin->getWidth()) / 2
-	  && (uint32_t)event.button.x < ((uint32_t)_screen->w + _popin->getWidth()) / 2
-	  && (uint32_t)event.button.y > ((uint32_t)_screen->h - _popin->getHeight()) / 2
-	  && (uint32_t)event.button.y < ((uint32_t)_screen->h + _popin->getHeight()) / 2) {
-	_popin->dispatchClickEvent(event.button.x - (_screen->w - _popin->getWidth()) / 2,
-			     event.button.y - (_screen->h - _popin->getHeight()) / 2);
-      }
-      else if (event.button.button == SDL_BUTTON_LEFT
-	       && event.button.y >= 20) {
-	_selected = _game->dispatchClickEvent(event.button.x, event.button.y - 20);
-      }
+      _selected = _hud->dispatchClickEvent(event.button.x, event.button.y);
     }
   }
-  _game->updatePos(_velocity_x, _velocity_y);
+  // _game->updatePos(_velocity_x, _velocity_y);
 }
 
 void sys::Sdl::display(Ecs::World &world) {
@@ -92,9 +78,6 @@ void sys::Sdl::display(Ecs::World &world) {
   SDL_BlitSurface(_hud->render(world, _player), NULL, _screen, NULL);
 
   SDL_Rect dst;
-  dst.x = 0;
-  dst.y = 20;
-  SDL_BlitSurface(_game->render(world, _player), NULL, _screen, &dst);
   if (_selected
       && _selected->get<comp::Type>()->type == Type::CITY) {
     SDL_Surface *popinSurface = _popin->render(world, _selected->get<comp::Id>()->value);

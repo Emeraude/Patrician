@@ -5,6 +5,9 @@
 
 Gui::Hud::Hud(uint16_t width, uint16_t height) : AElement(width, height) {
   updateSize(width, height);
+  _game = new Gui::Game(_width, _height - 20);
+  _game->setPos(0, 20);
+  _children.push_back(_game);
 }
 
 Gui::Hud::~Hud() {
@@ -58,10 +61,12 @@ SDL_Surface *Gui::Hud::render(Ecs::World& world, uint32_t player) {
   uint32_t money = playerEntity->get<comp::Money>()->value;
   std::string const& date = world.get<sys::Time>()->getDate().toString();
 
+  _blitted.clear();
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 0, 0, 0));
   SDL_BlitSurface(_sprites["top"], NULL, _surface, NULL);
   this->writeText(std::to_string(money) + "po", 0, 0, Gui::align::LEFT);
   this->writeText(date, _width, 0, Gui::align::RIGHT);
+  this->blit(_game, world, player);
   return _surface;
 }
 

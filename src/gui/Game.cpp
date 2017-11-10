@@ -102,7 +102,7 @@ void Gui::Game::writeText(std::string const& content, int x, int y, Gui::align a
 }
 
 SDL_Surface *Gui::Game::render(Ecs::World &world, uint32_t player) {
-  SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 0, 0, 0));
+  SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 0, 0, 40));
   _blittedEntities.clear();
   for (auto *it: world.getEntities()) {
     if (it->get<comp::Type>()->type == Type::CITY) {

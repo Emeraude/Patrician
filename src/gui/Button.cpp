@@ -18,11 +18,7 @@ Gui::Button::Button(uint16_t w, uint16_t h, std::string const& content) : AEleme
 
 #include <iostream>
 Ecs::Entity *Gui::Button::onClickEvent(uint16_t x, uint16_t y) {
-  if (x >= _x
-      && x < _x + _height
-      && y >= _y
-      && y < _y + _width)
-    std::cout << "Button is clicked!" << std::endl;
+  std::cout << "Button is clicked at " << x << ":" << y << "!" << std::endl;
   return NULL;
 }
 
@@ -35,11 +31,6 @@ void Gui::Button::writeText() {
   dst.y = ABS(_width - msg->h) / 2;
   SDL_BlitSurface(msg, NULL, _surface, &dst);
   SDL_FreeSurface(msg);
-}
-
-void Gui::Button::setPos(uint16_t x, uint16_t y) {
-  _x = x;
-  _y = y;
 }
 
 SDL_Surface *Gui::Button::render(Ecs::World&, uint32_t) {

@@ -6,11 +6,13 @@
 #include <SDL.h>
 #include "AElement.hpp"
 #include "Base.hpp"
+#include "Game.hpp"
 
 namespace Gui {
   class Hud : public AElement {
   private:
     std::map<std::string, SDL_Surface *> _sprites;
+    Gui::Game *_game;
 
   public:
     Hud(uint16_t w, uint16_t h);
