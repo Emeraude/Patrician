@@ -22,7 +22,7 @@ namespace Gui {
   public:
     Game(uint16_t width, uint16_t height);
     ~Game();
-    void updateSize(uint32_t width, uint32_t height);
+    void updateSize(uint16_t width, uint16_t height);
     void updatePos(int32_t x, int32_t y);
     SDL_Surface *render(Ecs::World &world, uint32_t player);
 

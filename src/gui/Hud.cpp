@@ -4,10 +4,10 @@
 #include "TextRender.hpp"
 
 Gui::Hud::Hud(uint16_t width, uint16_t height) : AElement(width, height) {
-  updateSize(width, height);
   _game = new Gui::Game(_width, _height - 20);
   _game->setPos(0, 20);
   _children.push_back(_game);
+  updateSize(width, height);
 }
 
 Gui::Hud::~Hud() {
@@ -35,6 +35,7 @@ void Gui::Hud::updateSize(uint16_t width, uint16_t height) {
   dst.y = 19;
   SDL_BlitSurface(bar, NULL, _sprites["top"], &dst);
   SDL_FreeSurface(bar);
+  _game->updateSize(_width, _height - 20);
 }
 
 void Gui::Hud::writeText(std::string const& content, int x, int y, Gui::align alignment) {

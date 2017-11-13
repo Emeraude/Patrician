@@ -60,7 +60,6 @@ void sys::Sdl::events(Ecs::World &world) {
 	_win_w = event.window.data1;
 	_win_h = event.window.data2;
 	_hud->updateSize(_win_w, _win_h);
-	// _game->updateSize(_win_w, _win_h - 20);
 	_screen = SDL_GetWindowSurface(_window);
 	if (_screen == NULL)
 	  throw Exception::Sdl();
