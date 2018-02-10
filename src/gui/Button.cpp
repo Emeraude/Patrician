@@ -33,6 +33,6 @@ void Gui::Button::writeText() {
   SDL_FreeSurface(msg);
 }
 
-SDL_Surface *Gui::Button::render(Ecs::World&, uint32_t) {
+SDL_Surface *Gui::Button::render(Ecs::World&, uint32_t, Ecs::Entity *) {
   return _surface;
 }
