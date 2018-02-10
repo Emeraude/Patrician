@@ -12,12 +12,10 @@ sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _pla
   if (_screen == NULL)
     throw Exception::Sdl();
   _hud = new Gui::Hud(640, 480);
-  _popin = new Gui::Popin(300, 300);
 }
 
 sys::Sdl::~Sdl() {
   delete _hud;
-  delete _popin;
   SDL_DestroyWindow(_window);
   SDL_Quit();
 }
@@ -74,16 +72,7 @@ void sys::Sdl::events(Ecs::World &world) {
 
 void sys::Sdl::display(Ecs::World &world) {
   SDL_FillRect(_screen, NULL, SDL_MapRGB(_screen->format, 0, 0, 0));
-  SDL_BlitSurface(_hud->render(world, _player), NULL, _screen, NULL);
-
-  SDL_Rect dst;
-  if (_selected
-      && _selected->get<comp::Type>()->type == Type::CITY) {
-    SDL_Surface *popinSurface = _popin->render(world, _selected->get<comp::Id>()->value);
-    dst.x = (_screen->w - popinSurface->w) / 2;
-    dst.y = (_screen->h - popinSurface->h) / 2;
-    SDL_BlitSurface(popinSurface, NULL, _screen, &dst);
-  }
+  SDL_BlitSurface(_hud->render(world, _player, _selected), NULL, _screen, NULL);
   SDL_UpdateWindowSurface(_window);
 }
 

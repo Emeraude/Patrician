@@ -24,7 +24,7 @@ namespace Gui {
     ~Game();
     void updateSize(uint16_t width, uint16_t height);
     void updatePos(int32_t x, int32_t y);
-    SDL_Surface *render(Ecs::World &world, uint32_t player);
+    SDL_Surface *render(Ecs::World &world, uint32_t player, Ecs::Entity *selected = NULL);
 
   private:
     bool blitSurface(SDL_Surface *surface, uint32_t x, uint32_t y);

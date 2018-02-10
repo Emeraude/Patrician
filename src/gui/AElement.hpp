@@ -21,7 +21,7 @@ namespace Gui {
   public:
     AElement(uint16_t w, uint16_t h, uint16_t x = 0, uint16_t y = 0);
     virtual ~AElement();
-    virtual SDL_Surface *render(Ecs::World& w, uint32_t player) = 0;
+    virtual SDL_Surface *render(Ecs::World& w, uint32_t player, Ecs::Entity *selected = NULL) = 0;
 
     Ecs::Entity *dispatchClickEvent(uint16_t x, uint16_t y);
     uint16_t getWidth() const;
@@ -36,6 +36,6 @@ namespace Gui {
   protected:
     virtual Ecs::Entity *onClickEvent(uint16_t x, uint16_t y) = 0;
 
-    void blit(AElement *e, Ecs::World &world, uint32_t player);
+    void blit(AElement *e, Ecs::World &world, uint32_t player, Ecs::Entity *selected = NULL);
   };
 }

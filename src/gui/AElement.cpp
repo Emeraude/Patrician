@@ -57,11 +57,11 @@ void Gui::AElement::setPos(uint16_t x, uint16_t y) {
   _y = y;
 }
 
-void Gui::AElement::blit(AElement *e, Ecs::World &world, uint32_t player) {
+void Gui::AElement::blit(AElement *e, Ecs::World &world, uint32_t player, Ecs::Entity *selected) {
   SDL_Rect dst;
 
   dst.x = e->getX();
   dst.y = e->getY();
-  SDL_BlitSurface(e->render(world, player), NULL, _surface, &dst);
+  SDL_BlitSurface(e->render(world, player, selected), NULL, _surface, &dst);
   _blitted.push_back(e);
 }

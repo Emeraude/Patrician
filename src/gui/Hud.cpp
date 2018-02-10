@@ -5,6 +5,7 @@
 
 Gui::Hud::Hud(uint16_t width, uint16_t height) : AElement(width, height) {
   _game = new Gui::Game(_width, _height - 20);
+  _popin = new Gui::Popin(300, 300);
   _game->setPos(0, 20);
   _children.push_back(_game);
   updateSize(width, height);
@@ -57,7 +58,7 @@ void Gui::Hud::writeText(std::string const& content, int x, int y, Gui::align al
   SDL_FreeSurface(msg);
 }
 
-SDL_Surface *Gui::Hud::render(Ecs::World& world, uint32_t player) {
+SDL_Surface *Gui::Hud::render(Ecs::World& world, uint32_t player, Ecs::Entity *selected) {
   Ecs::Entity *playerEntity = world.get(player);
   uint32_t money = playerEntity->get<comp::Money>()->value;
   std::string const& date = world.get<sys::Time>()->getDate().toString();
@@ -68,6 +69,10 @@ SDL_Surface *Gui::Hud::render(Ecs::World& world, uint32_t player) {
   this->writeText(std::to_string(money) + "po", 0, 0, Gui::align::LEFT);
   this->writeText(date, _width, 0, Gui::align::RIGHT);
   this->blit(_game, world, player);
+  if (selected
+      && selected->get<comp::Type>()->type == Type::CITY) {
+    this->blit(_popin, world, player, selected);
+  }
   return _surface;
 }
 

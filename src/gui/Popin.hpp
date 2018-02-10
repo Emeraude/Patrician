@@ -12,10 +12,13 @@
 
 namespace Gui {
   class Popin : public Gui::AElement {
+  private:
+    Ecs::Entity *_city;
+
   public:
     Popin(uint16_t w, uint16_t h);
 
-    SDL_Surface *render(Ecs::World &world, uint32_t cityId);
+    SDL_Surface *render(Ecs::World &world, uint32_t cityId, Ecs::Entity *selected = NULL);
     Ecs::Entity *onClickEvent(uint16_t x, uint16_t y);
 
   private:

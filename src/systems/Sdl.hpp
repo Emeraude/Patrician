@@ -18,7 +18,6 @@ namespace sys {
     int _velocity_y;
     unsigned int _player;
     Gui::Hud *_hud;
-    Gui::Popin *_popin;
     Ecs::Entity *_selected;
 
     void events(Ecs::World &world);
