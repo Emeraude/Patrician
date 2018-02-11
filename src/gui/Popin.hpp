@@ -9,7 +9,7 @@
 #include "gui/AElement.hpp"
 #include "gui/Base.hpp"
 #include "gui/Button.hpp"
-#include "gui/TextRender.hpp"
+#include "gui/Text.hpp"
 
 namespace Gui {
   class Popin : public Gui::AElement {

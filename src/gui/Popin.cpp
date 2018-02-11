@@ -9,23 +9,8 @@ Gui::Popin::~Popin() {
 }
 
 void Gui::Popin::writeText(std::string const& content, int x, int y, Gui::align alignment) {
-  SDL_Surface *msg = Gui::TextRender::getInstance().writeText(content, "black");
-
-  if (alignment & Gui::align::TOP)
-    y -= msg->h;
-  else if (alignment & Gui::align::MIDDLE)
-    y -= msg->h / 2;
-
-  if (alignment & Gui::align::RIGHT)
-    x -= msg->w;
-  else if (alignment & Gui::align::CENTER)
-    x -= msg->w / 2;
-
-  SDL_Rect dst;
-  dst.x = x;
-  dst.y = y;
-  SDL_BlitSurface(msg, NULL, _surface, &dst);
-  SDL_FreeSurface(msg);
+  Gui::Text text = Gui::Text(x, y, content, alignment, "black");
+  this->blit(&text);
 }
 
 SDL_Surface *Gui::Popin::render(Ecs::World &world, uint32_t cityId, Ecs::Entity *selected) {
