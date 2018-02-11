@@ -5,16 +5,17 @@ Gui::Text::Text(uint16_t x, uint16_t y, std::string const& content, Gui::align a
   this->setPos(_baseX, _baseY);
 }
 
-Gui::Text::~Text() {
-  SDL_FreeSurface(_surface);
-}
-
-SDL_Surface *Gui::Text::render(Ecs::World &, uint32_t) {
+SDL_Surface *Gui::Text::render(Ecs::World &, uint32_t, Ecs::Entity *) {
   return _surface;
 }
 
+Ecs::Entity *Gui::Text::onClickEvent(uint16_t, uint16_t) {
+  return NULL;
+}
+
 void Gui::Text::updateSurface() {
-  delete _surface;
+  if (_surface)
+    SDL_FreeSurface(_surface);
   _surface = TTF_RenderUTF8_Blended(Gui::Text::Cache::getInstance().getFont(_fontFamily, _size),
 				    _content.c_str(),
 				    Gui::Text::Cache::getInstance().getColor(_color));
@@ -28,14 +29,14 @@ void Gui::Text::setPos(uint16_t x, uint16_t y) {
   _baseX = _x = x;
   _baseY = _y = y;
   if (_alignment & Gui::align::TOP)
-    _y -= _height;
+    _y = (int32_t)(_y - _height) < 0 ? 0 : _y - _height;
   else if (_alignment & Gui::align::MIDDLE)
-    _y -= _height / 2;
+    _y = (int32_t)(_y - _height / 2) < 0 ? 0 : _y - _height / 2;
 
   if (_alignment & Gui::align::RIGHT)
-    x += _width;
+    _x += _width;
   else if (_alignment & Gui::align::CENTER)
-    x += _width /2;
+    _x += _width /2;
 }
 
 Gui::Text::Cache::Cache() {

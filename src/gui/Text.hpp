@@ -45,9 +45,10 @@ namespace Gui {
 	 std::string color,
 	 std::string fontFamily = "DejaVuSansMono",
 	 uint16_t size = 12);
-    ~Text();
-    SDL_Surface *render(Ecs::World &world, uint32_t player);
     void setPos(uint16_t x, uint16_t y);
+
+    SDL_Surface *render(Ecs::World &world, uint32_t player, Ecs::Entity *selected);
+    Ecs::Entity *onClickEvent(uint16_t x, uint16_t y);
 
   private:
     void updateSurface();
