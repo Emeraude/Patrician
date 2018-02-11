@@ -28,8 +28,7 @@ void Gui::Button::writeText() {
   delete _text;
   this->_blitted.clear();
   _text = new Gui::Text(0, 0, _content, Gui::align::MIDDLE_LEFT, "black");
-  Ecs::World empty_world;
-  this->blit(_text, empty_world, 0, NULL);
+  this->blit(_text);
 }
 
 SDL_Surface *Gui::Button::render(Ecs::World&, uint32_t, Ecs::Entity*) {

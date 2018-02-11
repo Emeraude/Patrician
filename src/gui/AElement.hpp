@@ -37,5 +37,6 @@ namespace Gui {
     virtual Ecs::Entity *onClickEvent(uint16_t x, uint16_t y) = 0;
 
     void blit(AElement *e, Ecs::World &world, uint32_t player, Ecs::Entity *selected = NULL);
+    void blit(AElement *e);
   };
 }

@@ -40,10 +40,8 @@ void Gui::Hud::updateSize(uint16_t width, uint16_t height) {
 }
 
 void Gui::Hud::writeText(std::string const& content, int x, int y, Gui::align alignment) {
-  Ecs::World empty_world;
-  Gui::Text *text = new Gui::Text(x, y, content, alignment, "white");
-  this->blit(text, empty_world, 0, NULL);
-  delete text;
+  Gui::Text text = Gui::Text(x, y, content, alignment, "white");
+  this->blit(&text);
 }
 
 SDL_Surface *Gui::Hud::render(Ecs::World& world, uint32_t player, Ecs::Entity *selected) {

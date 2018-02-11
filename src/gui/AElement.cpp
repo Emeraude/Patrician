@@ -65,3 +65,9 @@ void Gui::AElement::blit(AElement *e, Ecs::World &world, uint32_t player, Ecs::E
   SDL_BlitSurface(e->render(world, player, selected), NULL, _surface, &dst);
   _blitted.push_back(e);
 }
+
+void Gui::AElement::blit(AElement *e) {
+  Ecs::World empty_world;
+
+  this->blit(e, empty_world, 0, NULL);
+}
