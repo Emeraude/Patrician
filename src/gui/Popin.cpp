@@ -1,6 +1,12 @@
 #include "Popin.hpp"
 
-Gui::Popin::Popin(uint16_t w, uint16_t h) : Gui::AElement(w, h), _city(NULL) {}
+Gui::Popin::Popin(uint16_t w, uint16_t h) : Gui::AElement(w, h), _city(NULL) {
+  _button = new Gui::Button(80, 20, "Wild button");
+}
+
+Gui::Popin::~Popin() {
+  delete _button;
+}
 
 void Gui::Popin::writeText(std::string const& content, int x, int y, Gui::align alignment) {
   SDL_Surface *msg = Gui::TextRender::getInstance().writeText(content, "black");
@@ -25,6 +31,7 @@ void Gui::Popin::writeText(std::string const& content, int x, int y, Gui::align 
 SDL_Surface *Gui::Popin::render(Ecs::World &world, uint32_t cityId, Ecs::Entity *selected) {
   SDL_Surface *in;
 
+  this->_blitted.clear();
   if (selected)
     _city = selected;
   else
@@ -49,6 +56,7 @@ SDL_Surface *Gui::Popin::render(Ecs::World &world, uint32_t cityId, Ecs::Entity 
     this->writeText(std::string(infosResource[i].name) + " " + std::to_string(s->at(static_cast<Resource>(i)).quantity),
 		    10, 50 + 15 * i);
   }
+  this->blit(_button, world, 0, NULL);
 
   return _surface;
 }
