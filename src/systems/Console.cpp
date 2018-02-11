@@ -38,14 +38,14 @@ void sys::Console::status(std::stringstream&) {
 
 void sys::Console::ship(std::stringstream& ss) {
   if (ss.eof())
-    throw Exception::Usage("");
+    throw Exception::Usage();
   std::string cmd;
   ss >> cmd;
   if (cmd == "add") {
     uint16_t x, y;
     std::string type;
     if (!(ss >> type >> x >> y))
-      throw Exception::Usage("");
+      throw Exception::Usage();
     else if (_types[type] == NULL)
       std::cerr << "Unknown ship type \"" << type << "\"" << std::endl;
     else
@@ -69,7 +69,7 @@ void sys::Console::ship(std::stringstream& ss) {
 	try {
 	  x = std::stoi(cityName);
 	} catch (...) {
-	  throw Exception::Usage("");
+	  throw Exception::Usage();
 	}
       }
       else {
@@ -88,12 +88,12 @@ void sys::Console::ship(std::stringstream& ss) {
       e.get<comp::Speed>()->current = e.get<comp::Speed>()->max;
     }
     else
-      throw Exception::Usage("");
+      throw Exception::Usage();
   }
   else if (cmd == "select") {
     unsigned int id;
     if (!(ss >> id))
-      throw Exception::Usage("");
+      throw Exception::Usage();
     else {
       try {
 	Ecs::Entity& e = *_w->getEntities().at(id);
@@ -125,7 +125,7 @@ void sys::Console::ship(std::stringstream& ss) {
 
 void sys::Console::city(std::stringstream& ss) {
   if (ss.eof())
-    throw Exception::Usage("");
+    throw Exception::Usage();
   std::string cmd;
   ss >> cmd;
   if (cmd == "list") {
@@ -140,7 +140,7 @@ void sys::Console::city(std::stringstream& ss) {
   else if (cmd == "details") {
     std::string cityName;
     if (!(ss >> cityName))
-      throw Exception::Usage("");
+      throw Exception::Usage();
     else {
       try {
 	Ecs::Entity *e = _w->getEntities()[::cityNames.at(cityName)];
@@ -160,7 +160,7 @@ void sys::Console::city(std::stringstream& ss) {
   else if (cmd == "stock") {
     std::string cityName;
     if (!(ss >> cityName))
-      throw Exception::Usage("");
+      throw Exception::Usage();
     else {
       try {
 	Ecs::Entity *city = _w->get(::cityNames.at(cityName));
@@ -174,18 +174,18 @@ void sys::Console::city(std::stringstream& ss) {
     }
   }
   else
-    throw Exception::Usage("");
+    throw Exception::Usage();
 }
 
 void sys::Console::building(std::stringstream& ss) {
   if (ss.eof())
-    throw Exception::Usage("");
+    throw Exception::Usage();
   std::string cmd;
   ss >> cmd;
   if (cmd == "create") {
     std::string cityName, type;
     if (!(ss >> cityName >> type))
-      throw Exception::Usage("");
+      throw Exception::Usage();
     else if (_buildingTypes[type] == NULL)
       std::cerr << "Unknown building type \"" << type << "\"" << std::endl;
     else
@@ -198,7 +198,7 @@ void sys::Console::building(std::stringstream& ss) {
   else if (cmd == "list") {
     std::string cityName;
     if (!(ss >> cityName))
-      throw Exception::Usage("");
+      throw Exception::Usage();
     else
       try {
 	for (auto *it: _w->getEntities()) {
@@ -220,11 +220,11 @@ void sys::Console::building(std::stringstream& ss) {
 
 void sys::Console::buy(std::stringstream& ss) {
   if (ss.eof())
-    throw Exception::Usage("");
+    throw Exception::Usage();
   std::string resourceStr;
   uint32_t quantity;
   if (!(ss >> resourceStr >> quantity))
-    throw Exception::Usage("");
+    throw Exception::Usage();
   this->checkResourceType(resourceStr);
   this->checkSelectedShip();
   Ecs::Entity *ship = _w->get(_selectedShip);
@@ -276,11 +276,11 @@ void sys::Console::checkResourceType(std::string const& str) {
 
 void sys::Console::sell(std::stringstream& ss) {
   if (ss.eof())
-    throw Exception::Usage("");
+    throw Exception::Usage();
   std::string resourceStr;
   uint32_t quantity;
   if (!(ss >> resourceStr >> quantity))
-    throw Exception::Usage("");
+    throw Exception::Usage();
   this->checkResourceType(resourceStr);
   this->checkSelectedShip();
   Ecs::Entity *ship = _w->get(_selectedShip);

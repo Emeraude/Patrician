@@ -45,7 +45,7 @@ namespace sys {
     public:
       class Usage : public ::Exception::Base {
       public:
-	Usage(std::string const& str) : ::Exception::Base(str) {}
+	Usage() : ::Exception::Base("") {}
       };
     };
   };
