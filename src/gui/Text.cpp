@@ -34,9 +34,9 @@ void Gui::Text::setPos(uint16_t x, uint16_t y) {
     _y = (int32_t)(_y - _height / 2) < 0 ? 0 : _y - _height / 2;
 
   if (_alignment & Gui::align::RIGHT)
-    _x += _width;
+    _x -= _width;
   else if (_alignment & Gui::align::CENTER)
-    _x += _width /2;
+    _x -= _width /2;
 }
 
 Gui::Text::Cache::Cache() {
