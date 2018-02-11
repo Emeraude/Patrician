@@ -9,7 +9,7 @@
 #include "src/Exceptions.hpp"
 #include "gui/AElement.hpp"
 #include "gui/Base.hpp"
-#include "gui/TextRender.hpp"
+#include "gui/Text.hpp"
 
 namespace Gui {
   class Game : public Gui::AElement {

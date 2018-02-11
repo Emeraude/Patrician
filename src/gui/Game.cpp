@@ -86,19 +86,8 @@ bool Gui::Game::blitSurface(std::string const& name, Ecs::Entity *e) {
 }
 
 void Gui::Game::writeText(std::string const& content, int x, int y, Gui::align alignment) {
-  SDL_Surface *msg = Gui::TextRender::getInstance().writeText(content, "white");
-
-  if (alignment & Gui::align::TOP)
-    y -= msg->h;
-  else if (alignment & Gui::align::MIDDLE)
-    y -= msg->h / 2;
-
-  if (alignment & Gui::align::RIGHT)
-    x -= msg->w;
-  else if (alignment & Gui::align::CENTER)
-    x -= msg->w / 2;
-  blitSurface(msg, x, y);
-  SDL_FreeSurface(msg);
+  Gui::Text text = Gui::Text(x, y, content, alignment, "white");
+  this->blit(&text);
 }
 
 SDL_Surface *Gui::Game::render(Ecs::World &world, uint32_t player, Ecs::Entity *selected) {
