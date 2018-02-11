@@ -6,16 +6,18 @@
 #include "src/Exceptions.hpp"
 #include "gui/AElement.hpp"
 #include "gui/Base.hpp"
-#include "gui/TextRender.hpp"
+#include "gui/Text.hpp"
 
 namespace Gui {
   class Button : public Gui::AElement {
   private:
     bool _disabled;
     std::string const& _content;
+    Gui::Text *_text;
 
   public:
     Button(uint16_t w, uint16_t h, std::string const& content);
+    ~Button();
     void setPos(uint16_t x, uint16_t y);
 
     SDL_Surface *render(Ecs::World& w, uint32_t player, Ecs::Entity *selected = NULL);
