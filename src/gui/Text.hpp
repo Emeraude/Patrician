@@ -1,13 +1,13 @@
 #pragma once
 
 #include <cstdint>
+#include <map>
 #include <string>
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include "World.hpp"
 #include "gui/AElement.hpp"
 #include "gui/Base.hpp"
-#include "gui/TextRender.hpp"
 #include "src/Exceptions.hpp"
 
 namespace Gui {
