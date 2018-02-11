@@ -1,7 +1,7 @@
 #include "Hud.hpp"
 #include "Components.hpp"
 #include "systems/Time.hpp"
-#include "TextRender.hpp"
+#include "gui/Text.hpp"
 
 Gui::Hud::Hud(uint16_t width, uint16_t height) : AElement(width, height) {
   _game = new Gui::Game(_width, _height - 20);
@@ -40,22 +40,10 @@ void Gui::Hud::updateSize(uint16_t width, uint16_t height) {
 }
 
 void Gui::Hud::writeText(std::string const& content, int x, int y, Gui::align alignment) {
-  SDL_Rect dst;
-  SDL_Surface *msg = Gui::TextRender::getInstance().writeText(content, "white");
-
-  dst.x = x;
-  dst.y = y;
-  if (alignment & Gui::align::TOP)
-    dst.y -= msg->h;
-  else if (alignment & Gui::align::MIDDLE)
-    dst.y -= msg->h / 2;
-
-  if (alignment & Gui::align::RIGHT)
-    dst.x -= msg->w;
-  else if (alignment & Gui::align::CENTER)
-    dst.x -= msg->w / 2;
-  SDL_BlitSurface(msg, NULL, _surface, &dst);
-  SDL_FreeSurface(msg);
+  Ecs::World empty_world;
+  Gui::Text *text = new Gui::Text(x, y, content, alignment, "white");
+  this->blit(text, empty_world, 0, NULL);
+  delete text;
 }
 
 SDL_Surface *Gui::Hud::render(Ecs::World& world, uint32_t player, Ecs::Entity *selected) {
