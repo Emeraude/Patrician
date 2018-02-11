@@ -4,7 +4,7 @@ Gui::Button::Button(uint16_t w, uint16_t h, std::string const& content) : AEleme
   SDL_Surface *in;
 
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 127, 127, 127));
-  in = SDL_CreateRGBSurface(0, _height - 2, _width - 2, 32, 0, 0, 0, 0);
+  in = SDL_CreateRGBSurface(0, _width - 2, _height - 2, 32, 0, 0, 0, 0);
   SDL_FillRect(in, NULL, SDL_MapRGB(in->format, 255, 255, 255));
 
   SDL_Rect dst;
