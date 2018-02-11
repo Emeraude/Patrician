@@ -27,7 +27,7 @@ Ecs::Entity *Gui::Button::onClickEvent(uint16_t x, uint16_t y) {
 void Gui::Button::writeText() {
   delete _text;
   this->_blitted.clear();
-  _text = new Gui::Text(0, 0, _content, Gui::align::MIDDLE_CENTER, "black");
+  _text = new Gui::Text(0, 0, _content, Gui::align::MIDDLE_LEFT, "black");
   Ecs::World empty_world;
   this->blit(_text, empty_world, 0, NULL);
 }
