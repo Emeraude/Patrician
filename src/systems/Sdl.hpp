@@ -24,7 +24,7 @@ namespace sys {
     void display(Ecs::World &world);
 
   public:
-    Sdl();
+    Sdl(uint16_t w, uint16_t h);
     ~Sdl();
     void update(Ecs::World &world);
   };

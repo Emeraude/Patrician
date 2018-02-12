@@ -1,7 +1,7 @@
 #include "Sdl.hpp"
 #include "PlayerBuilder.hpp"
 
-sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _player(0), _selected(NULL) {
+sys::Sdl::Sdl(uint16_t w, uint16_t h) : _win_w(w), _win_h(h), _velocity_x(0), _velocity_y(0), _player(0), _selected(NULL) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
     throw Exception::Sdl();
   _window = SDL_CreateWindow("Patrician", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,

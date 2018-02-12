@@ -15,7 +15,7 @@ int main(void) {
     std::srand(rd());
 
     w.add<sys::Console>();
-    w.add<sys::Sdl>();
+    w.add<sys::Sdl>(640, 480);
     w.add<sys::Time>();
     CityBuilder::addRandom(w);
     PlayerBuilder::addPlayer(w, cityNames.begin()->second);
