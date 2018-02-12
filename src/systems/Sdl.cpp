@@ -11,7 +11,7 @@ sys::Sdl::Sdl() : _win_w(640), _win_h(480), _velocity_x(0), _velocity_y(0), _pla
   _screen = SDL_GetWindowSurface(_window);
   if (_screen == NULL)
     throw Exception::Sdl();
-  _hud = new Gui::Hud(640, 480);
+  _hud = new Gui::Hud(_win_w, _win_h);
 }
 
 sys::Sdl::~Sdl() {
