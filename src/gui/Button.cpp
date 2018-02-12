@@ -20,7 +20,7 @@ Gui::Button::~Button() {
   delete _text;
 }
 
-Ecs::Entity *Gui::Button::onClickEvent(uint16_t x, uint16_t y) {
+Ecs::Entity *Gui::Button::onClickEvent(uint16_t, uint16_t) {
   return NULL;
 }
 

@@ -50,6 +50,6 @@ SDL_Surface *Gui::Popin::render(Ecs::World &world, uint32_t cityId, Ecs::Entity 
   return _surface;
 }
 
-Ecs::Entity *Gui::Popin::onClickEvent(uint16_t x, uint16_t y) {
+Ecs::Entity *Gui::Popin::onClickEvent(uint16_t, uint16_t) {
   return _city;
 }

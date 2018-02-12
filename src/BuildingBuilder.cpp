@@ -2,7 +2,7 @@
 #include "BuildingBuilder.hpp"
 #include "Exceptions.hpp"
 
-Ecs::Entity* BuildingBuilder::base(Ecs::World& w, uint32_t city, uint32_t owner) {
+Ecs::Entity* BuildingBuilder::base(Ecs::World&, uint32_t city, uint32_t owner) {
   Ecs::Entity *e = new Ecs::Entity();
 
   e->add<comp::Type>(Type::BUILDING);
