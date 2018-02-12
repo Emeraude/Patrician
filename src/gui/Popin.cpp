@@ -17,10 +17,7 @@ SDL_Surface *Gui::Popin::render(Ecs::World &world, uint32_t cityId, Ecs::Entity 
   SDL_Surface *in;
 
   this->_blitted.clear();
-  if (selected)
-    _city = selected;
-  else
-    _city = world.get(cityId);
+  _city = selected ? selected : world.get(cityId);
   SDL_FillRect(_surface, NULL, SDL_MapRGB(_surface->format, 127, 127, 127));
   in = SDL_CreateRGBSurface(0, _width - 2, _height - 2, 32, 0, 0, 0, 0);
   SDL_FillRect(in, NULL, SDL_MapRGB(in->format, 255, 255, 255));
@@ -36,9 +33,11 @@ SDL_Surface *Gui::Popin::render(Ecs::World &world, uint32_t cityId, Ecs::Entity 
   this->writeText(cityName, _width / 2, 10, Gui::align::CENTER);
 
   Ecs::Entity *e = world.get(_city->get<comp::Buildings>()->office);
-  comp::Stock *s = e->get<comp::Stock>();
-  for (unsigned int i = Resource::FIRST; i <= Resource::LAST; ++i) {
-    this->writeText(std::string(infosResource[i].name) + " " + std::to_string(s->at(static_cast<Resource>(i)).quantity),
+  comp::Stock *stock = e->get<comp::Stock>();
+  for (uint32_t i = Resource::FIRST; i <= Resource::LAST; ++i) {
+    this->writeText(std::string(infosResource[i].name)
+		    + " "
+		    + std::to_string(stock->at(static_cast<Resource>(i)).quantity),
 		    10, 50 + 15 * i);
   }
   this->blit(_button, world, 0, NULL);
