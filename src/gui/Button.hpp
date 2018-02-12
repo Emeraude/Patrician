@@ -18,7 +18,6 @@ namespace Gui {
   public:
     Button(uint16_t w, uint16_t h, std::string const& content);
     ~Button();
-    void setPos(uint16_t x, uint16_t y);
 
     SDL_Surface *render(Ecs::World& w, uint32_t player, Ecs::Entity *selected = NULL);
     Ecs::Entity *onClickEvent(uint16_t x, uint16_t y);

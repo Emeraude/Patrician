@@ -15,7 +15,7 @@ namespace Gui {
   class Popin : public Gui::AElement {
   private:
     Ecs::Entity *_city;
-    Gui::Button *_button;
+    std::map<Resource, Gui::Button *> _buttons;
 
   public:
     Popin(uint16_t w, uint16_t h);
