@@ -5,17 +5,20 @@
 #include "systems/Console.hpp"
 #include "systems/Sdl.hpp"
 #include "systems/Time.hpp"
+#include "Arguments.hpp"
 #include "CityBuilder.hpp"
 #include "PlayerBuilder.hpp"
 
-int main(void) {
+int main(int argc, char **argv) {
   try {
+    Arguments args(argc, argv);
     Ecs::World w;
     std::random_device rd;
     std::srand(rd());
 
     w.add<sys::Console>();
-    w.add<sys::Sdl>(640, 480);
+    if (args.hasGui())
+      w.add<sys::Sdl>(640, 480);
     w.add<sys::Time>();
     CityBuilder::addRandom(w);
     PlayerBuilder::addPlayer(w, cityNames.begin()->second);

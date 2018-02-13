@@ -1,4 +1,5 @@
-SRC	=	src/BuildingBuilder.cpp \
+SRC	=	src/Arguments.cpp \
+		src/BuildingBuilder.cpp \
 		src/CityBuilder.cpp \
 		src/Duration.cpp \
 		src/Exceptions.cpp \
