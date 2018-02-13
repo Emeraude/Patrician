@@ -1,6 +1,5 @@
-#include "Arguments.hpp"
-#include <iostream>
 #include <string>
+#include "Arguments.hpp"
 
 Arguments::Arguments(uint32_t argc, char **argv) : _gui(true) {
   for (unsigned int i = 1; i < argc; ++i) {
