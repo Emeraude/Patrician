@@ -7,7 +7,7 @@
 enum Resource {
   BRICK = 0, IRON_GOODS, TIMBER,
   FIRST = BRICK, LAST = TIMBER,
-  LENGTH = TIMBER + 1
+  LENGTH = LAST + 1
 };
 
 static const struct {
